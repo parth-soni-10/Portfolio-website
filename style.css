@@ -1,0 +1,512 @@
+/* Global Color Variables */
+:root {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --header-bg: #1f1f1f;
+  --hero-bg: #1a1a1a;
+  --card-bg: #2a2a2a;
+  --skill-bg: #2c2c2c;
+  --accent: #00bcd4;
+  --border-color: #ffffff;
+  --footer-bg: #1f1f1f;
+}
+
+body.light-mode {
+  --bg-color: #ffffff;
+  --text-color: #121212;
+  --header-bg: #f4f4f4;
+  --hero-bg: #ffffff;
+  --card-bg: #ffffff;
+  --skill-bg: #e0e0e0;
+  --border-color: #000000;
+  --footer-bg: #f4f4f4;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+section {
+  padding: 3em 2em;
+}
+
+/* Header */
+header {
+  background-color: var(--header-bg);
+  padding: 1em 2em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav h1 {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1em;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+/* Hero Section */
+#hero {
+  text-align: center;
+  background-color: var(--hero-bg);
+  padding: 4em 2em;
+}
+
+/* Project Cards */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5em;
+}
+
+.project-card {
+  background: var(--card-bg);
+  padding: 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.project-card h3 {
+  margin-top: 0;
+}
+
+.project-card a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.project-card a:hover {
+  text-decoration: underline;
+}
+
+/* Skills List */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  list-style: none;
+  padding: 0;
+}
+
+.skills-list li {
+  background: var(--skill-bg);
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+#skills h3 {
+  margin-top: 2em;
+  font-size: 1.3em;
+  color: var(--accent);
+}
+
+/* Certificates Section */
+#certificates {
+  padding: 3em 2em;
+}
+
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.certificate-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.certificate-card img {
+  width: 100%;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.certificate-card p,
+.certificate-card a {
+  color: var(--text-color);
+}
+
+.certificate-card a {
+  text-decoration: underline;
+}
+
+/* Experience Section */
+#experience {
+  background-color: var(--hero-bg);
+  color: var(--text-color);
+}
+
+.experience-entry {
+  margin-bottom: 2.5em;
+  background-color: var(--card-bg);
+  padding: 1.5em;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.experience-entry h3,
+.experience-entry h4,
+.experience-entry p,
+.experience-entry li {
+  color: var(--text-color);
+}
+
+.experience-entry ul {
+  padding-left: 1.2em;
+}
+
+/* Contact Section */
+#contact a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+#contact a:hover {
+  text-decoration: underline;
+}
+
+.icon {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.icon-light { display: none; }
+body.light-mode .icon-dark { display: none; }
+body.light-mode .icon-light { display: inline; }
+
+/* Toggle Button */
+#toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 0.6em 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--accent);
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2em;
+  background: var(--footer-bg);
+  font-size: 0.9em;
+}
+
+/* About Section */
+.about-section {
+  max-width: 800px;
+  margin: auto;
+  padding: 3rem 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text-color);
+}
+
+.about-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.about-section p {
+  margin-bottom: 1.2rem;
+  text-align: justify;
+}
+
+.about-section .ending {
+  margin-top: 2rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* Education Section */
+#education {
+  padding: 60px 20px;
+  background-color: var(--hero-bg);
+  color: var(--text-color);
+}
+
+.education-entry {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 6px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-left: 4px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.education-entry h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.25rem;
+}
+
+.education-entry h4 {
+  margin: 0 0 10px 0;
+  font-weight: normal;
+  color: var(--text-color);
+}
+
+.education-entry p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+#education h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 2px solid currentColor;
+  display: inline-block;
+}
+
+#education {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.education-wrapper {
+  max-width: 900px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.education-entry {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+
+.education-entry:hover {
+  transform: scale(1.02);
+}
+
+#education h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  border-bottom: 2px solid #00cfe8;
+  padding-bottom: 0.5rem;
+}
+
+section h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.5rem;
+}
+
+/* Skills Section */
+#skills {
+  padding: 60px 20px;
+  background-color: var(--hero-bg);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#skills h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.5rem;
+  color: var(--text-color);
+  width: 100%;
+}
+
+.skills-section {
+  max-width: 900px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.skills-list li {
+  background: var(--skill-bg);
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: background-color 0.3s ease;
+}
+
+#skills h3 {
+  margin-top: 2em;
+  font-size: 1.3em;
+  color: var(--accent);
+  width: 100%;
+  text-align: center;
+}
+
+/* Experience Section */
+#experience {
+  padding: 60px 20px;
+  background-color: var(--hero-bg);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#experience h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.5rem;
+  color: var(--text-color);
+  width: 100%;
+}
+
+.experience-wrapper {
+  max-width: 900px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.experience-entry {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 6px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-left: 4px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.experience-entry:hover {
+  transform: scale(1.02);
+}
+
+.experience-entry h3,
+.experience-entry h4,
+.experience-entry p,
+.experience-entry li {
+  color: var(--text-color);
+}
+
+.experience-entry ul {
+  padding-left: 1.2em;
+}
+
+.certificate-card img:hover {
+  transform: scale(1.75);
+}
+.resume-card {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.resume-card img {
+  transition: transform 0.3s ease;
+}
+
+.resume-card img:hover {
+  transform: scale(1.05);
+}
+
+#resume a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #00bcd4;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+#resume a:hover {
+  background-color: #0097a7;
+}
+
+.resume-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 24px;
+  background-color: #0073e6;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.resume-button:hover {
+  background-color: #005bb5;
+}

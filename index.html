@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Parth Soni - Portfolio Website" />
+  <title>Parth Soni | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Parth's Portfolio</h1>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#experience">Professional Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h2>Hello, I'm Parth Soni</h2>
+    <p>A data analyst turning messy datasets into meaningful insights — from dashboards to decisions, one insight at a time.</p>
+  </section>
+
+  <section id="about" class="about-section">
+  <h2>About Me</h2>
+
+  <p>
+    Hey there! I'm <strong>Parth</strong> — an aspiring data analyst currently pursuing my MSc in
+    <strong>Computer Science (Negotiated Learning)</strong> at <strong>University College Dublin (UCD)</strong>, Ireland.
+    I enjoy turning messy datasets into clear, actionable stories that actually make sense — and make an impact.
+  </p>
+
+  <p>
+    When I’m not deep in Excel sheets or dashboard design, you’ll probably find me watching (or yelling at)
+    Formula 1, tennis, Counter-Strike tourneys, cycling events, cricket matches... you get the idea —
+    sports basically own my weekends.
+  </p>
+
+  <p>
+    I’m also a full-on <strong>avgeek</strong> and machine nerd. If it’s made of metal and moves —
+    planes, trains, bikes, cars — I’m into it. I could spend hours watching aircraft landings or
+    getting lost in spec sheets for fun.
+  </p>
+
+  <p>
+    I’d describe myself as an <strong>ambivert</strong>: loud and expressive with the right people, quiet and
+    observant when I need to recharge.
+  </p>
+
+  <p>
+    <strong>Walks + music = therapy.</strong> I don’t stick to one genre — if it sounds good, I’m vibing.
+  </p>
+
+  <p>
+    I’m also big on staying organized. Color-coded folders? Yes please. Whether it’s my work or my playlists,
+    I like things structured.
+  </p>
+
+  <p>
+    When I’m not exploring a dataset, I’m probably binge-watching something intense —
+    sci-fi, thrillers, crime dramas are my go-tos.
+  </p>
+
+  <p>
+    If you're curious, I even turned my watch history into a data project — yep, Content Analysis meets Netflix binging.
+  </p>
+
+  <p class="ending">
+    Always exploring, always analyzing — I’m excited about the stories hidden in data and how they can help people
+    make smarter, faster decisions. Let’s build something cool with it.
+  </p>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+
+  <div class="education-wrapper">
+    <div class="education-entry">
+      <h3>MSc in Computer Science (Negotiated Learning)</h3>
+      <h4>University College Dublin (UCD), Ireland</h4>
+      <p><strong>Sept 2025 – Aug 2026</strong></p>
+      <p>Focus Areas: Data Analytics, Data Visualization, Machine Learning, Python, SQL, Power BI</p>
+    </div>
+
+    <div class="education-entry">
+      <h3>Bachelor of Technology in Computer Science and Engineering</h3>
+      <h4>Dayananda Sagar University, Bengaluru</h4>
+      <p><strong>Aug 2019 – May 2023</strong></p>
+      <p>Focus Areas: Programming, Database Management, Data Science | CGPA: 8.15</p>
+    </div>
+
+    <div class="education-entry">
+      <h3>CBSE Class 12 (Science)</h3>
+      <h4>Kendriya Vidyalaya, Aurangabad</h4>
+      <p>Percentage: 66%</p>
+    </div>
+
+    <div class="education-entry">
+      <h3>CBSE Class 10</h3>
+      <h4>Kendriya Vidyalaya, Aurangabad</h4>
+      <p>CGPA: 9.8</p>
+    </div>
+  </div>
+</section>
+
+<section id="resume" style="text-align: center;">
+
+  <h2>Resume</h2>
+
+  <!-- Button linking to Google Drive -->
+  <p>
+    <a href="https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view?usp=sharing" target="_blank" class="resume-button">
+      View My Resume (Google Drive)
+    </a>
+  </p>
+</section>
+
+
+
+  <section id="experience">
+    <h2>Professional Experience</h2>
+    <div class="experience-entry">
+      <h3>Inventory Analyst - Intern</h3>
+      <h4>ANKO (Kas Services), Bengaluru, India</h4>
+      <p><em>Nov 2023 – May 2024</em></p>
+      <ul>
+        <li>Handled execution, deployment, and monitoring of key supply chain metrics for a new product division (~1.8M AUD/week).</li>
+        <li>Conducted sales analysis to identify trends, enabling proactive decisions in inventory and pricing.</li>
+        <li>Implemented monitoring systems for real-time stock tracking and business metrics.</li>
+        <li>Collaborated across teams to resolve issues and ensure smooth operations.</li>
+        <li>Performed shrinkage analysis and applied corrective measures to enhance profitability.</li>
+        <li>Managed inventory planning during peak events like Mother's Day, Anzac Day, and Christmas.</li>
+      </ul>
+    </div>
+    <div class="experience-entry">
+      <h3>Technical Writer - Intern</h3>
+      <h4>Nokia, Bengaluru, India</h4>
+      <p><em>Feb 2023 – Aug 2023</em></p>
+      <ul>
+        <li>Updated and redesigned documentation using new brand guidelines for visual appeal.</li>
+        <li>Supported development of user manuals and technical documentation aligned with style guides.</li>
+        <li>Created visuals, diagrams, and infographics to improve comprehension of technical content.</li>
+      </ul>
+    </div>
+  </section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="project-grid">
+
+    <div class="project-card">
+      <h3>Excel and Python EDA</h3>
+      <p>
+        Cleaned public datasets using Excel and Python, ensuring data quality for visualization.<br>
+        Created informative charts and insights using Excel, Tableau, and Python.<br>
+        Conducted statistical cleaning in the Sales Forecasting Model project, handling missing values and outliers.<br>
+        Performed exploratory analysis to uncover correlations and trends in sales data.
+      </p>
+      <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank">GitHub Repository</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Pink Eye Detection using CNN (2023)</h3>
+      <p>
+        Built a CNN model to classify eye images as normal or infected with conjunctivitis using real-time camera input.<br>
+        Integrated Conv2D, MaxPooling, ReLU, Dropout, and Dense layers for effective feature extraction.<br>
+        Trained on a labeled dataset for accurate early detection of conjunctivitis.<br>
+        Aimed to reduce infection spread by enabling timely self-screening and early medical attention.
+      </p>
+      <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank">GitHub Repository</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Interactive Tableau Dashboards</h3>
+      <p>
+        Created a series of interactive dashboards to visualize real-world datasets with clarity and impact.<br>
+        Focused on delivering insights through effective visual storytelling and user-friendly layouts.<br>
+        Applied filters, parameters, and calculated fields to let users interact with the data dynamically.<br>
+        Demonstrates core data analyst skills: data preparation, visual design, and trend analysis.
+      </p>
+      <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank">View on Tableau Public</a>
+    </div>
+
+    <div class="project-card">
+  <h3>Content Consumption Analysis Dashboard</h3>
+  <p>
+    For over 2 years, I’ve maintained a detailed Google Sheet tracking every show, movie, and documentary I watch —
+    including genre, duration, platform, language, and more.<br><br>
+
+    Using this dataset, I’ve created a comprehensive dashboard that gives me insights into my viewing behavior:
+    which genres I binge the most, what time of year I watch more content, how long I spend watching each month, 
+    and which streaming platforms dominate my screen time.<br><br>
+
+    The dashboard includes multiple infographics and pivot tables to visualize trends over time, compare platforms,
+    and analyze my preferences at a glance. It’s a unique blend of personal interest and data storytelling — 
+    combining passion with analytical thinking.<br><br>
+
+    It's a living project that grows with me and continues to evolve with each new season I complete.
+  </p>
+  <a href="https://docs.google.com/spreadsheets/d/1rWMX8Ew3rWxZr1Se18kE_Q1N6JoodQ0RciqwdX31BUE/edit?gid=334671821#gid=334671821" target="_blank">
+    View Dashboard (Google Sheets)
+  </a>
+</div>
+
+
+  </div>
+</section>
+
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <h3>Technical Skills</h3>
+    <ul class="skills-list">
+      <li>SQL</li>
+      <li>Advanced Microsoft Excel</li>
+      <li>Microsoft Power BI</li>
+      <li>Python</li>
+      <li>Tableau</li>
+      <li>Data Analysis</li>
+      <li>Data Visualization</li>
+      <li>Snowflake</li>
+      <li>Logic and Analysis</li>
+      <li>Technical Writing</li>
+      <li>Documentation</li>
+      <li>Proofreading</li>
+      <li>Graphic Design</li>
+    </ul>
+    <h3>Non-Technical Skills</h3>
+    <ul class="skills-list">
+      <li>Flexibility</li>
+      <li>Critical Thinking</li>
+      <li>Good Communication Skills</li>
+      <li>Emotional Intelligence</li>
+      <li>Listening Skill</li>
+      <li>Time Management</li>
+      <li>Presentation Skills</li>
+      <li>Attention to Detail</li>
+    </ul>
+  </section>
+
+<section id="certificates">
+  <h2>Certificates</h2>
+  <div class="certificate-grid">
+
+    <div class="certificate-card">
+      <a href="https://www.coursera.org/account/accomplishments/specialization/QBHFUA673MO6" target="_blank">
+        <img src="assets/images/certificates/certificate-microsoft-powerbi-coursera.jpeg" alt="Microsoft Power BI Certificate">
+      </a>
+      <p>Microsoft Power BI Data Analyst</p>
+    </div>
+
+    <div class="certificate-card">
+      <a href="https://www.coursera.org/account/accomplishments/specialization/JLDAR2MZXMWX" target="_blank">
+        <img src="assets/images/certificates/certificate-google-data-analytics-coursera.jpeg" alt="Google Data Analytics Certificate">
+      </a>
+      <p>Google Data Analytics</p>
+    </div>
+
+    <div class="certificate-card">
+      <a href="https://www.coursera.org/account/accomplishments/specialization/KSFA0JZ0YG2S" target="_blank">
+        <img src="assets/images/certificates/certificate-meta-data-analyst-coursera.jpeg" alt="Meta Data Analyst Certificate">
+      </a>
+      <p>Meta Data Analyst</p>
+    </div>
+
+    <div class="certificate-card">
+      <a href="https://www.coursera.org/account/accomplishments/specialization/27AVBDNU4DC5" target="_blank">
+        <img src="assets/images/certificates/certificate-ibm-data-analyst-coursera.jpeg" alt="IBM Data Analyst Certificate">
+      </a>
+      <p>IBM Data Analyst</p>
+    </div>
+
+    <div class="certificate-card">
+      <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/tMjbs76F526fF5v3G/NjynCWzGSaWXQCxSX_tMjbs76F526fF5v3G_kNjmYzfrRDT2cS5c7_1735733964804_completion_certificate.pdf" target="_blank">
+        <img src="assets/images/certificates/certificate-BA-datascience-simulation-forage.png" alt="Data Science Job Simulation Certificate">
+      </a>
+      <p>Data Science Job Simulation (Forage)</p>
+    </div>
+
+    <div class="certificate-card">
+      <a href="https://github.com/parth-soni-10/Certificates" target="_blank">
+        <img src="assets\images\certificates\certificate-other-certificates.png" alt="Other Certificates">
+      </a>
+      <p>Other Certificates</p>
+    </div>
+
+  </div>
+</section>
+
+</section>
+
+  <section id="contact">
+  <h2>Contact Me</h2>
+
+  <p>
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/gmail.png" class="icon icon-dark" alt="Gmail" />
+    <img src="https://img.icons8.com/ios-filled/50/000000/gmail.png" class="icon icon-light" alt="Gmail" />
+    Email: <a href="mailto:soni.soni.parth@gmail.com">soni.soni.parth@gmail.com</a>
+  </p>
+
+  <p>
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" class="icon icon-dark" alt="LinkedIn" />
+    <img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" class="icon icon-light" alt="LinkedIn" />
+    LinkedIn: <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank">Parth Soni</a>
+  </p>
+
+  <p>
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" class="icon icon-dark" alt="GitHub" />
+    <img src="https://img.icons8.com/ios-filled/50/000000/github.png" class="icon icon-light" alt="GitHub" />
+    GitHub: <a href="https://github.com/parth-soni-10" target="_blank">Parth Soni</a>
+  </p>
+
+  <p>
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/twitterx--v1.png" class="icon icon-dark" alt="Twitter" />
+    <img src="https://img.icons8.com/ios-filled/50/000000/twitterx--v1.png" class="icon icon-light" alt="Twitter" />
+    Twitter: <a href="https://x.com/theimprfectkid" target="_blank">Parth Soni</a>
+  </p>
+</section>
+
+
+  <button id="toggle">Toggle Theme</button>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+
+      const sections = document.querySelectorAll("section");
+      const options = {
+        threshold: 0.1
+      };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, options);
+      sections.forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
