@@ -395,3 +395,25 @@ body.light-mode .icon-light { display: inline-block; }
   position: relative;
   top: -2px; /* adjust until text aligns perfectly */
 }
+
+#about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--hero-bg);
+  padding: 60px 20px;
+  color: var(--text-color);
+}
+
+.about-wrapper {
+  max-width: 720px;
+  width: 100%;
+  text-align: left;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+}
+
+.about-wrapper p {
+  margin-bottom: 1.2rem;
+}
