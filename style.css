@@ -432,3 +432,23 @@ body.light-mode .icon-light { display: inline-block; }
 .dashboard-button:hover{
   background-color: #3e8e41;
 }
+
+.dashboard-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.dashboard-button{
+  padding:6px 12px;
+  font-size:0.9rem;
+  border-radius:6px;
+  text-decoration:none;
+  background:#4CAF50;
+  color:white;
+  font-weight:600;
+}
+
+.dashboard-button:hover{
+  background:#3e8e41;
+}
