@@ -417,3 +417,18 @@ body.light-mode .icon-light { display: inline-block; }
 .about-wrapper p {
   margin-bottom: 1.2rem;
 }
+
+.dashboard-button{
+  margin-left: 12px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: 600;
+}
+
+.dashboard-button:hover{
+  background-color: #3e8e41;
+}
