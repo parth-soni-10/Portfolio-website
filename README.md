@@ -4,7 +4,7 @@
 
 A fully hand-coded personal portfolio website built with **pure HTML, CSS, and vanilla JavaScript** — no frameworks, no build tools, no dependencies. Just clean, fast, and intentional front-end code.
 
-Live and deployed at: **[your-url-here]**
+Live and deployed at: **https://parth-portfolio-wb.netlify.app/**
 
 ---
 
