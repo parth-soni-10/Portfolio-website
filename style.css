@@ -336,65 +336,11 @@ nav a:hover { color: var(--orange); }
 
 .rule-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
 
-/* ===================== THREE-COL LAYOUT (ABOUT) ===================== */
-.three-col-layout {
+/* ===================== TWO-COL LAYOUT (ABOUT) ===================== */
+.two-col-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 1fr;
+  grid-template-columns: 1fr 420px;
   border-bottom: 1px solid var(--rule);
-}
-
-.sidebar {
-  background: var(--ink);
-  padding: 3.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  border-right: 1px solid rgba(255,255,255,0.08);
-}
-
-.sidebar-section-label {
-  font-size: 0.65rem;
-  color: var(--orange);
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.sidebar-list { list-style: none; }
-
-.sidebar-list li {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.82);
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.sidebar-list.plain li { justify-content: flex-start; }
-
-/* Skill level badges on dark sidebar */
-.skill-badge {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.25rem 0.65rem;
-  border-radius: 2px;
-  font-weight: 600;
-  background: rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.88);
-  border: 1px solid rgba(255,255,255,0.2);
-  white-space: nowrap;
-}
-
-.skill-badge.expert {
-  background: rgba(232,93,4,0.3);
-  color: #ffaa70;
-  border-color: rgba(232,93,4,0.5);
 }
 
 .about-main {
@@ -402,6 +348,42 @@ nav a:hover { color: var(--orange); }
   background: var(--cream-light);
   border-right: 1px solid var(--rule);
 }
+
+/* Open to roles block */
+.open-to-block {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.open-to-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+
+.open-to-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.open-to-chip {
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.45rem 1rem;
+  border-radius: 3px;
+  background: var(--ink);
+  color: #fff;
+  border: 1px solid var(--ink);
+  letter-spacing: 0.02em;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.open-to-chip:hover { background: var(--orange); border-color: var(--orange); }
 
 .section-eyebrow {
   font-size: 0.68rem;
@@ -874,8 +856,8 @@ footer { display: grid; grid-template-columns: 1fr 0.85fr 0.85fr; }
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
-  .three-col-layout { grid-template-columns: 240px 1fr; }
-  .edu-aside { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding: 3rem 2.5rem; }
+  .two-col-layout { grid-template-columns: 1fr; }
+  .edu-aside { border-top: 1px solid var(--rule); padding: 3rem 2.5rem; }
   .cert-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -887,9 +869,7 @@ footer { display: grid; grid-template-columns: 1fr 0.85fr 0.85fr; }
   .hero-left { padding: 5rem 2rem 3rem; min-height: 70vh; }
   .hero-left::after { display: none; }
   .hero-right { padding: 3rem 2rem; border-left: none; border-top: 1px solid var(--rule); }
-  .three-col-layout { grid-template-columns: 1fr; }
-  .sidebar { flex-direction: row; flex-wrap: wrap; gap: 1.5rem; padding: 2.5rem 2rem; }
-  .sidebar-block { min-width: 180px; flex: 1; }
+  .two-col-layout { grid-template-columns: 1fr; }
   .exp-block { grid-template-columns: 1fr; gap: 0.75rem; }
   .exp-meta { padding-top: 0; }
   .experience-inner, .projects-inner, .skills-full-inner, .certs-inner { padding: 0 2rem; }
