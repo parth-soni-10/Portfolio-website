@@ -385,6 +385,53 @@ nav a:hover { color: var(--orange); }
 
 .open-to-chip:hover { background: var(--orange); border-color: var(--orange); }
 
+/* Medium writing callout in About */
+.medium-callout {
+  margin-top: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--ink);
+  border-left: 3px solid var(--orange);
+  border-radius: 4px;
+}
+
+.medium-callout-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.medium-callout-desc {
+  font-size: 0.84rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.btn-medium {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background: var(--orange);
+  color: #fff;
+  padding: 0.65rem 1.3rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.btn-medium:hover { background: var(--orange-dark); }
+
 .section-eyebrow {
   font-size: 0.68rem;
   text-transform: uppercase;
