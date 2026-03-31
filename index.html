@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -346,6 +346,8 @@
       </div>
     </div>
   </section>
+
+  <!-- ===================== SKILLS ===================== -->
   <section id="skills" class="skills-full-section">
     <div class="skills-full-inner">
       <p class="section-eyebrow">Skills</p>
@@ -525,4 +527,20 @@
         <div class="footer-grey-tags">
           <span class="footer-grey-tag">Dublin, Ireland</span>
           <span class="footer-grey-tag">Available May 2026</span>
-     
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- IndexNow Helper and notification on page load -->
+  <script src="indexnow-helper.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof notifyContentUpdate === 'function') {
+        notifyContentUpdate().catch(err => console.log('IndexNow notification skipped:', err));
+      }
+    });
+  </script>
+</body>
+</html>
