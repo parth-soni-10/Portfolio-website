@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup 1 – Terminal Data</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e0a;
+    --surface: #0f1a0f;
+    --card: #111d11;
+    --accent: #39ff14;
+    --accent2: #00e5ff;
+    --text: #d4f5d4;
+    --muted: #5a8a5a;
+    --border: #1e3a1e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* --- NAV --- */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,10,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .logo span { color: var(--text); opacity: 0.5; font-weight: 400; }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    margin-left: 1.5rem;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* --- HERO --- */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 4rem 4rem;
+    position: relative;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  .terminal-window {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(57,255,20,0.08);
+  }
+
+  .terminal-bar {
+    background: var(--card);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .terminal-title { color: var(--muted); font-size: 0.7rem; margin-left: auto; letter-spacing: 0.1em; }
+
+  .terminal-body { padding: 1.5rem; font-size: 0.8rem; line-height: 2; }
+  .t-line { display: flex; gap: 0.5rem; }
+  .t-prompt { color: var(--accent); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--muted); padding-left: 1.5rem; }
+  .t-out.highlight { color: var(--accent2); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-text h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .hero-text h1 .name-accent { color: var(--accent); }
+
+  .hero-tagline {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    max-width: 380px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 4px;
+  }
+
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .cta-row { display: flex; gap: 1rem; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0e0a;
+    padding: 0.7rem 1.5rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: box-shadow 0.2s;
+  }
+  .btn-primary:hover { box-shadow: 0 0 20px rgba(57,255,20,0.5); }
+
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.7rem 1.5rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* --- SKILLS TICKER --- */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.7rem 0;
+    background: var(--surface);
+  }
+
+  .ticker {
+    display: flex;
+    gap: 3rem;
+    animation: ticker 25s linear infinite;
+    width: max-content;
+  }
+
+  .ticker span {
+    white-space: nowrap;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .ticker span strong { color: var(--accent); }
+
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* --- ABOUT --- */
+  #about {
+    padding: 5rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading span { color: var(--accent); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 2;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .data-bars { display: flex; flex-direction: column; gap: 1rem; }
+
+  .bar-item { }
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .bar-label span:last-child { color: var(--accent); }
+
+  .bar-track {
+    background: var(--border);
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    animation: fillBar 1.5s ease-out forwards;
+    transform-origin: left;
+  }
+
+  @keyframes fillBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* --- EXPERIENCE TIMELINE --- */
+  #experience {
+    padding: 5rem 4rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-inner { max-width: 1200px; margin: 0 auto; }
+
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -6px; top: 6px;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .tl-date { font-size: 0.65rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.4rem; }
+  .tl-role { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+  .tl-company { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .tl-list { list-style: none; }
+  .tl-list li { font-size: 0.78rem; color: var(--muted); line-height: 1.8; padding-left: 1rem; position: relative; }
+  .tl-list li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
+
+  /* --- PROJECTS --- */
+  #projects { padding: 5rem 4rem; max-width: 1200px; margin: 0 auto; }
+
+  .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+  .proj-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proj-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(57,255,20,0.03), transparent);
+  }
+
+  .proj-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(57,255,20,0.1);
+  }
+
+  .proj-num { font-size: 0.65rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+  .proj-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.7rem; }
+  .proj-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+  .proj-link { font-size: 0.7rem; color: var(--accent2); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; }
+  .proj-link:hover { text-decoration: underline; }
+
+  /* --- FOOTER --- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* BG grid */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  section, header, footer { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<header>
+  <div class="logo">PS<span>.portfolio</span></div>
+  <nav>
+    <a href="#">About</a>
+    <a href="#">Experience</a>
+    <a href="#">Projects</a>
+    <a href="#">Skills</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <p class="section-tag">// data_analyst.init()</p>
+      <h1>Hi, I'm <span class="name-accent">Parth</span><br>Soni.</h1>
+      <p class="hero-tagline">Turning messy datasets into meaningful decisions — from SQL queries to boardroom dashboards, one insight at a time.</p>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num">4+</span>
+          <span class="stat-label">Certifications</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Internships</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">MSc</span>
+          <span class="stat-label">UCD Dublin</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">4+</span>
+          <span class="stat-label">Projects</span>
+        </div>
+      </div>
+      <div class="cta-row">
+        <a href="#" class="btn-primary">View Resume</a>
+        <a href="#" class="btn-ghost">Let's Connect</a>
+      </div>
+    </div>
+
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">parth@portfolio ~ analyst.py</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> import parth_soni as ps</span></div>
+        <div class="t-line"><span class="t-out"># Loading profile...</span></div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"> ps.info()</span></div>
+        <div class="t-line"><span class="t-out highlight">{ role: "Data Analyst" }</span></div>
+        <div class="t-line"><span class="t-out">  location: "Dublin, Ireland"</span></div>
+        <div class="t-line"><span class="t-out">  education: "MSc CS @ UCD"</span></div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"> ps.skills()</span></div>
+        <div class="t-line"><span class="t-out highlight">["SQL", "Python", "Power BI",</span></div>
+        <div class="t-line"><span class="t-out"> "Tableau", "Excel", "Snowflake"]</span></div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"> ps.status()</span></div>
+        <div class="t-line"><span class="t-out highlight">"Open to opportunities 🟢"</span></div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"><span class="cursor"></span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span><strong>SQL</strong> · Data Querying</span>
+    <span><strong>Power BI</strong> · Dashboard Design</span>
+    <span><strong>Python</strong> · EDA & Analysis</span>
+    <span><strong>Tableau</strong> · Visualization</span>
+    <span><strong>Excel</strong> · Advanced Analytics</span>
+    <span><strong>Snowflake</strong> · Cloud Data</span>
+    <span><strong>ML</strong> · CNN & Modelling</span>
+    <span><strong>SQL</strong> · Data Querying</span>
+    <span><strong>Power BI</strong> · Dashboard Design</span>
+    <span><strong>Python</strong> · EDA & Analysis</span>
+    <span><strong>Tableau</strong> · Visualization</span>
+    <span><strong>Excel</strong> · Advanced Analytics</span>
+    <span><strong>Snowflake</strong> · Cloud Data</span>
+    <span><strong>ML</strong> · CNN & Modelling</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <p class="section-tag">// about.me</p>
+      <h2 class="section-heading">Who I <span>Am</span></h2>
+      <div class="about-text">
+        <p>Hey there! I'm <strong>Parth</strong> — an aspiring data analyst pursuing my MSc in <strong>Computer Science</strong> at <strong>University College Dublin</strong>, Ireland.</p>
+        <p>I enjoy turning messy datasets into clear, actionable stories. When I'm not building dashboards, you'll find me following <strong>Formula 1</strong>, tennis, or going deep on aviation specs.</p>
+        <p>Always exploring, always analyzing — excited by the stories hidden in data and how they help people make smarter decisions.</p>
+      </div>
+    </div>
+    <div>
+      <p class="section-tag">// skill_proficiency.map()</p>
+      <div class="data-bars">
+        <div class="bar-item">
+          <div class="bar-label"><span>SQL & Databases</span><span>90%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Excel & Power BI</span><span>92%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Python & EDA</span><span>80%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Tableau</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Data Storytelling</span><span>88%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="position:relative;z-index:1;">
+  <div class="exp-inner">
+    <p class="section-tag">// career.log</p>
+    <h2 class="section-heading">Experience</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <p class="tl-date">Nov 2023 – May 2024</p>
+        <p class="tl-role">Inventory Analyst – Intern</p>
+        <p class="tl-company">ANKO (KAS Services) · Bengaluru, India</p>
+        <ul class="tl-list">
+          <li>Monitored key supply chain metrics for a division with ~1.8M AUD/week revenue</li>
+          <li>Built real-time stock monitoring systems; reduced shrinkage by 7%</li>
+          <li>Coordinated cross-functional teams for peak-season inventory planning</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">Feb 2023 – Aug 2023</p>
+        <p class="tl-role">Technical Writer – Intern</p>
+        <p class="tl-company">Nokia · Bengaluru, India</p>
+        <ul class="tl-list">
+          <li>Redesigned 70+ product documents under new brand guidelines</li>
+          <li>Created infographics & diagrams to simplify complex technical content</li>
+          <li>Authored 3 comprehensive user manuals in collaboration with R&D</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <p class="section-tag">// projects.render()</p>
+  <h2 class="section-heading">Projects</h2>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <p class="proj-num">01 // python · excel</p>
+      <h3 class="proj-title">Excel & Python EDA</h3>
+      <p class="proj-desc">Cleaned public datasets, performed exploratory statistical analysis, and built visualization charts to surface actionable sales insights.</p>
+      <a href="https://github.com/parth-soni-10/Excel_EDA" class="proj-link">→ GitHub Repo</a>
+    </div>
+    <div class="proj-card">
+      <p class="proj-num">02 // cnn · flask</p>
+      <h3 class="proj-title">Pink Eye Detection CNN</h3>
+      <p class="proj-desc">Built a CNN to classify conjunctivitis from eye images with real-time camera input via Flask. Implemented Conv2D, MaxPooling, ReLU, Dropout layers.</p>
+      <a href="https://github.com/parth-soni-10/Flask_webapp" class="proj-link">→ GitHub Repo</a>
+    </div>
+    <div class="proj-card">
+      <p class="proj-num">03 // tableau</p>
+      <h3 class="proj-title">Interactive Tableau Dashboards</h3>
+      <p class="proj-desc">Designed data-driven story dashboards with filters, parameters, and calculated fields for interactive business insight exploration.</p>
+      <a href="https://public.tableau.com/app/profile/parth.soni7469" class="proj-link">→ Tableau Public</a>
+    </div>
+    <div class="proj-card">
+      <p class="proj-num">04 // google sheets · looker</p>
+      <h3 class="proj-title">Content Consumption Analytics</h3>
+      <p class="proj-desc">Tracked 2+ years of personal watch data in Google Sheets. Built a living Looker Studio dashboard surfacing genre, platform, and time-based trends.</p>
+      <a href="#" class="proj-link">→ View Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Parth Soni · Data Analyst · Dublin, Ireland</span>
+  <span>soni.soni.parth@gmail.com · <a href="#">LinkedIn</a> · <a href="#">GitHub</a></span>
+</footer>
+
+</body>
+</html>

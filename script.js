@@ -1,105 +1,41 @@
-/* =====================================================
-   PARTH SONI PORTFOLIO — script.js
-   - Mobile menu toggle
-   - Scroll fade-in animations
-   - Active nav link highlighting
-   - Smooth section reveal on load
-   ===================================================== */
+// ── TYPEWRITER ────────────────────────────────────────────
+const roles = ['Data Analyst','SQL Wizard','BI Developer','F1 Enthusiast','Storyteller','Dashboard Builder','Insights Analyst'];
+let ri = 0, ci = 0, del = false;
+const tw = document.getElementById('tw');
+const cur = document.getElementById('cur');
 
-(function () {
-  'use strict';
+setInterval(() => cur.style.opacity = cur.style.opacity === '0' ? '1' : '0', 520);
 
-  // ---- Mobile menu ----
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileNav  = document.getElementById('mobileNav');
-
-  if (menuToggle && mobileNav) {
-    menuToggle.addEventListener('click', () => {
-      const isOpen = mobileNav.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', isOpen);
-      menuToggle.textContent = isOpen ? '✕' : '☰';
-    });
-
-    // Close on link click
-    mobileNav.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-        menuToggle.textContent = '☰';
-      });
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
-        mobileNav.classList.remove('open');
-        menuToggle.textContent = '☰';
-      }
-    });
+function tick() {
+  const w = roles[ri];
+  if (!del) {
+    tw.textContent = w.slice(0, ++ci);
+    if (ci === w.length) { del = true; setTimeout(tick, 1900); return; }
+  } else {
+    tw.textContent = w.slice(0, --ci);
+    if (ci === 0) { del = false; ri = (ri + 1) % roles.length; }
   }
+  setTimeout(tick, del ? 42 : 75);
+}
+tick();
 
-  // ---- Fade-up scroll animations ----
-  const fadeTargets = document.querySelectorAll(
-    '.exp-block, .proj-row, .cert-card, .edu-entry, ' +
-    '.resume-inline-card, .skill-chip, .role-card, .about-body'
-  );
+// ── THEME TOGGLE ──────────────────────────────────────────
+const root = document.documentElement;
+const btn  = document.getElementById('themeBtn');
+const moon = document.getElementById('iconMoon');
+const sun  = document.getElementById('iconSun');
 
-  // Add fade-up class to animatable elements
-  fadeTargets.forEach(el => el.classList.add('fade-up'));
+const saved = localStorage.getItem('theme') || 'dark';
+setTheme(saved);
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-  );
+btn.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  localStorage.setItem('theme', next);
+});
 
-  fadeTargets.forEach(el => observer.observe(el));
-
-  // ---- Staggered cert card reveal ----
-  const certCards = document.querySelectorAll('.cert-card');
-  certCards.forEach((card, i) => {
-    card.style.transitionDelay = `${i * 60}ms`;
-  });
-
-  // ---- Active nav link on scroll ----
-  const sections  = document.querySelectorAll('section[id], div[id], footer[id]');
-  const navLinks  = document.querySelectorAll('nav a');
-  const headerH   = 70;
-
-  function setActiveNav() {
-    let current = '';
-    sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - headerH - 20) {
-        current = sec.getAttribute('id');
-      }
-    });
-
-    navLinks.forEach(link => {
-      link.style.color = '';
-      const href = link.getAttribute('href');
-      if (href === '#' + current) {
-        link.style.color = '#e85d04';
-      }
-    });
-  }
-
-  window.addEventListener('scroll', setActiveNav, { passive: true });
-  setActiveNav();
-
-  // ---- Header shrink on scroll ----
-  const header = document.getElementById('site-header');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 80) {
-      header.style.boxShadow = '0 2px 24px rgba(0,0,0,0.4)';
-    } else {
-      header.style.boxShadow = 'none';
-    }
-  }, { passive: true });
-
-})();
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  moon.style.display = t === 'dark' ? 'block' : 'none';
+  sun.style.display  = t === 'light' ? 'block' : 'none';
+}

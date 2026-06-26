@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth Soni — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root, [data-theme="dark"] {
+  --bg:           #0a0a0a;
+  --bg-raised:    #111111;
+  --card:         rgba(255,255,255,0.035);
+  --card-hover:   rgba(255,255,255,0.065);
+  --border:       rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.18);
+  --t1:           #f0f0f0;
+  --t2:           rgba(240,240,240,0.52);
+  --t3:           rgba(240,240,240,0.28);
+  --amber:        #f59e0b;
+  --amber-bg:     rgba(245,158,11,0.1);
+  --amber-border: rgba(245,158,11,0.22);
+  --nav-bg:       rgba(10,10,10,0.78);
+  --pill-bg:      rgba(255,255,255,0.06);
+  --pill-border:  rgba(255,255,255,0.1);
+  --icon-filter:  none;
+  --scheme:       dark;
+}
+
+[data-theme="light"] {
+  --bg:           #f5f5f4;
+  --bg-raised:    #ffffff;
+  --card:         rgba(0,0,0,0.032);
+  --card-hover:   rgba(0,0,0,0.058);
+  --border:       rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.18);
+  --t1:           #111111;
+  --t2:           rgba(17,17,17,0.52);
+  --t3:           rgba(17,17,17,0.32);
+  --amber:        #c77c00;
+  --amber-bg:     rgba(199,124,0,0.08);
+  --amber-border: rgba(199,124,0,0.22);
+  --nav-bg:       rgba(245,245,244,0.82);
+  --pill-bg:      rgba(0,0,0,0.04);
+  --pill-border:  rgba(0,0,0,0.09);
+  --icon-filter:  none;
+  --scheme:       light;
+}
+
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { color-scheme: var(--scheme); scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s, color 0.25s;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; }
+
+/* ── NAV ─────────────────────────────────────────────────── */
+.nav-wrap {
+  position: sticky;
+  top: 0; z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px) saturate(1.5);
+  border-bottom: 1px solid var(--border);
+}
+.nav {
+  max-width: 680px; margin: 0 auto;
+  padding: 0 1.25rem;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { font-size: 0.85rem; font-weight: 600; letter-spacing: -0.02em; }
+.nav-links { display: flex; align-items: center; gap: 1.5rem; }
+.nav-links a {
+  font-size: 0.78rem; color: var(--t3);
+  transition: color 0.15s; letter-spacing: -0.01em;
+}
+.nav-links a:hover { color: var(--t1); }
+.theme-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--t2); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+.theme-btn:hover { border-color: var(--border-hover); color: var(--t1); background: var(--card-hover); }
+.theme-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+/* ── PAGE ─────────────────────────────────────────────────── */
+.page {
+  max-width: 680px; margin: 0 auto;
+  padding: 2rem 1.25rem 6rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+
+/* ── CARD ─────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.35rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.card:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.card-no-hover { transition: none; }
+.card-no-hover:hover { border-color: var(--border); background: var(--card); }
+
+/* ── SECTION LABEL ────────────────────────────────────────── */
+.slabel {
+  font-size: 0.65rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.13em;
+  color: var(--t3); margin-bottom: 1.1rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.slabel::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* ── PROFILE ──────────────────────────────────────────────── */
+.profile-row {
+  display: flex; gap: 1.1rem; align-items: flex-start;
+}
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-hover);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; flex-shrink: 0; overflow: hidden;
+}
+.avatar img { width:100%; height:100%; object-fit: cover; }
+.profile-name {
+  font-size: 1.18rem; font-weight: 700;
+  letter-spacing: -0.025em; margin-bottom: 0.18rem;
+}
+.profile-sub {
+  font-size: 0.82rem; color: var(--t2);
+  min-height: 1.25em; margin-bottom: 0.75rem;
+}
+.profile-sub #tw { color: var(--amber); font-weight: 500; }
+.profile-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.mpill {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem; color: var(--t2);
+  background: var(--pill-bg); border: 1px solid var(--pill-border);
+  border-radius: 100px; padding: 0.24rem 0.7rem;
+}
+.dot { width:6px; height:6px; border-radius:50%; background:#22c55e; box-shadow:0 0 5px #22c55e; flex-shrink:0; }
+
+.about-text {
+  font-size: 0.875rem; color: var(--t2); line-height: 1.88; margin-top: 1.1rem;
+}
+.about-text strong { color: var(--t1); font-weight: 500; }
+.about-text + .about-text { margin-top: 0.6rem; }
+
+/* Social links */
+.socials { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.1rem; }
+.slink {
+  display: inline-flex; align-items: center; gap: 0.42rem;
+  font-size: 0.76rem; color: var(--t2);
+  background: var(--pill-bg); border: 1px solid var(--pill-border);
+  border-radius: 9px; padding: 0.38rem 0.8rem;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.slink:hover { border-color: var(--border-hover); color: var(--t1); background: var(--card-hover); }
+.slink svg { width:13px; height:13px; flex-shrink:0; }
+
+/* ── SKILLS ───────────────────────────────────────────────── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 0.5rem;
+}
+.skill {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 0.4rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 11px;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: default;
+}
+.skill:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.skill img { width: 22px; height: 22px; object-fit: contain; }
+.skill-name {
+  font-size: 0.63rem; color: var(--t2); text-align: center;
+  letter-spacing: 0.01em; line-height: 1.3;
+}
+
+/* ── EXPERIENCE ───────────────────────────────────────────── */
+.exp-list { display: flex; flex-direction: column; gap: 0.55rem; }
+.exp-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.1rem 1.25rem;
+  display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.exp-card:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.exp-num { font-size: 0.65rem; color: var(--amber); font-weight: 600; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+.exp-role { font-size: 0.92rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 0.18rem; }
+.exp-company { font-size: 0.78rem; color: var(--t2); margin-bottom: 0.65rem; }
+.exp-desc { font-size: 0.82rem; color: var(--t2); line-height: 1.8; margin-bottom: 0.8rem; }
+.exp-bullets { list-style: none; margin-bottom: 0.8rem; }
+.exp-bullets li {
+  font-size: 0.8rem; color: var(--t2); line-height: 1.75;
+  padding-left: 1.1rem; position: relative;
+}
+.exp-bullets li::before { content:'–'; position:absolute; left:0; color: var(--t3); }
+.exp-meta-right { text-align: right; flex-shrink: 0; }
+.exp-date { font-size: 0.7rem; color: var(--t3); white-space: nowrap; }
+.exp-loc { font-size: 0.7rem; color: var(--t3); margin-top: 0.2rem; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.tag {
+  font-size: 0.66rem; color: var(--t3);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.18rem 0.5rem; letter-spacing: 0.01em;
+}
+
+/* ── PROJECTS ─────────────────────────────────────────────── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.proj-grid .pcard:first-child { grid-column: 1 / -1; }
+
+.pcard {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.pcard:hover { border-color: var(--border-hover); background: var(--card-hover); }
+
+.pcard-img {
+  height: 140px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.pcard:first-child .pcard-img { height: 170px; }
+
+.pcard-img canvas, .pcard-img .pattern { position: absolute; inset: 0; }
+
+.pbadge {
+  position: absolute; top: 0.65rem; right: 0.65rem;
+  font-size: 0.62rem; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber); background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  border-radius: 100px; padding: 0.2rem 0.6rem; z-index: 2;
+}
+
+.pcard-body { padding: 1rem 1.1rem 1.1rem; flex: 1; display: flex; flex-direction: column; }
+.pcard-links { display: flex; gap: 0.6rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+.pcard-link {
+  font-size: 0.72rem; color: var(--t3); font-weight: 500;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  transition: color 0.15s;
+}
+.pcard-link:hover { color: var(--t1); }
+.pcard-link svg { width:11px; height:11px; }
+.pcard-title {
+  font-size: 0.9rem; font-weight: 600; letter-spacing: -0.015em;
+  margin-bottom: 0.35rem;
+}
+.pcard-desc {
+  font-size: 0.78rem; color: var(--t2); line-height: 1.8;
+  margin-bottom: 0.85rem; flex: 1;
+}
+.pcard-icons { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.pcard-icon { width: 16px; height: 16px; object-fit: contain; opacity: 0.7; }
+.pcard-icon:hover { opacity: 1; }
+
+/* ── OPEN TO ──────────────────────────────────────────────── */
+.open-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.open-chip {
+  font-size: 0.75rem; font-weight: 500;
+  padding: 0.32rem 0.85rem; border-radius: 100px;
+  background: var(--pill-bg); border: 1px solid var(--pill-border);
+  color: var(--t2); letter-spacing: -0.01em;
+  transition: border-color 0.15s, color 0.15s;
+}
+.open-chip:hover { border-color: var(--border-hover); color: var(--t1); }
+
+/* ── WRITING CTA ──────────────────────────────────────────── */
+.writing-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.1rem 1.35rem;
+  background: var(--amber-bg); border: 1px solid var(--amber-border);
+  border-radius: 14px; transition: border-color 0.2s, background 0.2s;
+}
+.writing-cta:hover { border-color: rgba(245,158,11,0.42); background: rgba(245,158,11,0.15); }
+.wc-label { font-size: 0.65rem; color: var(--amber); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; margin-bottom: 0.22rem; }
+.wc-title { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 0.2rem; }
+.wc-desc { font-size: 0.76rem; color: var(--t2); line-height: 1.6; }
+.wc-arrow { color: var(--amber); font-size: 1rem; flex-shrink: 0; }
+
+/* ── CONTACT ──────────────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+.citem {
+  display: flex; flex-direction: column; gap: 0.28rem;
+  padding: 1rem; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--border);
+  transition: border-color 0.15s, background 0.15s;
+}
+.citem:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.citem-icon { font-size: 1rem; }
+.citem-label { font-size: 0.82rem; font-weight: 600; letter-spacing: -0.01em; }
+.citem-sub { font-size: 0.7rem; color: var(--t3); }
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 1rem; padding-top: 1.25rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-l, .footer-r { font-size: 0.73rem; color: var(--t3); }
+
+/* ── TRANSITIONS ──────────────────────────────────────────── */
+.card, .exp-card, .pcard, .skill, .slink, .citem, .writing-cta {
+  transition: border-color 0.2s, background 0.2s;
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <span class="nav-logo">parth.soni</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#stack">Stack</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="themeBtn" title="Toggle theme">
+        <!-- Moon icon (default, shown in dark mode) -->
+        <svg id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- Sun icon (shown in light mode) -->
+        <svg id="iconSun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<main class="page">
+
+  <!-- ── PROFILE ── -->
+  <div class="card card-no-hover" id="about">
+    <div class="profile-row">
+      <div class="avatar">🧑🏽</div>
+      <div>
+        <div class="profile-name">Parth Soni</div>
+        <div class="profile-sub"><span id="tw">Data Analyst</span><span id="cur" style="color:var(--t3);font-weight:300"> |</span></div>
+        <div class="profile-meta">
+          <span class="mpill"><span class="dot"></span>Open to work</span>
+          <span class="mpill">📍 Dublin, Ireland</span>
+          <span class="mpill">🎓 MSc CS · UCD</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="about-text">
+      I take <strong>messy, chaotic data</strong> and turn it into something that actually means something.
+      I live in the space between spreadsheets and strategy — building dashboards, writing queries,
+      and finding patterns that others miss.
+    </p>
+    <p class="about-text">
+      Three words own my weekends: <strong>Formula 1. Tennis. Counter-Strike.</strong> Certified avgeek ✈️,
+      sci-fi binge-watcher 🚀, and always chasing the quiet satisfaction of a perfectly cleaned dataset.
+    </p>
+
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank" class="slink">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/parth-soni-10" target="_blank" class="slink">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://x.com/theimprfectkid" target="_blank" class="slink">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        X / Twitter
+      </a>
+      <a href="https://medium.com/@soni.soni.parth" target="_blank" class="slink">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+        Medium
+      </a>
+      <a href="mailto:soni.soni.parth@gmail.com" class="slink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Email
+      </a>
+      <a href="https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view" target="_blank" class="slink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Resume
+      </a>
+    </div>
+  </div>
+
+  <!-- ── TECH STACK ── -->
+  <div class="card card-no-hover" id="stack">
+    <div class="slabel">Tech Stack</div>
+    <div class="skills-grid">
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="SQL">
+        <span class="skill-name">SQL</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/python/3776AB" alt="Python">
+        <span class="skill-name">Python</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/microsoftpowerbi/F2C811" alt="Power BI">
+        <span class="skill-name">Power BI</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/tableau/E97627" alt="Tableau">
+        <span class="skill-name">Tableau</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/microsoftexcel/217346" alt="Excel">
+        <span class="skill-name">Excel</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/snowflake/29B5E8" alt="Snowflake">
+        <span class="skill-name">Snowflake</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/looker/4285F4" alt="Looker">
+        <span class="skill-name">Looker Studio</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/pandas/150458" alt="Pandas">
+        <span class="skill-name">Pandas</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/googlesheets/34A853" alt="Sheets">
+        <span class="skill-name">Google Sheets</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/scikitlearn/F7931E" alt="Scikit-learn">
+        <span class="skill-name">scikit-learn</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/git/F05032" alt="Git">
+        <span class="skill-name">Git</span>
+      </div>
+      <div class="skill">
+        <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML">
+        <span class="skill-name">HTML / CSS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EXPERIENCE ── -->
+  <div id="experience">
+    <div class="slabel">Experience</div>
+    <div class="exp-list">
+
+      <div class="exp-card">
+        <div>
+          <div class="exp-num">01 · ANKO (KAS Services)</div>
+          <div class="exp-role">Inventory Analyst — Intern</div>
+          <div class="exp-company">Supply Chain &amp; Analytics · Bengaluru, India</div>
+          <ul class="exp-bullets">
+            <li>Managed supply chain metrics for a new division with ~1.8M AUD weekly revenue</li>
+            <li>Reduced shrinkage by 7% and prevented stockouts through demand trend analysis</li>
+            <li>Determined a 15% avg. inventory uplift was needed to meet peak period demand</li>
+            <li>Built real-time monitoring dashboards for stock and business metric visibility</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Excel</span><span class="tag">Supply Chain</span>
+            <span class="tag">Inventory Management</span><span class="tag">Data Analysis</span>
+          </div>
+        </div>
+        <div class="exp-meta-right">
+          <div class="exp-date">Nov 2023 — May 2024</div>
+          <div class="exp-loc">Bengaluru, India</div>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div>
+          <div class="exp-num">02 · Nokia</div>
+          <div class="exp-role">Technical Writer — Intern</div>
+          <div class="exp-company">Documentation &amp; Communications · Bengaluru, India</div>
+          <ul class="exp-bullets">
+            <li>Produced structured technical documentation and reports for engineering teams</li>
+            <li>Developed writing processes that improved documentation clarity and consistency</li>
+            <li>Delivered accurate, well-formatted content under tight release deadlines</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Technical Writing</span><span class="tag">Documentation</span>
+            <span class="tag">Communication</span>
+          </div>
+        </div>
+        <div class="exp-meta-right">
+          <div class="exp-date">Feb 2023 — Aug 2023</div>
+          <div class="exp-loc">Bengaluru, India</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── PROJECTS ── -->
+  <div id="projects">
+    <div class="slabel">Projects</div>
+    <div class="proj-grid">
+
+      <!-- 01 Content Dashboard (full width) -->
+      <div class="pcard" onclick="window.open('https://contenttrackerdashboard.netlify.app/','_blank')">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#0d1117 0%,#0e2240 55%,#0d1117 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.12" viewBox="0 0 680 170" preserveAspectRatio="none">
+            <rect x="40" y="50" width="30" height="80" fill="#4285F4"/>
+            <rect x="80" y="70" width="30" height="60" fill="#4285F4"/>
+            <rect x="120" y="35" width="30" height="95" fill="#4285F4"/>
+            <rect x="160" y="55" width="30" height="75" fill="#4285F4"/>
+            <rect x="200" y="25" width="30" height="105" fill="#4285F4"/>
+            <rect x="240" y="60" width="30" height="70" fill="#4285F4"/>
+            <rect x="280" y="40" width="30" height="90" fill="#4285F4"/>
+            <rect x="320" y="65" width="30" height="65" fill="#4285F4"/>
+          </svg>
+          <span class="pbadge">Live · Personal Project</span>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-links">
+            <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" class="pcard-link" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Dashboard
+            </a>
+          </div>
+          <div class="pcard-title">Content Consumption Analytics Dashboard</div>
+          <div class="pcard-desc">2+ years of personal viewing data — genres, platforms, ratings, and watch time — tracked in Google Sheets and visualised in a fully interactive Looker Studio dashboard. Answers: which genres I binge, which platforms I use most, and how my taste has shifted over time.</div>
+          <div class="pcard-icons">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/looker/4285F4" title="Looker Studio">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/googlesheets/34A853" title="Google Sheets">
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 F1 Blog -->
+      <div class="pcard" onclick="window.open('https://medium.com/@soni.soni.parth','_blank')">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#1a0000 0%,#3d0a00 55%,#1a0000 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 140" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,70 Q85,20 170,70 Q255,120 340,70" stroke="#E8002D" stroke-width="2" fill="none"/>
+            <path d="M0,85 Q85,35 170,85 Q255,135 340,85" stroke="#E8002D" stroke-width="1" fill="none" opacity="0.5"/>
+          </svg>
+          <span class="pbadge">Every weekend</span>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-links">
+            <a href="https://medium.com/@soni.soni.parth" target="_blank" class="pcard-link" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Read on Medium
+            </a>
+          </div>
+          <div class="pcard-title">F1 Race Weekend Blog</div>
+          <div class="pcard-desc">Data-driven breakdowns after every race weekend. Qualifying debrief Saturday evening, race debrief Sunday. No fluff — just sharp strategy and pace analysis.</div>
+          <div class="pcard-icons">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/medium/000000" title="Medium" style="filter:invert(1) opacity(0.6)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 Tableau -->
+      <div class="pcard" onclick="window.open('https://public.tableau.com/app/profile/parth.soni7469','_blank')">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#100020 0%,#1f003a 55%,#100020 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 140" preserveAspectRatio="none">
+            <line x1="50" y1="20" x2="50" y2="120" stroke="#E97627" stroke-width="1.5"/>
+            <line x1="110" y1="40" x2="110" y2="100" stroke="#E97627" stroke-width="1.5"/>
+            <line x1="170" y1="10" x2="170" y2="130" stroke="#E97627" stroke-width="1.5"/>
+            <line x1="230" y1="30" x2="230" y2="110" stroke="#E97627" stroke-width="1.5"/>
+            <line x1="290" y1="50" x2="290" y2="90" stroke="#E97627" stroke-width="1.5"/>
+            <line x1="20" y1="50" x2="320" y2="50" stroke="#E97627" stroke-width="1"/>
+            <line x1="20" y1="70" x2="320" y2="70" stroke="#E97627" stroke-width="1"/>
+            <line x1="20" y1="90" x2="320" y2="90" stroke="#E97627" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-links">
+            <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" class="pcard-link" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Tableau Public
+            </a>
+          </div>
+          <div class="pcard-title">Interactive Tableau Dashboards</div>
+          <div class="pcard-desc">Public collection of interactive dashboards across sports, finance, and lifestyle domains. Built to explore and communicate data visually.</div>
+          <div class="pcard-icons">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/tableau/E97627" title="Tableau">
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Excel / Python EDA -->
+      <div class="pcard" onclick="window.open('https://github.com/parth-soni-10/Excel_EDA','_blank')">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#001a00 0%,#003300 55%,#001a00 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 140" preserveAspectRatio="none">
+            <polyline points="30,110 80,60 130,80 180,30 230,55 280,40 320,70" stroke="#3776AB" stroke-width="2" fill="none"/>
+            <polyline points="30,90 80,100 130,60 180,70 230,40 280,65 320,50" stroke="#217346" stroke-width="2" fill="none" stroke-dasharray="5,4"/>
+          </svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-links">
+            <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" class="pcard-link" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
+          <div class="pcard-title">Excel &amp; Python EDA</div>
+          <div class="pcard-desc">Exploratory data analysis using Excel and Python to uncover trends, outliers, and patterns in structured datasets.</div>
+          <div class="pcard-icons">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/python/3776AB" title="Python">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/microsoftexcel/217346" title="Excel">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/pandas/150458" title="Pandas">
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 Pink Eye CNN -->
+      <div class="pcard" onclick="window.open('https://github.com/parth-soni-10/Flask_webapp','_blank')">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#000d1a 0%,#001535 55%,#000d1a 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.13" viewBox="0 0 340 140" preserveAspectRatio="xMidYMid slice">
+            <circle cx="170" cy="70" r="30" stroke="#4285F4" stroke-width="1.5" fill="none"/>
+            <circle cx="170" cy="70" r="50" stroke="#4285F4" stroke-width="0.8" fill="none"/>
+            <circle cx="90" cy="40" r="15" stroke="#4285F4" stroke-width="1" fill="none"/>
+            <circle cx="250" cy="40" r="15" stroke="#4285F4" stroke-width="1" fill="none"/>
+            <circle cx="90" cy="100" r="15" stroke="#4285F4" stroke-width="1" fill="none"/>
+            <circle cx="250" cy="100" r="15" stroke="#4285F4" stroke-width="1" fill="none"/>
+            <line x1="100" y1="47" x2="145" y2="60" stroke="#4285F4" stroke-width="0.8"/>
+            <line x1="240" y1="47" x2="195" y2="60" stroke="#4285F4" stroke-width="0.8"/>
+            <line x1="100" y1="93" x2="145" y2="80" stroke="#4285F4" stroke-width="0.8"/>
+            <line x1="240" y1="93" x2="195" y2="80" stroke="#4285F4" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-links">
+            <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" class="pcard-link" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
+          <div class="pcard-title">Pink Eye Detection — CNN</div>
+          <div class="pcard-desc">Convolutional neural network deployed as a Flask web app to classify eye images and detect conjunctivitis. End-to-end from model training to web deployment.</div>
+          <div class="pcard-icons">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/python/3776AB" title="Python">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/scikitlearn/F7931E" title="scikit-learn">
+            <img class="pcard-icon" src="https://cdn.simpleicons.org/flask/000000" title="Flask" style="filter:invert(0.7)">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── WRITING CTA ── -->
+  <a href="https://medium.com/@soni.soni.parth" target="_blank" class="writing-cta">
+    <div>
+      <div class="wc-label">Writing on Medium</div>
+      <div class="wc-title">F1 Race Weekend Debrief</div>
+      <div class="wc-desc">Sharp analysis every race weekend — qualifying Saturday, race Sunday.</div>
+    </div>
+    <div class="wc-arrow">→</div>
+  </a>
+
+  <!-- ── OPEN TO ── -->
+  <div class="card card-no-hover">
+    <div class="slabel">Open To</div>
+    <div class="open-row">
+      <span class="open-chip">Data Analyst</span>
+      <span class="open-chip">Business Analyst</span>
+      <span class="open-chip">BI Developer</span>
+      <span class="open-chip">Insights Analyst</span>
+    </div>
+  </div>
+
+  <!-- ── CONTACT ── -->
+  <div id="contact">
+    <div class="slabel">Get in Touch</div>
+    <div class="contact-grid">
+      <a href="mailto:soni.soni.parth@gmail.com" class="citem">
+        <span class="citem-icon">✉️</span>
+        <span class="citem-label">Email</span>
+        <span class="citem-sub">Quick inquiries</span>
+      </a>
+      <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank" class="citem">
+        <span class="citem-icon">💼</span>
+        <span class="citem-label">LinkedIn</span>
+        <span class="citem-sub">Connect with me</span>
+      </a>
+      <a href="https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view" target="_blank" class="citem">
+        <span class="citem-icon">📄</span>
+        <span class="citem-label">Resume</span>
+        <span class="citem-sub">View on Drive</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-l">© 2026 Parth Soni</span>
+    <span class="footer-r">Dublin, Ireland 🇮🇪</span>
+  </div>
+
+</main>
+
+<script>
+// ── TYPEWRITER ────────────────────────────────────────────
+const roles = ['Data Analyst','SQL Wizard','BI Developer','F1 Enthusiast','Storyteller','Dashboard Builder','Insights Analyst'];
+let ri = 0, ci = 0, del = false;
+const tw = document.getElementById('tw');
+const cur = document.getElementById('cur');
+
+setInterval(() => cur.style.opacity = cur.style.opacity === '0' ? '1' : '0', 520);
+
+function tick() {
+  const w = roles[ri];
+  if (!del) {
+    tw.textContent = w.slice(0, ++ci);
+    if (ci === w.length) { del = true; setTimeout(tick, 1900); return; }
+  } else {
+    tw.textContent = w.slice(0, --ci);
+    if (ci === 0) { del = false; ri = (ri + 1) % roles.length; }
+  }
+  setTimeout(tick, del ? 42 : 75);
+}
+tick();
+
+// ── THEME TOGGLE ──────────────────────────────────────────
+const root = document.documentElement;
+const btn  = document.getElementById('themeBtn');
+const moon = document.getElementById('iconMoon');
+const sun  = document.getElementById('iconSun');
+
+const saved = localStorage.getItem('theme') || 'dark';
+setTheme(saved);
+
+btn.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  localStorage.setItem('theme', next);
+});
+
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  moon.style.display = t === 'dark' ? 'block' : 'none';
+  sun.style.display  = t === 'light' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>

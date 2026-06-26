@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup 2 – Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --ink: #0f0f0f;
+    --paper: #faf7f2;
+    --orange: #e85d04;
+    --warm-grey: #8a8070;
+    --rule: #d4cfc5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  /* --- HEADER --- */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--ink);
+    padding: 0 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+    border-bottom: 2px solid var(--orange);
+  }
+
+  .logo-box {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+
+  .logo-box sup {
+    font-size: 0.5rem;
+    color: var(--orange);
+    vertical-align: super;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.15em;
+  }
+
+  nav { display: flex; gap: 2rem; }
+  nav a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--orange); }
+
+  /* --- HERO --- */
+  #hero {
+    padding-top: 56px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-left {
+    background: var(--ink);
+    padding: 5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::after {
+    content: 'DATA';
+    position: absolute;
+    bottom: -0.15em;
+    right: -0.05em;
+    font-family: 'Playfair Display', serif;
+    font-size: 14rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .issue-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .issue-tag::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--orange);
+  }
+
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 900;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--orange);
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+    max-width: 340px;
+    margin-bottom: 3rem;
+  }
+
+  .btn-editorial {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--orange);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.9rem 2rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    transition: background 0.2s;
+    width: fit-content;
+  }
+
+  .btn-editorial:hover { background: #c44d02; }
+  .btn-editorial::after { content: '→'; font-size: 1rem; }
+
+  .hero-right {
+    background: var(--paper);
+    padding: 5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid var(--rule);
+  }
+
+  .profile-kicker {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--warm-grey);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .big-stat {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .big-num span { font-size: 2rem; color: var(--orange); }
+
+  .big-desc {
+    font-size: 0.78rem;
+    color: var(--warm-grey);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 0.3rem;
+  }
+
+  .profile-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .pill {
+    border: 1px solid var(--rule);
+    padding: 0.35rem 0.8rem;
+    font-size: 0.7rem;
+    color: var(--warm-grey);
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+  }
+
+  .pill.active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  .pull-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink);
+    border-left: 3px solid var(--orange);
+    padding-left: 1.25rem;
+    line-height: 1.6;
+  }
+
+  /* --- DIVIDER --- */
+  .rule-section {
+    padding: 0 3rem;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    gap: 2rem;
+    overflow: hidden;
+  }
+
+  .rule-tag {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+
+  .rule-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+  /* --- ABOUT --- */
+  #about {
+    display: grid;
+    grid-template-columns: 280px 1fr 1fr;
+    min-height: 60vh;
+  }
+
+  .sidebar {
+    background: var(--ink);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .sidebar-section-label {
+    font-size: 0.6rem;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-list {
+    list-style: none;
+  }
+
+  .sidebar-list li {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sidebar-list li span { color: var(--orange); font-size: 0.65rem; }
+
+  .about-main {
+    padding: 4rem 3rem;
+    background: var(--paper);
+    border-right: 1px solid var(--rule);
+  }
+
+  .section-eyebrow {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+  .big-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-body p {
+    font-size: 0.85rem;
+    color: var(--warm-grey);
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-body p strong { color: var(--ink); font-weight: 500; }
+
+  .edu-aside {
+    padding: 4rem 3rem;
+    background: var(--cream);
+  }
+
+  .edu-entry {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .edu-entry:last-child { border-bottom: none; }
+
+  .edu-year {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    margin-bottom: 0.3rem;
+  }
+
+  .edu-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .edu-school { font-size: 0.78rem; color: var(--warm-grey); }
+
+  /* --- PROJECTS --- */
+  #projects {
+    padding: 5rem 3rem;
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .proj-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 1rem;
+  }
+
+  .proj-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+  }
+
+  .proj-count { font-size: 0.65rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.2em; }
+
+  .proj-list { }
+
+  .proj-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    transition: padding-left 0.2s;
+    cursor: pointer;
+  }
+
+  .proj-row:hover { padding-left: 1rem; }
+  .proj-row:hover .proj-row-num { color: var(--orange); }
+
+  .proj-row-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    transition: color 0.2s;
+  }
+
+  .proj-row-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .proj-row-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .proj-tag {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .proj-row-arrow {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .proj-row:hover .proj-row-arrow { color: var(--orange); transform: translateX(4px); }
+
+  /* --- FOOTER --- */
+  footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-left {
+    background: var(--orange);
+    padding: 3rem;
+    color: #fff;
+  }
+
+  .footer-left h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .footer-left p { font-size: 0.8rem; opacity: 0.8; margin-bottom: 1.5rem; }
+
+  .footer-contact-btn {
+    background: #fff;
+    color: var(--orange);
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: inline-block;
+  }
+
+  .footer-right {
+    background: var(--ink);
+    padding: 3rem;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .footer-links { display: flex; flex-direction: column; gap: 0.75rem; }
+  .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-copy { margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-box">PARTH SONI<sup>PORTFOLIO</sup></div>
+  <nav>
+    <a href="#">About</a>
+    <a href="#">Experience</a>
+    <a href="#">Projects</a>
+    <a href="#">Skills</a>
+    <a href="#">Certificates</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section id="hero">
+  <div class="hero-left">
+    <p class="issue-tag">Data Analyst · Dublin, Ireland</p>
+    <h1 class="hero-h1">Making <em>data</em><br>speak <em>clearly.</em></h1>
+    <p class="hero-sub">From raw CSV files to boardroom-ready dashboards — I translate complexity into clarity. Currently pursuing MSc Computer Science at UCD.</p>
+    <a href="#" class="btn-editorial">View Resume</a>
+  </div>
+
+  <div class="hero-right">
+    <p class="profile-kicker">Profile — Parth Shirish Soni</p>
+
+    <div class="big-stat">
+      <div class="big-num">4<span>+</span></div>
+      <p class="big-desc">Professional Certifications</p>
+    </div>
+
+    <div class="big-stat" style="margin-bottom:1.5rem;padding-bottom:1.5rem;">
+      <div class="big-num" style="font-size:3rem;">MSc CS</div>
+      <p class="big-desc">University College Dublin · 2025–2026</p>
+    </div>
+
+    <div class="profile-pill-row">
+      <span class="pill active">SQL</span>
+      <span class="pill active">Python</span>
+      <span class="pill active">Power BI</span>
+      <span class="pill">Tableau</span>
+      <span class="pill">Excel</span>
+      <span class="pill">Snowflake</span>
+      <span class="pill">ML</span>
+    </div>
+
+    <blockquote class="pull-quote">
+      "Data is only as powerful as the story it tells."
+    </blockquote>
+  </div>
+</section>
+
+<div class="rule-section">
+  <div class="rule-line"></div>
+  <span class="rule-tag">About · Experience · Education</span>
+  <div class="rule-line"></div>
+</div>
+
+<section id="about">
+  <div class="sidebar">
+    <div>
+      <p class="sidebar-section-label">Technical Skills</p>
+      <ul class="sidebar-list">
+        <li>SQL <span>Expert</span></li>
+        <li>Excel <span>Expert</span></li>
+        <li>Power BI <span>Advanced</span></li>
+        <li>Python <span>Advanced</span></li>
+        <li>Tableau <span>Advanced</span></li>
+        <li>Snowflake <span>Intermediate</span></li>
+        <li>Data Viz <span>Expert</span></li>
+      </ul>
+    </div>
+    <div>
+      <p class="sidebar-section-label">Soft Skills</p>
+      <ul class="sidebar-list">
+        <li>Critical Thinking</li>
+        <li>Storytelling</li>
+        <li>Communication</li>
+        <li>Attention to Detail</li>
+        <li>Time Management</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="about-main">
+    <p class="section-eyebrow">About Me</p>
+    <h2 class="big-heading">Driven<br>by Data.</h2>
+    <div class="about-body">
+      <p>Hey there! I'm <strong>Parth</strong> — an aspiring data analyst pursuing my MSc in <strong>Computer Science</strong> at <strong>University College Dublin</strong>. I enjoy turning messy datasets into clear, actionable stories that actually make an impact.</p>
+      <p>When I'm not working with Excel sheets or building dashboards, you'll usually find me following <strong>Formula 1</strong>, tennis, or Counter-Strike tournaments. Sports definitely own my weekends.</p>
+      <p>I'd call myself an <strong>ambivert</strong> — organized (color-coded folders are my thing), analytical by nature, and always excited to find the story hidden inside data.</p>
+    </div>
+  </div>
+
+  <div class="edu-aside">
+    <p class="section-eyebrow" style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.25em;color:var(--orange);margin-bottom:1.5rem;">Education</p>
+
+    <div class="edu-entry">
+      <p class="edu-year">2025 – 2026</p>
+      <p class="edu-title">MSc Computer Science</p>
+      <p class="edu-school">University College Dublin, Ireland</p>
+    </div>
+    <div class="edu-entry">
+      <p class="edu-year">2019 – 2023</p>
+      <p class="edu-title">B.Tech Computer Science</p>
+      <p class="edu-school">Dayananda Sagar University, India · CGPA 8.15</p>
+    </div>
+    <div class="edu-entry">
+      <p class="edu-year">Internship · 2023–2024</p>
+      <p class="edu-title">Inventory Analyst</p>
+      <p class="edu-school">ANKO (KAS Services), Bengaluru</p>
+    </div>
+    <div class="edu-entry">
+      <p class="edu-year">Internship · 2023</p>
+      <p class="edu-title">Technical Writer</p>
+      <p class="edu-school">Nokia, Bengaluru</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="proj-header">
+    <h2 class="proj-h2">Selected Projects</h2>
+    <span class="proj-count">04 works</span>
+  </div>
+
+  <div class="proj-list">
+    <div class="proj-row">
+      <div class="proj-row-num">01</div>
+      <div>
+        <div class="proj-row-title">Excel & Python EDA</div>
+        <div class="proj-row-tags">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Excel</span>
+          <span class="proj-tag">Tableau</span>
+          <span class="proj-tag">EDA</span>
+        </div>
+      </div>
+      <div class="proj-row-arrow">→</div>
+    </div>
+
+    <div class="proj-row">
+      <div class="proj-row-num">02</div>
+      <div>
+        <div class="proj-row-title">Pink Eye Detection CNN</div>
+        <div class="proj-row-tags">
+          <span class="proj-tag">CNN</span>
+          <span class="proj-tag">Flask</span>
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">ML</span>
+        </div>
+      </div>
+      <div class="proj-row-arrow">→</div>
+    </div>
+
+    <div class="proj-row">
+      <div class="proj-row-num">03</div>
+      <div>
+        <div class="proj-row-title">Interactive Tableau Dashboards</div>
+        <div class="proj-row-tags">
+          <span class="proj-tag">Tableau</span>
+          <span class="proj-tag">Data Viz</span>
+          <span class="proj-tag">Storytelling</span>
+        </div>
+      </div>
+      <div class="proj-row-arrow">→</div>
+    </div>
+
+    <div class="proj-row">
+      <div class="proj-row-num">04</div>
+      <div>
+        <div class="proj-row-title">Content Consumption Analytics</div>
+        <div class="proj-row-tags">
+          <span class="proj-tag">Looker Studio</span>
+          <span class="proj-tag">Google Sheets</span>
+          <span class="proj-tag">Dashboard</span>
+        </div>
+      </div>
+      <div class="proj-row-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <h3>Let's work<br>together.</h3>
+    <p>Open to Data Analyst & Business Analyst opportunities. Based in Dublin, available globally.</p>
+    <a href="mailto:soni.soni.parth@gmail.com" class="footer-contact-btn">Get In Touch</a>
+  </div>
+
+  <div class="footer-right">
+    <div class="footer-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+      <a href="#">Tableau Public</a>
+      <a href="#">Resume (Google Drive)</a>
+    </div>
+    <p class="footer-copy">© 2025 Parth Soni · Dublin, Ireland</p>
+  </div>
+</footer>
+
+</body>
+</html>
