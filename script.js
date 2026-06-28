@@ -1,41 +1,91 @@
-// ── TYPEWRITER ────────────────────────────────────────────
-const roles = ['Data Analyst','SQL Wizard','BI Developer','F1 Enthusiast','Storyteller','Dashboard Builder','Insights Analyst'];
-let ri = 0, ci = 0, del = false;
-const tw = document.getElementById('tw');
-const cur = document.getElementById('cur');
+(function () {
+  'use strict';
 
-setInterval(() => cur.style.opacity = cur.style.opacity === '0' ? '1' : '0', 520);
+  /* ── MOBILE MENU ─────────────────────────────────── */
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav  = document.getElementById('mobileNav');
 
-function tick() {
-  const w = roles[ri];
-  if (!del) {
-    tw.textContent = w.slice(0, ++ci);
-    if (ci === w.length) { del = true; setTimeout(tick, 1900); return; }
-  } else {
-    tw.textContent = w.slice(0, --ci);
-    if (ci === 0) { del = false; ri = (ri + 1) % roles.length; }
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+    });
+
+    mobileNav.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        menuToggle.innerHTML = '&#9776;';
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        menuToggle.innerHTML = '&#9776;';
+      }
+    });
   }
-  setTimeout(tick, del ? 42 : 75);
-}
-tick();
 
-// ── THEME TOGGLE ──────────────────────────────────────────
-const root = document.documentElement;
-const btn  = document.getElementById('themeBtn');
-const moon = document.getElementById('iconMoon');
-const sun  = document.getElementById('iconSun');
+  /* ── SCROLL FADE-IN ──────────────────────────────── */
+  const fadeTargets = document.querySelectorAll(
+    '.exp-block, .proj-row, .cert-card, .edu-entry, ' +
+    '.about-body, .open-to-block, .medium-callout, ' +
+    '.skills-two-col, .footer-grey'
+  );
 
-const saved = localStorage.getItem('theme') || 'dark';
-setTheme(saved);
+  fadeTargets.forEach(el => el.classList.add('fade-up'));
 
-btn.addEventListener('click', () => {
-  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  setTheme(next);
-  localStorage.setItem('theme', next);
-});
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+  );
 
-function setTheme(t) {
-  root.setAttribute('data-theme', t);
-  moon.style.display = t === 'dark' ? 'block' : 'none';
-  sun.style.display  = t === 'light' ? 'block' : 'none';
-}
+  fadeTargets.forEach(el => observer.observe(el));
+
+  /* ── STAGGERED CERT REVEAL ───────────────────────── */
+  document.querySelectorAll('.cert-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 55}ms`;
+  });
+
+  /* ── ACTIVE NAV ON SCROLL ────────────────────────── */
+  const sections = document.querySelectorAll('section[id], div[id], footer[id]');
+  const navLinks  = document.querySelectorAll('nav a');
+  const headerH   = 70;
+
+  function setActiveNav() {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - headerH - 20) {
+        current = sec.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.style.color = '';
+      if (link.getAttribute('href') === '#' + current) {
+        link.style.color = '#e85d04';
+      }
+    });
+  }
+
+  window.addEventListener('scroll', setActiveNav, { passive: true });
+  setActiveNav();
+
+  /* ── HEADER SHADOW ON SCROLL ─────────────────────── */
+  const header = document.getElementById('site-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.style.boxShadow = window.scrollY > 60
+        ? '0 2px 24px rgba(0,0,0,0.45)'
+        : 'none';
+    }, { passive: true });
+  }
+
+})();
