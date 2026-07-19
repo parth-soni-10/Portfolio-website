@@ -237,19 +237,116 @@
     <div class="projects-inner">
       <div class="proj-header-row">
         <h2 class="proj-h2">Selected Projects</h2>
-        <span class="proj-count-label">05 works</span>
+        <span class="proj-count-label">07 works</span>
       </div>
 
       <div class="proj-list">
 
-        <div class="proj-row" onclick="window.open('https://github.com/parth-soni-10/Excel_EDA','_blank')">
+        <!-- 01 Content Dashboard -->
+        <div class="proj-row featured-proj" onclick="window.open('https://contenttrackerdashboard.netlify.app/','_blank')">
           <div class="proj-row-num">01</div>
+          <div class="proj-row-body">
+            <div class="proj-row-title">
+              Content Tracking Dashboard
+              <span class="proj-featured-badge">Live &bull; 2024 &ndash; Current</span>
+            </div>
+            <p class="proj-row-desc">
+              Built an end-to-end personal media analytics dashboard using HTML, CSS, JavaScript,
+              Google Sheets API, and Apps Script to analyse 342+ titles &mdash; transforming raw viewing
+              logs into interactive dashboards with calculated KPIs, derived metrics, YoY comparisons,
+              dynamic filtering, and interactive visualisations across six analytics pages, without a
+              traditional backend or external frameworks.
+            </p>
+            <div class="proj-row-tags">
+              <span class="ptag">JavaScript</span><span class="ptag">Google Sheets API</span><span class="ptag">Apps Script</span><span class="ptag">Data Pipeline</span><span class="ptag">Looker Studio</span>
+            </div>
+          </div>
+          <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Live Dashboard &rarr;</a>
+        </div>
+
+        <!-- 02 F1 Telemetry -->
+        <div class="proj-row" onclick="window.open('https://medium.com/@soni.soni.parth','_blank')">
+          <div class="proj-row-num">02</div>
+          <div class="proj-row-body">
+            <div class="proj-row-title">
+              Formula 1 Telemetry Analysis
+              <span class="proj-featured-badge">Live &bull; Jan 2026 &ndash; Present</span>
+            </div>
+            <p class="proj-row-desc">
+              Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy
+              to collect, clean, transform, and analyse race telemetry across the 2026 Formula 1 season,
+              publishing weekly data-driven performance reports. Developed 9+ visualisation types
+              including lap-time evolution, tyre strategy analysis, minisector dominance, cumulative lap
+              delta, and sector performance &mdash; translating complex datasets into audience-friendly
+              visual stories through 10+ published articles on Medium.
+            </p>
+            <div class="proj-row-tags">
+              <span class="ptag">Python</span><span class="ptag">FastF1</span><span class="ptag">pandas</span><span class="ptag">NumPy</span><span class="ptag">Telemetry</span><span class="ptag">Medium</span>
+            </div>
+          </div>
+          <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Read on Medium &rarr;</a>
+        </div>
+
+        <!-- 03 UCD PolicyBot -->
+        <div class="proj-row" onclick="window.open('https://github.com/shridharjoshi034-ai/LocalHost-Legends','_blank')">
+          <div class="proj-row-num">03</div>
+          <div class="proj-row-body">
+            <div class="proj-row-title">
+              UCD PolicyBot
+              <span class="proj-featured-badge">May &ndash; Aug 2026</span>
+            </div>
+            <p class="proj-row-desc">
+              RAG chatbot using a local SLM (Phi-3 / Gemma-2-9B) and vector database to answer UCD
+              academic and admin policy questions &mdash; with mandatory citation (URL + page number) and a
+              self-correction loop that verifies output against retrieved context. Built a scraping and
+              parsing pipeline with BeautifulSoup, Scrapy, pdfplumber, and PyMuPDF to scrape 200+ policy
+              docs, preserving hierarchical structure for downstream vector indexing. Automated dedup and
+              validation checks cut malformed records by ~30% and pushed retrieval precision above 80%.
+            </p>
+            <div class="proj-row-tags">
+              <span class="ptag">RAG</span><span class="ptag">Python</span><span class="ptag">LLM</span><span class="ptag">Vector DB</span><span class="ptag">BeautifulSoup</span><span class="ptag">pdfplumber</span>
+            </div>
+          </div>
+          <a href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
+        </div>
+
+        <!-- 04 Irish Visa Tracker -->
+        <div class="proj-row featured-proj" onclick="window.open('https://irishvisaupdatetracker.netlify.app/','_blank')">
+          <div class="proj-row-num">04</div>
+          <div class="proj-row-body">
+            <div class="proj-row-title">
+              Irish Visa Decision Tracker
+              <span class="proj-featured-badge">Live &bull; Personal Project</span>
+            </div>
+            <p class="proj-row-desc">
+              Tracks visa decisions published daily by the Embassy of Ireland, New Delhi &mdash; turning a
+              flat daily spreadsheet (no history, no search, no trends) into a searchable, browsable
+              dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s
+              &lsquo;.ods&rsquo; file, handle weekends and public holidays gracefully, and upsert records
+              into a Google Sheet (the database). The Apps Script Web App exposes a clean HTTP API read
+              by the four-tab Netlify dashboard: live snapshot, daily summary, full history with
+              date-picker, and a suggestions form.
+            </p>
+            <div class="proj-row-tags">
+              <span class="ptag">Python</span><span class="ptag">GitHub Actions</span><span class="ptag">Google Sheets</span><span class="ptag">Apps Script</span><span class="ptag">Netlify</span><span class="ptag">Scraping</span>
+            </div>
+          </div>
+          <div class="proj-row-links-group">
+            <a href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Live Site &rarr;</a>
+            <a href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()" style="margin-left:1rem;">GitHub &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 05 Excel EDA -->
+        <div class="proj-row" onclick="window.open('https://github.com/parth-soni-10/Excel_EDA','_blank')">
+          <div class="proj-row-num">05</div>
           <div class="proj-row-body">
             <div class="proj-row-title">Excel &amp; Python EDA</div>
             <p class="proj-row-desc">
               Cleaned and prepared public datasets using Excel and Python to ensure high data quality.
-              Performed exploratory statistical analysis on sales data &mdash; handling missing values, outliers,
-              and anomalies &mdash; and built Tableau charts to surface key correlations and actionable insights.
+              Performed exploratory statistical analysis on sales data &mdash; handling missing values,
+              outliers, and anomalies &mdash; and built Tableau charts to surface key correlations and
+              actionable insights.
             </p>
             <div class="proj-row-tags">
               <span class="ptag">Python</span><span class="ptag">Excel</span><span class="ptag">Tableau</span><span class="ptag">EDA</span>
@@ -258,10 +355,11 @@
           <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
         </div>
 
+        <!-- 06 Pink Eye CNN -->
         <div class="proj-row" onclick="window.open('https://github.com/parth-soni-10/Flask_webapp','_blank')">
-          <div class="proj-row-num">02</div>
+          <div class="proj-row-num">06</div>
           <div class="proj-row-body">
-            <div class="proj-row-title">Pink Eye Detection using CNN</div>
+            <div class="proj-row-title">Pink Eye Detection &mdash; CNN</div>
             <p class="proj-row-desc">
               Developed a Convolutional Neural Network to classify eye images as healthy or infected
               with conjunctivitis. Implemented Conv2D, MaxPooling, ReLU, Dropout, and Dense layers;
@@ -275,62 +373,22 @@
           <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
         </div>
 
+        <!-- 07 Tableau -->
         <div class="proj-row" onclick="window.open('https://public.tableau.com/app/profile/parth.soni7469','_blank')">
-          <div class="proj-row-num">03</div>
+          <div class="proj-row-num">07</div>
           <div class="proj-row-body">
             <div class="proj-row-title">Interactive Tableau Dashboards</div>
             <p class="proj-row-desc">
               Designed a collection of interactive dashboards to tell data-driven stories with clarity
               and strong visual hierarchy. Implemented filters, parameters, and calculated fields to
               enable interactive exploration of datasets. Focused on dashboard usability, fast insight
-              extraction, and storytelling &mdash; core skills for any analyst role.
+              extraction, and storytelling.
             </p>
             <div class="proj-row-tags">
               <span class="ptag">Tableau</span><span class="ptag">Data Viz</span><span class="ptag">Dashboards</span><span class="ptag">Storytelling</span>
             </div>
           </div>
           <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Tableau Public &rarr;</a>
-        </div>
-
-        <div class="proj-row featured-proj" onclick="window.open('https://contenttrackerdashboard.netlify.app/','_blank')">
-          <div class="proj-row-num">04</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              Content Consumption Analytics Dashboard
-              <span class="proj-featured-badge">Live &bull; Personal Project</span>
-            </div>
-            <p class="proj-row-desc">
-              I've tracked every show and movie I watch for 2+ years in a Google Sheet &mdash; genre,
-              duration, platform, rating, and more. Built a fully interactive live dashboard
-              that answers: which genres I binge, which platforms I use most, viewing time by
-              month, and how my taste has shifted over time. A blend of personal curiosity and
-              real data storytelling, powered by Looker Studio.
-            </p>
-            <div class="proj-row-tags">
-              <span class="ptag">Looker Studio</span><span class="ptag">Google Sheets</span><span class="ptag">Dashboard</span><span class="ptag">Data Storytelling</span>
-            </div>
-          </div>
-          <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Live Dashboard &rarr;</a>
-        </div>
-
-        <div class="proj-row" onclick="window.open('https://medium.com/@soni.soni.parth','_blank')">
-          <div class="proj-row-num">05</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              F1 Race Weekend Blog
-              <span class="proj-featured-badge">Live &bull; Medium</span>
-            </div>
-            <p class="proj-row-desc">
-              After every race weekend I publish a data-driven breakdown &mdash; no fluff, just sharp
-              analysis of strategy, pace, and key moments. Qualifying debrief drops Saturday
-              evening, race debrief follows Sunday. If you love F1 and data in the same sentence,
-              this one's for you.
-            </p>
-            <div class="proj-row-tags">
-              <span class="ptag">Writing</span><span class="ptag">F1</span><span class="ptag">Data Analysis</span><span class="ptag">Storytelling</span><span class="ptag">Medium</span>
-            </div>
-          </div>
-          <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Read on Medium &rarr;</a>
         </div>
 
       </div>

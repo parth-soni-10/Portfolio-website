@@ -640,6 +640,7 @@ nav a:hover { color: var(--orange); }
 
 .proj-row-link { font-size: 0.76rem; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; white-space: nowrap; padding-top: 0.4rem; transition: color 0.2s; flex-shrink: 0; }
 .proj-row-link:hover { color: #fff; }
+.proj-row-links-group { display: flex; flex-direction: column; gap: 0.4rem; padding-top: 0.4rem; flex-shrink: 0; }
 .featured-proj { background: rgba(232,93,4,0.03); }
 
 /* ===================== SKILLS FULL ===================== */
