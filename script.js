@@ -27,8 +27,10 @@
     });
   }
 
-  /* ── SCROLL FADE-IN ──────────────────────────────── */
+  /* ── SCROLL FADE-IN (Relay-style blur + rise) ────── */
   const fadeTargets = document.querySelectorAll(
+    '.issue-tag, .hero-h1, .hero-sub, .hero-cta-row, ' +
+    '.profile-kicker, .hero-stat-block, .profile-pill-row, .pull-quote, ' +
     '.exp-block, .proj-row, .cert-card, .edu-entry, ' +
     '.about-body, .open-to-block, .medium-callout, ' +
     '.skills-two-col, .footer-grey'
@@ -45,10 +47,15 @@
         }
       });
     },
-    { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+    { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
   );
 
   fadeTargets.forEach(el => observer.observe(el));
+
+  /* ── STAGGERED HERO ENTRANCE ─────────────────────── */
+  document.querySelectorAll('#hero .fade-up').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 90}ms`;
+  });
 
   /* ── STAGGERED CERT REVEAL ───────────────────────── */
   document.querySelectorAll('.cert-card').forEach((card, i) => {
