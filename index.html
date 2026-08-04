@@ -81,6 +81,88 @@
     </div>
   </section>
 
+  <!-- ===================== CONNECT CARD (profile switcher) ===================== -->
+  <section id="connect" class="connect-section" aria-label="Connect with Parth">
+    <div class="connect-inner">
+      <p class="connect-eyebrow">Connect &mdash; Parth Soni</p>
+
+      <div class="connect-card" id="connectCard">
+        <div class="connect-tabs" role="tablist" aria-label="Profile views">
+          <button type="button" class="connect-tab active" role="tab" aria-selected="true" tabindex="0"
+                  aria-controls="pane-github" data-view="github" id="tab-github">GitHub</button>
+          <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
+                  aria-controls="pane-linkedin" data-view="linkedin" id="tab-linkedin">LinkedIn</button>
+          <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
+                  aria-controls="pane-availability" data-view="availability" id="tab-availability">Open to work</button>
+          <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
+                  aria-controls="pane-email" data-view="email" id="tab-email">Email</button>
+          <span class="connect-indicator" aria-hidden="true"></span>
+        </div>
+
+        <div class="connect-body" id="connectBody">
+
+          <!-- GitHub -->
+          <div class="connect-pane active" role="tabpanel" aria-labelledby="tab-github" id="pane-github">
+            <p class="connect-pane-label">GitHub &mdash; @parth-soni-10</p>
+            <h3 class="connect-pane-title">Building data tools in public</h3>
+            <p class="connect-pane-desc">
+              Python, SQL &amp; dashboard projects &mdash; from F1 telemetry pipelines to
+              live-scraping trackers. <span class="connect-gh-stats"><span id="ghRepos">&mdash;</span> repos &bull; <span id="ghFollowers">&mdash;</span> followers</span>
+            </p>
+            <div class="connect-pane-actions">
+              <a href="https://github.com/parth-soni-10" target="_blank" rel="noopener" class="connect-btn connect-btn-solid">View GitHub &rarr;</a>
+            </div>
+          </div>
+
+          <!-- LinkedIn -->
+          <div class="connect-pane" role="tabpanel" aria-labelledby="tab-linkedin" id="pane-linkedin" aria-hidden="true">
+            <p class="connect-pane-label">LinkedIn</p>
+            <h3 class="connect-pane-title">Parth Soni &mdash; Data Analyst</h3>
+            <p class="connect-pane-desc">
+              MSc Computer Science @ University College Dublin &bull; Dublin, Ireland.
+              Internships at ANKO and Nokia. Open to analyst roles worldwide.
+            </p>
+            <div class="connect-pane-actions">
+              <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank" rel="noopener" class="connect-btn connect-btn-linkedin">Connect on LinkedIn</a>
+            </div>
+          </div>
+
+          <!-- Availability -->
+          <div class="connect-pane" role="tabpanel" aria-labelledby="tab-availability" id="pane-availability" aria-hidden="true">
+            <p class="connect-pane-label">Open to work</p>
+            <h3 class="connect-pane-title">Available for analyst roles</h3>
+            <p class="connect-pane-desc">
+              Data Analyst &bull; Business Analyst &bull; BI Developer &bull; Insights Analyst.<br>
+              Based in Dublin &mdash; available globally &bull; remote OK.
+            </p>
+            <div class="connect-pane-chips">
+              <span class="connect-chip">SQL</span><span class="connect-chip">Python</span>
+              <span class="connect-chip">Power BI</span><span class="connect-chip">Tableau</span>
+            </div>
+            <div class="connect-pane-actions">
+              <a href="#contact" class="connect-btn connect-btn-solid">Get in touch &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="connect-pane" role="tabpanel" aria-labelledby="tab-email" id="pane-email" aria-hidden="true">
+            <p class="connect-pane-label">Email</p>
+            <h3 class="connect-pane-title">Let's talk data</h3>
+            <p class="connect-pane-desc">
+              Best reached by email &mdash; I reply within a day.
+            </p>
+            <p class="connect-email-addr">soni.soni.parth@gmail.com</p>
+            <div class="connect-pane-actions">
+              <button type="button" class="connect-btn connect-btn-solid" id="copyEmail">Copy email</button>
+              <a href="mailto:soni.soni.parth@gmail.com" class="connect-btn connect-btn-ghost">Open mail app</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== RULE / DIVIDER ===================== -->
   <div class="rule-section">
     <div class="rule-line"></div>

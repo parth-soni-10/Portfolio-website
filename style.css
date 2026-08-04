@@ -313,6 +313,243 @@ nav a:hover { color: var(--orange); }
   line-height: 1.7;
 }
 
+/* ===================== CONNECT CARD (profile switcher) ===================== */
+/* Recreates the Svelte Contacts card from colinlienard.com —
+   content swaps with a 300ms directional fly (x:±200px, cubic-out)
+   + fade, and an indicator pill that slides between tabs (300ms tween). */
+.connect-section {
+  background: var(--ink);
+  padding: 5rem 2rem 4.5rem;
+  overflow: hidden;
+}
+
+.connect-inner {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.connect-eyebrow {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--orange);
+  text-align: center;
+  margin-bottom: 1.75rem;
+  font-weight: 600;
+}
+
+.connect-card {
+  background: #1b1b1b;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.02) inset;
+  overflow: hidden;
+}
+
+/* Tabs + sliding indicator */
+.connect-tabs {
+  position: relative;
+  display: flex;
+  padding: 0.75rem 0.6rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.connect-tab {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.9rem 0.4rem 1rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.connect-tab:hover { color: rgba(255,255,255,0.85); }
+.connect-tab.active { color: #fff; }
+.connect-tab:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.connect-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--orange);
+  box-shadow: 0 0 12px rgba(232,93,4,0.6);
+  transition: left 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+              width 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Body: hidden panes are absolutely stacked; active pane sits in flow */
+.connect-body {
+  position: relative;
+  transition: height 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.connect-pane {
+  position: absolute;
+  inset: 0;
+  padding: 1.75rem 2rem 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(24px);
+  transition: opacity 0.3s ease,
+              transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+              visibility 0s linear 0.3s;
+}
+
+.connect-pane.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.3s ease,
+              transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+              visibility 0s;
+}
+
+/* During a swap both panes fly simultaneously (Svelte in:fly/out:fly) */
+.connect-body.switching .connect-pane { position: absolute; }
+
+/* The outgoing pane must leave the tab order instantly (it is already
+   invisible at opacity 0, but would otherwise stay focusable for 300ms) */
+.connect-body.switching .connect-pane:not(.active) {
+  visibility: hidden;
+  transition: none;
+}
+
+.connect-pane-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.connect-pane-title {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 0.7rem;
+}
+
+.connect-pane-desc {
+  font-size: 0.93rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+  font-weight: 400;
+}
+
+.connect-gh-stats { color: rgba(255,255,255,0.5); }
+
+.connect-email-addr {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px dashed rgba(255,255,255,0.22);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  word-break: break-all;
+}
+
+.connect-pane-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.35rem;
+}
+
+.connect-chip {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 3px;
+  background: var(--tag-dark-bg);
+  border: 1px solid var(--tag-dark-border);
+  color: var(--tag-dark-text);
+}
+
+.connect-pane-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.connect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.4rem;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.connect-btn-solid { background: var(--orange); color: #fff; border-color: var(--orange); }
+.connect-btn-solid:hover {
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(232,93,4,0.28);
+}
+
+.connect-btn-linkedin { background: #0A66C2; color: #fff; border-color: #0A66C2; }
+.connect-btn-linkedin:hover {
+  background: #084d94;
+  border-color: #084d94;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(10,102,194,0.3);
+}
+
+.connect-btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  border-color: rgba(255,255,255,0.25);
+}
+.connect-btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+
+/* Connect card — responsive */
+@media (max-width: 640px) {
+  .connect-section { padding: 3.5rem 1.25rem 3rem; }
+  .connect-tabs { padding: 0.5rem 0.25rem 0; }
+  .connect-tab { font-size: 0.64rem; letter-spacing: 0.04em; padding: 0.8rem 0.25rem 0.85rem; }
+  .connect-pane { padding: 1.4rem 1.25rem 1.6rem; }
+  .connect-pane-title { font-size: 1.25rem; }
+  .connect-pane-actions { flex-direction: column; }
+  .connect-btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 380px) {
+  .connect-tab { font-size: 0.58rem; }
+}
+
 /* ===================== RULE DIVIDER ===================== */
 .rule-section {
   background: var(--ink);
@@ -798,6 +1035,12 @@ footer { display: grid; grid-template-columns: 1fr 0.85fr 0.85fr; }
     transform: none;
     transition: none;
     will-change: auto;
+  }
+  .connect-indicator,
+  .connect-body,
+  .connect-pane,
+  .connect-pane.active {
+    transition: none !important;
   }
 }
 
