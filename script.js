@@ -295,6 +295,133 @@
     })
     .catch(() => {});
 
+  /* Live GitHub contribution heatmap (github-contributions-api, CORS-enabled) */
+  const ghGraph = document.getElementById('ghGraph');
+  const ghWrap  = document.getElementById('ghGraphWrap');
+  const ghTotal = document.getElementById('ghTotal');
+  const WEEKS = 53;
+  const GAP   = 2;
+
+  function fitGraph() {
+    if (!ghGraph || !ghWrap || !ghGraph.querySelector('.gh-cells')) return;
+    const avail = ghWrap.clientWidth;
+    let cell = Math.floor((avail - GAP * (WEEKS - 1)) / WEEKS);
+    if (cell < 5) cell = 5; // min size; the wrapper scrolls horizontally below this
+    ghGraph.style.setProperty('--gh-cell', cell + 'px');
+    ghGraph.style.setProperty('--gh-gap', GAP + 'px');
+    const pitch = cell + GAP;
+    ghGraph.querySelectorAll('.gh-month-label').forEach(el => {
+      el.style.left = (Number(el.dataset.col) * pitch) + 'px';
+    });
+  }
+
+  function renderContributionGraph() {
+    if (!ghGraph || !ghWrap) return;
+    const pad = n => String(n).padStart(2, '0');
+
+    fetch('https://github-contributions-api.jogruber.de/v4/parth-soni-10')
+      .then(r => (r.ok ? r.json() : Promise.reject(new Error('ghc'))))
+      .then(data => {
+        const dayMap = {};
+        (data.contributions || []).forEach(d => { dayMap[d.date] = d; });
+
+        const today = new Date();
+        const start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 364);
+        const gridStart = new Date(start);
+        gridStart.setDate(gridStart.getDate() - gridStart.getDay()); // align to Sunday
+
+        /* Build 53 Sunday-starting week columns */
+        const weeks = [];
+        const cursor = new Date(gridStart);
+        for (let w = 0; w < WEEKS; w++) {
+          const col = [];
+          for (let r = 0; r < 7; r++) {
+            col.push(new Date(cursor));
+            cursor.setDate(cursor.getDate() + 1);
+          }
+          weeks.push(col);
+        }
+
+        /* Month labels: one per column containing the 1st of a month in range.
+           Day-based math (DST-safe): whole days first, then divide by 7. */
+        const monthStarts = [];
+        const m = new Date(start.getFullYear(), start.getMonth(), 1);
+        while (m <= today) {
+          const dayDelta = Math.round((m.getTime() - gridStart.getTime()) / 86400000);
+          const colIdx = Math.floor(dayDelta / 7);
+          if (colIdx >= 0 && colIdx < WEEKS) {
+            monthStarts.push({ col: colIdx, label: m.toLocaleString('en-US', { month: 'short' }) });
+          }
+          m.setMonth(m.getMonth() + 1);
+        }
+
+        /* Cells + contribution total over the window */
+        let total = 0;
+        const cellsFrag = document.createDocumentFragment();
+        weeks.forEach(col => {
+          col.forEach(d => {
+            const cell = document.createElement('span');
+            cell.className = 'gh-cell';
+            if (d >= start && d <= today) {
+              const key = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+              const rec = dayMap[key];
+              const count = rec ? (rec.count || 0) : 0;
+              const level = rec ? (rec.level || 0) : 0;
+              cell.classList.add('lvl-' + level);
+              const dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+              cell.title = count > 0
+                ? dateLabel + ' \u2014 ' + count + (count === 1 ? ' contribution' : ' contributions')
+                : dateLabel + ' \u2014 No contributions';
+              total += count;
+            } else {
+              cell.style.visibility = 'hidden'; // filler days outside the window
+            }
+            cellsFrag.appendChild(cell);
+          });
+        });
+
+        /* Assemble: month label row + cell grid */
+        ghGraph.textContent = '';
+        const monthsRow = document.createElement('div');
+        monthsRow.className = 'gh-months';
+        monthStarts.forEach(ms => {
+          const el = document.createElement('span');
+          el.className = 'gh-month-label';
+          el.dataset.col = String(ms.col);
+          el.textContent = ms.label;
+          monthsRow.appendChild(el);
+        });
+        const cellsGrid = document.createElement('div');
+        cellsGrid.className = 'gh-cells';
+        cellsGrid.appendChild(cellsFrag);
+        ghGraph.appendChild(monthsRow);
+        ghGraph.appendChild(cellsGrid);
+        ghGraph.setAttribute('aria-label', total.toLocaleString() + ' contributions in the last year');
+        if (ghTotal) ghTotal.textContent = total.toLocaleString();
+
+        fitGraph();
+      })
+      .catch(() => {
+        ghGraph.textContent = '';
+        const fail = document.createElement('div');
+        fail.className = 'gh-loading';
+        fail.textContent = 'Contribution graph unavailable right now.';
+        ghGraph.appendChild(fail);
+      });
+  }
+
+  renderContributionGraph();
+
+  /* Throttle refits on resize (mobile URL-bar resizes fire storms) */
+  let resizeRaf = null;
+  window.addEventListener('resize', () => {
+    if (resizeRaf) return;
+    resizeRaf = requestAnimationFrame(() => {
+      resizeRaf = null;
+      fitGraph();
+    });
+  });
+
   /* Init */
   positionIndicator(true);
   window.addEventListener('resize', () => positionIndicator(false));
