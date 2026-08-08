@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -480,6 +480,76 @@
           <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Tableau Public &rarr;</a>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ANALYTICS DASHBOARD DEMO ===================== -->
+  <section id="dashboard" class="dash-section" aria-label="Analytics dashboard demo">
+    <div class="dash-inner">
+      <div class="dash-header">
+        <div>
+          <p class="section-eyebrow">Featured Build</p>
+          <h2 class="big-heading">Analytics<br>Dashboard.</h2>
+        </div>
+        <div class="dash-header-side">
+          <p class="dash-intro">
+            A live slice of my Content Tracking Dashboard &mdash; 342+ titles, Google Sheets
+            as the backend, no frameworks. The filters below re-compute every metric and
+            chart instantly from the same pipeline the real app uses.
+          </p>
+          <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="btn-medium">Open Full Dashboard &rarr;</a>
+        </div>
+      </div>
+
+      <div class="dash-filters" role="group" aria-label="Filter dashboard by time period">
+        <button type="button" class="dash-filter active" data-period="all" aria-pressed="true">All Time</button>
+        <button type="button" class="dash-filter" data-period="2026" aria-pressed="false">2026</button>
+        <button type="button" class="dash-filter" data-period="2025" aria-pressed="false">2025</button>
+        <button type="button" class="dash-filter" data-period="2024" aria-pressed="false">2024</button>
+      </div>
+
+      <div class="dash-metrics">
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Titles Tracked</p>
+          <p class="dash-metric-value" id="mTitles">342</p>
+          <p class="dash-metric-sub" id="sTitles">movies + series</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Hours Watched</p>
+          <p class="dash-metric-value" id="mHours">1,640</p>
+          <p class="dash-metric-sub" id="sHours">since Jan 2024</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Shows Watched</p>
+          <p class="dash-metric-value" id="mShows">205</p>
+          <p class="dash-metric-sub" id="sShows">60% of titles</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Movies Watched</p>
+          <p class="dash-metric-value" id="mMovies">137</p>
+          <p class="dash-metric-sub" id="sMovies">40% of titles</p>
+        </div>
+      </div>
+
+      <div class="dash-charts">
+        <div class="dash-card dash-chart-card">
+          <div class="dash-chart-head">
+            <p class="dash-chart-title">Hours Watched &mdash; monthly trend</p>
+            <p class="dash-chart-sub" id="lineSub">per month &middot; All Time</p>
+          </div>
+          <div class="dash-chart-figure" id="lineFigure">
+            <svg id="lineSvg" viewBox="0 0 600 220" role="img" aria-label="Line chart of hours watched per month"></svg>
+            <div class="dash-tooltip" id="lineTip" aria-hidden="true" hidden></div>
+          </div>
+        </div>
+        <div class="dash-card dash-chart-card">
+          <div class="dash-chart-head">
+            <p class="dash-chart-title">Hours by Genre</p>
+            <p class="dash-chart-sub" id="barSub">top 6 genres &middot; All Time</p>
+          </div>
+          <div class="dash-chart-figure dash-bar-figure" id="barFigure" role="img" aria-label="Bar chart of hours by genre"></div>
+        </div>
       </div>
     </div>
   </section>
