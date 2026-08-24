@@ -16,6 +16,7 @@
       link.addEventListener('click', () => {
         mobileNav.classList.remove('open');
         menuToggle.innerHTML = '&#9776;';
+        menuToggle.setAttribute('aria-expanded', 'false');
       });
     });
 
@@ -23,6 +24,7 @@
       if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
         mobileNav.classList.remove('open');
         menuToggle.innerHTML = '&#9776;';
+        menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -69,28 +71,20 @@
     card.style.transitionDelay = `${i * 70}ms`;
   });
 
-  /* ── ACTIVE NAV ON SCROLL ────────────────────────── */
-  const sections = document.querySelectorAll('section[id], div[id], footer[id]');
-  const navLinks  = document.querySelectorAll('nav a');
-  const headerH   = 70;
+  /* ── ACTIVE NAV (IntersectionObserver, not a scroll listener) ── */
+  const navLinks = document.querySelectorAll('nav a');
+  const navByHref = new Map(Array.from(navLinks).map(l => [l.getAttribute('href'), l]));
 
-  function setActiveNav() {
-    let current = '';
-    sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - headerH - 20) {
-        current = sec.getAttribute('id');
-      }
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(l => { l.style.color = ''; });
+      const link = navByHref.get('#' + entry.target.id);
+      if (link) link.style.color = '#e85d04';
     });
-    navLinks.forEach(link => {
-      link.style.color = '';
-      if (link.getAttribute('href') === '#' + current) {
-        link.style.color = '#e85d04';
-      }
-    });
-  }
+  }, { rootMargin: '-40% 0px -55% 0px' });
 
-  window.addEventListener('scroll', setActiveNav, { passive: true });
-  setActiveNav();
+  document.querySelectorAll('section[id], div[id], footer[id]').forEach(sec => navObserver.observe(sec));
 
   /* ── HEADER SHADOW ON SCROLL ─────────────────────── */
   const header = document.getElementById('site-header');
@@ -129,19 +123,21 @@
   let timer       = null;
   let visible     = false; // corrected by IntersectionObserver's first callback
 
-  /* Slide the indicator pill to the active tab (300ms tween) */
+  /* Slide the indicator pill to the active tab (300ms tween).
+     Transform-only: translateX positions it, scaleX sizes it
+     (compositor-friendly — never animates left/width). */
   function positionIndicator(immediate) {
     const tab = tabs[activeIndex];
     if (!tab) return;
+    const tf = 'translateX(' + tab.offsetLeft + 'px) scaleX(' +
+               (tab.offsetWidth / indicator.parentElement.clientWidth) + ')';
     if (immediate) {
       indicator.style.transition = 'none';
-      indicator.style.left = tab.offsetLeft + 'px';
-      indicator.style.width = tab.offsetWidth + 'px';
+      indicator.style.transform = tf;
       void indicator.offsetWidth; // flush
       indicator.style.transition = '';
     } else {
-      indicator.style.left = tab.offsetLeft + 'px';
-      indicator.style.width = tab.offsetWidth + 'px';
+      indicator.style.transform = tf;
     }
   }
 
@@ -178,9 +174,10 @@
 
     switching = true;
 
-    /* Lock body height, stack both panes absolutely */
+    /* Lock body height to the taller pane so nothing clips mid-flight;
+       the panes themselves animate transform/opacity only, never height */
     const oldH = body.offsetHeight;
-    body.style.height = oldH + 'px';
+    body.style.height = Math.max(oldH, newPane.offsetHeight) + 'px';
     body.classList.add('switching');
 
     /* Start states: old stays put, new sits off-screen in travel direction */
@@ -195,7 +192,6 @@
     oldPane.style.opacity   = '0';
     newPane.style.transform = 'translateX(0)';
     newPane.style.opacity   = '1';
-    body.style.height       = newPane.offsetHeight + 'px';
 
     positionIndicator(false);
 
@@ -287,6 +283,11 @@
       const original = copyBtn.textContent;
       copyBtn.textContent = 'Copied \u2713';
       window.setTimeout(() => { copyBtn.textContent = original; }, 2000);
+      const status = document.getElementById('copyStatus');
+      if (status) {
+        status.textContent = 'Email address copied to clipboard';
+        window.setTimeout(() => { status.textContent = ''; }, 2000);
+      }
     });
   }
 
@@ -411,7 +412,7 @@
         ghGraph.textContent = '';
         const fail = document.createElement('div');
         fail.className = 'gh-loading';
-        fail.textContent = 'Contribution graph unavailable right now.';
+        fail.textContent = 'Contribution graph unavailable right now. Check your connection and reload.';
         ghGraph.appendChild(fail);
       });
   }
@@ -449,7 +450,9 @@
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  /* Locale-aware month labels (Intl, not a hardcoded array) */
+  const MONTH_NAMES = Array.from({ length: 12 }, (_, i) =>
+    new Date(2000, i, 1).toLocaleString('en-US', { month: 'short' }));
   const GENRES      = ['Sci-Fi','Drama','Documentary','Comedy','Crime','Animation'];
 
   /* Monthly hours watched + per-period KPIs (mirrors the live Content
@@ -460,28 +463,28 @@
       months: [18,24,31,27,35,29,42,38,45,39,51,47, 44,52,48,61,55,63,58,72,66,70,62,75, 58,64,71,60,78,83,74],
       titles: 342, hours: 1640, shows: 205, movies: 137,
       sub: ['movies + series', 'since Jan 2024', '60% of titles', '40% of titles'],
-      monthsLabel: 'Jan 2024 – Jul 2026'
+      monthsLabel: 'Jan 2024-Jul 2026'
     },
     '2024': {
       name: '2024',
       months: [18,24,31,27,35,29,42,38,45,39,51,47],
       titles: 198, hours: 426, shows: 116, movies: 82,
-      sub: ['active in period', 'Jan – Dec 2024', '59% of titles', '41% of titles'],
-      monthsLabel: 'Jan – Dec 2024'
+      sub: ['active in period', 'Jan-Dec 2024', '59% of titles', '41% of titles'],
+      monthsLabel: 'Jan-Dec 2024'
     },
     '2025': {
       name: '2025',
       months: [44,52,48,61,55,63,58,72,66,70,62,75],
       titles: 289, hours: 726, shows: 168, movies: 121,
-      sub: ['active in period', 'Jan – Dec 2025', '58% of titles', '42% of titles'],
-      monthsLabel: 'Jan – Dec 2025'
+      sub: ['active in period', 'Jan-Dec 2025', '58% of titles', '42% of titles'],
+      monthsLabel: 'Jan-Dec 2025'
     },
     '2026': {
       name: '2026',
       months: [58,64,71,60,78,83,74],
       titles: 214, hours: 488, shows: 119, movies: 95,
-      sub: ['active in period', 'Jan – Jul 2026', '56% of titles', '44% of titles'],
-      monthsLabel: 'Jan – Jul 2026'
+      sub: ['active in period', 'Jan-Jul 2026', '56% of titles', '44% of titles'],
+      monthsLabel: 'Jan-Jul 2026'
     }
   };
 
@@ -517,6 +520,17 @@
 
   let current = 'all';
   let inited  = false;
+
+  /* URL state: deep-link the active filter via ?period= */
+  const urlPeriod = new URLSearchParams(location.search).get('period');
+  if (urlPeriod && PERIODS[urlPeriod]) {
+    current = urlPeriod;
+    els.filters.forEach(f => {
+      const on = f.dataset.period === urlPeriod;
+      f.classList.toggle('active', on);
+      f.setAttribute('aria-pressed', String(on));
+    });
+  }
 
   /* ── KPI count-up animation ── */
   const values = { titles: 342, hours: 1640, shows: 205, movies: 137 };
@@ -681,7 +695,7 @@
     });
 
     svg.setAttribute('aria-label',
-      'Line chart: hours watched per month, ' + months.length + ' points — ' + PERIODS[period].monthsLabel);
+      'Line chart: hours watched per month, ' + months.length + ' points, ' + PERIODS[period].monthsLabel);
   }
 
   /* ── Bar chart (#0077E6) ── */
@@ -714,7 +728,7 @@
       genre.className = 'dash-bar-genre';
       genre.textContent = entry.name;
 
-      bar.appendChild(val);
+      area.appendChild(val); // sibling of the bar so scaleY never squashes the label
       area.appendChild(bar);
       col.appendChild(area);
       col.appendChild(genre);
@@ -723,13 +737,16 @@
 
     const grow = () => {
       fig.querySelectorAll('.dash-bar').forEach(b => {
-        b.style.height = (Number(b.dataset.v) / maxV * 100) + '%';
+        const s = Number(b.dataset.v) / maxV;
+        b.style.transform = 'scaleY(' + s + ')';
+        const val = b.parentElement.querySelector('.dash-bar-val');
+        if (val) val.style.bottom = 'calc(' + (s * 100).toFixed(2) + '% + 6px)';
       });
     };
     if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(grow));
     else grow();
 
-    fig.setAttribute('aria-label', 'Bar chart: hours watched by genre — ' + PERIODS[period].name);
+    fig.setAttribute('aria-label', 'Bar chart: hours watched by genre, ' + PERIODS[period].name);
   }
 
   /* ── Filters ── */
@@ -741,6 +758,7 @@
       f.classList.toggle('active', on);
       f.setAttribute('aria-pressed', String(on));
     });
+    history.replaceState(null, '', '?period=' + period + location.hash);
     updateMetrics(period, true);
     renderLine(period, true);
     renderBars(period, true);
@@ -770,4 +788,260 @@
   } else {
     init(true);
   }
+})();
+/* ── EXPENSE TRACKER DEMO (cents. magic entry) ─────── */
+/* A live slice of the cents. app: type a plain-language entry and it parses
+   amount / category / method, then updates the month's numbers instantly.
+   Reuses the dashboard design-token classes (.dash-card, .dash-bar, ...). */
+(function () {
+  'use strict';
+
+  const sec = document.getElementById('expense');
+  if (!sec) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const els = {
+    input:       document.getElementById('expEntry'),
+    addBtn:      document.getElementById('expAdd'),
+    parsed:      document.getElementById('expParsed'),
+    spending:    document.getElementById('expSpending'),
+    income:      document.getElementById('expIncome'),
+    net:         document.getElementById('expNet'),
+    budgetLeft:  document.getElementById('expBudgetLeft'),
+    budgetPct:   document.getElementById('expBudgetPct'),
+    budgetSub:   document.getElementById('expBudgetSubTop'),
+    budgetBar:   document.getElementById('expBudgetBar'),
+    budgetFill:  document.getElementById('expBudgetFill'),
+    barFig:      document.getElementById('expBarFigure'),
+    entries:     document.getElementById('expEntries')
+  };
+  if (!els.input) return;
+
+  /* Locale-aware EUR formatting (Intl — no hardcoded formats) */
+  const fmtEUR0 = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const fmtEUR2 = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 });
+
+  /* Keyword tables — first match wins, like the real app's parser */
+  const CATEGORIES = [
+    { name: 'Groceries',     words: ['lidl', 'tesco', 'aldi', 'dunnes', 'supervalu', 'supermarket', 'groceries', 'shopping', 'milk', 'bread'] },
+    { name: 'Transport',     words: ['uber', 'bolt', 'taxi', 'luas', 'dart', 'bus', 'train', 'fuel', 'petrol', 'diesel', 'leap', 'parking'] },
+    { name: 'Food & drink',  words: ['coffee', 'cafe', 'starbucks', 'mcdonald', 'subway', 'kfc', 'burger', 'pizza', 'lunch', 'dinner', 'takeaway', 'restaurant', 'bar'] },
+    { name: 'Bills',         words: ['rent', 'esb', 'electricity', 'gas', 'broadband', 'wifi', 'phone', 'bill', 'insurance', 'gym'] },
+    { name: 'Entertainment', words: ['netflix', 'spotify', 'cinema', 'movie', 'steam', 'games', 'concert', 'tickets', 'prime'] },
+    { name: 'Health',        words: ['pharmacy', 'chemist', 'doctor', 'medicine', 'dentist'] }
+  ];
+  const METHODS = [
+    { name: 'Revolut',    words: ['revolut'] },
+    { name: 'Cash',       words: ['cash'] },
+    { name: 'Visa',       words: ['visa'] },
+    { name: 'Mastercard', words: ['mastercard', 'mc'] },
+    { name: 'AIB',        words: ['aib'] },
+    { name: 'Apple Pay',  words: ['apple pay', 'applepay'] },
+    { name: 'Google Pay', words: ['google pay'] }
+  ];
+
+  function match(text, table) {
+    for (const item of table) {
+      if (item.words.some(w => text.includes(w))) return item;
+    }
+    return null;
+  }
+
+  function parseEntry(raw) {
+    const text = raw.trim();
+    if (!text) return null;
+
+    /* Amount: digits (no surrounding-space consumption so words stay separated) */
+    const amtMatch = text.match(/€?\s*(\d{1,4}(?:[.,]\d{1,2})?)(?:\s*(?:eur|euro))?/i);
+    if (!amtMatch) return null;
+    const amount = parseFloat(amtMatch[1].replace(',', '.'));
+    const rest = text.replace(amtMatch[0], '');
+
+    const date = /yesterday/i.test(text) ? 'Yesterday' : 'Today';
+    const cat = match(text.toLowerCase(), CATEGORIES);
+    const method = match(text.toLowerCase(), METHODS);
+
+    let desc = rest.replace(/\s+/g, ' ').trim();
+    ['yesterday', 'today'].forEach(w => { desc = desc.replace(new RegExp('\\b' + w + '\\b', 'i'), ''); });
+    if (method) {
+      const word = method.words.find(w => new RegExp('\\b' + w.replace(' ', '\\s') + '\\b', 'i').test(desc));
+      if (word) desc = desc.replace(new RegExp('\\b' + word.replace(' ', '\\s') + '\\b', 'i'), '');
+    }
+    desc = desc.replace(/\s+/g, ' ').trim();
+    if (!desc) desc = cat ? cat.name : 'Purchase';
+
+    return { amount, category: cat ? cat.name : 'Other', method: method ? method.name : '', date, desc };
+  }
+
+  const state = {
+    income: 2480,
+    spending: 1247,
+    budget: 1500,
+    categories: { Groceries: 412, Transport: 268, 'Food & drink': 198, Bills: 301, Entertainment: 68 },
+    entries: [
+      { amount: 24.90, category: 'Groceries', method: 'Revolut', date: 'Today', desc: 'tesco groceries' },
+      { amount: 68.40, category: 'Entertainment', method: 'Revolut', date: 'Yesterday', desc: 'steam sale' },
+      { amount: 12.50, category: 'Transport', method: 'Cash', date: 'Yesterday', desc: 'luas top-up' }
+    ]
+  };
+
+  function renderMetrics() {
+    const s = state.spending;
+    els.spending.textContent = fmtEUR0.format(s);
+    els.income.textContent = fmtEUR0.format(state.income);
+    els.net.textContent = fmtEUR0.format(state.income - s);
+    const left = state.budget - s;
+    els.budgetLeft.textContent = fmtEUR0.format(Math.max(left, 0));
+    const pct = Math.min(1, s / state.budget);
+    els.budgetFill.style.transform = 'scaleX(' + pct + ')';
+    els.budgetFill.classList.toggle('over', s > state.budget);
+    els.budgetPct.textContent = (s > state.budget ? 'over budget' : Math.round(pct * 100) + '% of budget used');
+    els.budgetSub.textContent = fmtEUR0.format(s) + ' of ' + fmtEUR0.format(state.budget);
+    if (els.budgetBar) els.budgetBar.setAttribute('aria-label',
+      (s > state.budget ? 'Over budget' : Math.round(pct * 100) + '% used') + ', €' + Math.round(s) + ' of €' + state.budget);
+  }
+
+  function renderBars(animate) {
+    const fig = els.barFig;
+    if (!fig) return;
+    fig.textContent = '';
+    const entries = Object.entries(state.categories).map(([name, v]) => ({ name, v }));
+    entries.sort((a, b) => b.v - a.v);
+    const maxV = entries[0].v;
+
+    entries.forEach(entry => {
+      const col = document.createElement('div');
+      col.className = 'dash-bar-col';
+      col.title = entry.name + ': ' + fmtEUR0.format(entry.v);
+
+      const area = document.createElement('div');
+      area.className = 'dash-bar-area';
+
+      const bar = document.createElement('div');
+      bar.className = 'dash-bar';
+      bar.dataset.v = String(entry.v);
+
+      const val = document.createElement('span');
+      val.className = 'dash-bar-val';
+      val.textContent = fmtEUR0.format(entry.v);
+
+      const genre = document.createElement('p');
+      genre.className = 'dash-bar-genre';
+      genre.textContent = entry.name;
+
+      area.appendChild(val); // sibling of the bar so scaleY never squashes the label
+      area.appendChild(bar);
+      col.appendChild(area);
+      col.appendChild(genre);
+      fig.appendChild(col);
+    });
+
+    const grow = () => {
+      fig.querySelectorAll('.dash-bar').forEach(b => {
+        const s = Number(b.dataset.v) / maxV;
+        b.style.transform = 'scaleY(' + s + ')';
+        const val = b.parentElement.querySelector('.dash-bar-val');
+        if (val) val.style.bottom = 'calc(' + (s * 100).toFixed(2) + '% + 6px)';
+      });
+    };
+    if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(grow));
+    else grow();
+
+    fig.setAttribute('aria-label', 'Bar chart of spending by category this month');
+  }
+
+  function renderEntries() {
+    els.entries.textContent = '';
+    state.entries.slice(0, 6).forEach(e => {
+      const li = document.createElement('li');
+      li.className = 'exp-entry';
+
+      const desc = document.createElement('span');
+      desc.className = 'exp-entry-desc';
+      desc.textContent = e.desc;
+
+      const meta = document.createElement('span');
+      meta.className = 'exp-entry-meta';
+      const metaParts = [e.category, e.method].filter(Boolean);
+      meta.textContent = metaParts.join(' · ') + ', ' + e.date;
+
+      const amt = document.createElement('span');
+      amt.className = 'exp-entry-amt';
+      amt.textContent = fmtEUR2.format(e.amount);
+
+      li.appendChild(desc);
+      li.appendChild(meta);
+      li.appendChild(amt);
+      els.entries.appendChild(li);
+    });
+  }
+
+  function showParsed(entry) {
+    if (!entry) { els.parsed.hidden = true; return; }
+    els.parsed.textContent = '';
+    const chips = [
+      { cls: 'exp-chip exp-chip-amt', txt: fmtEUR2.format(entry.amount) },
+      { cls: 'exp-chip', txt: entry.category }
+    ];
+    if (entry.method) chips.push({ cls: 'exp-chip', txt: entry.method });
+    chips.push({ cls: 'exp-chip', txt: entry.date });
+    chips.forEach(c => {
+      const s = document.createElement('span');
+      s.className = c.cls;
+      s.textContent = c.txt;
+      els.parsed.appendChild(s);
+    });
+    const d = document.createElement('span');
+    d.className = 'exp-chip-desc';
+    d.textContent = entry.desc;
+    els.parsed.appendChild(d);
+    els.parsed.hidden = false;
+  }
+
+  function addEntry() {
+    const entry = parseEntry(els.input.value);
+    if (!entry) { showParsed(null); els.input.focus(); return; }
+
+    state.entries.unshift(entry);
+    state.entries = state.entries.slice(0, 12);
+    state.spending += entry.amount;
+    state.categories[entry.category] = (state.categories[entry.category] || 0) + entry.amount;
+
+    renderMetrics();
+    renderBars(true);
+    renderEntries();
+    showParsed(null);
+    els.input.value = '';
+    els.addBtn.textContent = 'Added \u2713';
+    window.setTimeout(() => { els.addBtn.textContent = 'Add entry'; }, 1200);
+    els.input.focus();
+  }
+
+  let debounce = null;
+  els.input.addEventListener('input', () => {
+    window.clearTimeout(debounce);
+    debounce = window.setTimeout(() => showParsed(parseEntry(els.input.value)), 150);
+  });
+  els.addBtn.addEventListener('click', addEntry);
+  els.input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); addEntry(); }
+  });
+
+  function init() {
+    renderMetrics();
+    renderBars(!reduceMotion);
+    renderEntries();
+  }
+
+  let inited = false;
+  const io = new IntersectionObserver((entries) => {
+    if (inited) return;
+    if (entries.some(en => en.isIntersecting)) {
+      inited = true;
+      init();
+      io.disconnect();
+    }
+  }, { threshold: 0.2 });
+  io.observe(sec);
 })();

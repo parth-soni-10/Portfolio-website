@@ -3,14 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parth Soni – Data Analyst Portfolio. Dublin, Ireland." />
+  <meta name="description" content="Parth Soni, Data Analyst in Dublin. MSc CS at UCD. SQL, Python, Power BI, Tableau. I turn messy data into clear decisions." />
+  <meta name="theme-color" content="#0f0f0f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Parth Soni | Data Analyst" />
+  <meta property="og:description" content="From raw CSV files to boardroom-ready dashboards. I translate complexity into clarity, and numbers into decisions." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Parth Soni | Data Analyst" />
+  <meta name="twitter:description" content="From raw CSV files to boardroom-ready dashboards. I translate complexity into clarity, and numbers into decisions." />
   <title>Parth Soni | Data Analyst</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f0f0f'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='32' font-weight='bold' fill='%23ff7a1a' text-anchor='middle'%3EPS%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" href="fonts/playfair.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://api.github.com" crossorigin />
+  <link rel="preconnect" href="https://github-contributions-api.jogruber.de" crossorigin />
 </head>
 <body>
+
+  <a class="skip-link" href="#hero">Skip to content</a>
 
   <!-- ===================== HEADER ===================== -->
   <header id="site-header">
@@ -24,7 +35,7 @@
         <a href="#certificates">Certificates</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">&#9776;</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-controls="mobileNav" aria-expanded="false">&#9776;</button>
     </div>
   </header>
 
@@ -44,9 +55,8 @@
       <p class="issue-tag">Data Analyst &bull; Dublin, Ireland</p>
       <h1 class="hero-h1">Making <em>data</em><br>speak <em>clearly.</em></h1>
       <p class="hero-sub">
-        From raw CSV files to boardroom-ready dashboards &mdash; I translate complexity into
-        clarity, and numbers into decisions. Currently pursuing an MSc in Computer
-        Science at University College Dublin.
+        From raw CSV files to boardroom-ready dashboards. I translate complexity into
+        clarity, and numbers into decisions.
       </p>
       <div class="hero-cta-row">
         <a href="https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view?usp=drive_link"
@@ -56,12 +66,12 @@
     </div>
 
     <div class="hero-right">
-      <p class="profile-kicker">Profile &mdash; Parth Shirish Soni</p>
+      <p class="profile-kicker">Profile: Parth Shirish Soni</p>
 
       <div class="hero-stat-block">
-        <div class="big-stat" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
-          <div class="big-num" style="font-size:2.6rem;">MSc CS</div>
-          <p class="big-desc">University College Dublin &bull; 2025&ndash;2026</p>
+        <div class="big-stat big-stat-last">
+          <div class="big-num big-num-sm">MSc CS</div>
+          <p class="big-desc">University College Dublin &bull; 2025-2026</p>
         </div>
       </div>
 
@@ -84,7 +94,7 @@
   <!-- ===================== CONNECT CARD (profile switcher) ===================== -->
   <section id="connect" class="connect-section" aria-label="Connect with Parth">
     <div class="connect-inner">
-      <p class="connect-eyebrow">Connect &mdash; Parth Soni</p>
+      <h2 class="connect-eyebrow">Connect: Parth Soni</h2>
 
       <div class="connect-card" id="connectCard">
         <div class="connect-tabs" role="tablist" aria-label="Profile views">
@@ -103,7 +113,7 @@
 
           <!-- GitHub -->
           <div class="connect-pane active" role="tabpanel" aria-labelledby="tab-github" id="pane-github">
-            <p class="connect-pane-label">GitHub &mdash; @parth-soni-10</p>
+            <p class="connect-pane-label" translate="no">GitHub: @parth-soni-10</p>
             <h3 class="connect-pane-title">Building data tools in public</h3>
             <div class="connect-gh-graph-wrap" id="ghGraphWrap">
               <div class="connect-gh-graph" id="ghGraph" role="img"
@@ -111,10 +121,10 @@
                 <div class="gh-loading">Loading contribution graph&hellip;</div>
               </div>
             </div>
-            <p class="connect-gh-total"><span id="ghTotal">&mdash;</span> contributions in the last year</p>
+            <p class="connect-gh-total" aria-live="polite"><span id="ghTotal">&hellip;</span> contributions in the last year</p>
             <p class="connect-pane-desc">
-              Python, SQL &amp; dashboard projects &mdash; from F1 telemetry pipelines to
-              live-scraping trackers. <span class="connect-gh-stats"><span id="ghRepos">&mdash;</span> repos &bull; <span id="ghFollowers">&mdash;</span> followers</span>
+              Python, SQL &amp; dashboard projects, from F1 telemetry pipelines to
+              live-scraping trackers. <span class="connect-gh-stats" aria-live="polite"><span id="ghRepos">&hellip;</span> repos &bull; <span id="ghFollowers">&hellip;</span> followers</span>
             </p>
             <div class="connect-pane-actions">
               <a href="https://github.com/parth-soni-10" target="_blank" rel="noopener" class="connect-btn connect-btn-solid">View GitHub &rarr;</a>
@@ -124,7 +134,7 @@
           <!-- LinkedIn -->
           <div class="connect-pane" role="tabpanel" aria-labelledby="tab-linkedin" id="pane-linkedin" aria-hidden="true">
             <p class="connect-pane-label">LinkedIn</p>
-            <h3 class="connect-pane-title">Parth Soni &mdash; Data Analyst</h3>
+            <h3 class="connect-pane-title">Parth Soni: Data Analyst</h3>
             <p class="connect-pane-desc">
               MSc Computer Science @ University College Dublin &bull; Dublin, Ireland.
               Internships at ANKO and Nokia. Open to analyst roles worldwide.
@@ -140,28 +150,29 @@
             <h3 class="connect-pane-title">Available for analyst roles</h3>
             <p class="connect-pane-desc">
               Data Analyst &bull; Business Analyst &bull; BI Developer &bull; Insights Analyst.<br>
-              Based in Dublin &mdash; available globally &bull; remote OK.
+              Based in Dublin, available globally &bull; remote OK.
             </p>
             <div class="connect-pane-chips">
               <span class="connect-chip">SQL</span><span class="connect-chip">Python</span>
               <span class="connect-chip">Power BI</span><span class="connect-chip">Tableau</span>
             </div>
             <div class="connect-pane-actions">
-              <a href="#contact" class="connect-btn connect-btn-solid">Get in touch &rarr;</a>
+              <a href="#contact" class="connect-btn connect-btn-solid">Get In Touch &rarr;</a>
             </div>
           </div>
 
           <!-- Email -->
           <div class="connect-pane" role="tabpanel" aria-labelledby="tab-email" id="pane-email" aria-hidden="true">
             <p class="connect-pane-label">Email</p>
-            <h3 class="connect-pane-title">Let's talk data</h3>
+            <h3 class="connect-pane-title">Let&rsquo;s talk data</h3>
             <p class="connect-pane-desc">
-              Best reached by email &mdash; I reply within a day.
+              Best reached by email. I reply within a day.
             </p>
-            <p class="connect-email-addr">soni.soni.parth@gmail.com</p>
+            <p class="connect-email-addr" translate="no">soni.soni.parth@gmail.com</p>
             <div class="connect-pane-actions">
               <button type="button" class="connect-btn connect-btn-solid" id="copyEmail">Copy email</button>
               <a href="mailto:soni.soni.parth@gmail.com" class="connect-btn connect-btn-ghost">Open mail app</a>
+              <span class="sr-only" id="copyStatus" aria-live="polite"></span>
             </div>
           </div>
 
@@ -173,7 +184,7 @@
   <!-- ===================== RULE / DIVIDER ===================== -->
   <div class="rule-section">
     <div class="rule-line"></div>
-    <span class="rule-tag">About &bull; Experience &bull; Education</span>
+    <span class="rule-tag">About, Experience, Education</span>
     <div class="rule-line"></div>
   </div>
 
@@ -182,29 +193,28 @@
 
     <!-- About Main -->
     <div class="about-main">
-      <p class="section-eyebrow">About Me</p>
       <h2 class="big-heading">Driven<br>by Data.</h2>
 
       <div class="about-body">
         <p>
-          Hey, I'm <strong>Parth</strong> 👋 — Data Analyst in the making. Storyteller at heart.
-          I'm currently pursuing my <strong>MSc in Computer Science (Negotiated Learning)</strong>
+          Hey, I&rsquo;m <strong>Parth</strong> 👋. Data Analyst in the making. Storyteller at heart.
+          I&rsquo;m currently pursuing my <strong>MSc in Computer Science (Negotiated Learning)</strong>
           at <strong>University College Dublin</strong> 🎓, and my mission is simple: take messy,
           chaotic data and turn it into something that actually means something.
         </p>
         <p>
-          I live in the space between <strong>spreadsheets and strategy</strong> — building
-          dashboards, writing queries, and connecting dots that others miss. If there's a pattern
-          hiding in the noise, I'll find it.
+          I live in the space between <strong>spreadsheets and strategy</strong>, building
+          dashboards, writing queries, and connecting dots that others miss. If there&rsquo;s a pattern
+          hiding in the noise, I&rsquo;ll find it.
         </p>
         <p>
           Three words own my weekends: <strong>Formula 1. Tennis. Counter-Strike.</strong>
-          Whether it's dissecting a pit-stop strategy, tracking a Grand Slam run, or watching a
-          clutch round unfold — sports aren't just entertainment for me, they're <em>data in motion</em>.
+          Whether it&rsquo;s dissecting a pit-stop strategy, tracking a Grand Slam run, or watching a
+          clutch round unfold. Sports aren&rsquo;t just entertainment for me, they&rsquo;re <em>data in motion</em>.
         </p>
         <p>
           Certified <strong>avgeek</strong> and general machine enthusiast 🏍️✈️. Planes, trains,
-          bikes, cars — if it's made of metal and it moves, I'm already fascinated. And when I'm
+          bikes, cars: if it&rsquo;s made of metal and it moves, I&rsquo;m already fascinated. And when I&rsquo;m
           not doing any of that? Colour-coded folders, sci-fi binges 🚀, and the quiet satisfaction
           of a perfectly cleaned dataset.
         </p>
@@ -213,7 +223,7 @@
       <div class="medium-callout">
         <div class="medium-callout-left">
           <p class="medium-callout-label">Writing on Medium</p>
-          <p class="medium-callout-desc">I publish F1 race weekend breakdowns — sharp data-driven insights for fellow fans. Every qualifying, every race, every Monday debrief.</p>
+          <p class="medium-callout-desc">I publish F1 race weekend breakdowns and sharp, data-driven insights for fellow fans. Every qualifying, every race, every Monday debrief.</p>
         </div>
         <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="btn-medium">Read Articles &rarr;</a>
       </div>
@@ -231,29 +241,28 @@
 
     <!-- Education Aside -->
     <div class="edu-aside">
-      <p class="section-eyebrow-sm">Education</p>
 
       <div class="edu-entry">
-        <p class="edu-year">2025 &ndash; 2026</p>
+        <p class="edu-year">2025-2026</p>
         <p class="edu-title">MSc Computer Science</p>
         <p class="edu-school">University College Dublin, Ireland</p>
-        <p class="edu-detail">Data Analytics &bull; ML &bull; Python &bull; SQL &bull; Power BI</p>
+        <p class="edu-detail">Data Analytics, ML, Python, SQL, Power BI</p>
       </div>
 
       <div class="edu-entry">
-        <p class="edu-year">2019 &ndash; 2023</p>
+        <p class="edu-year">2019-2023</p>
         <p class="edu-title">B.Tech Computer Science &amp; Engineering</p>
         <p class="edu-school">Dayananda Sagar University, Bengaluru</p>
-        <p class="edu-detail">CGPA: 8.15 &bull; Programming &bull; Databases &bull; Data Science</p>
+        <p class="edu-detail">CGPA: 8.15, Programming, Databases, Data Science</p>
       </div>
 
       <div class="edu-entry">
-        <p class="edu-year">CBSE Class 12 &mdash; Science</p>
+        <p class="edu-year">CBSE Class 12, Science</p>
         <p class="edu-title">Kendriya Vidyalaya, Aurangabad</p>
         <p class="edu-detail">Percentage: 66%</p>
       </div>
 
-      <div class="edu-entry" style="border-bottom:none;margin-bottom:0;">
+      <div class="edu-entry edu-entry-last">
         <p class="edu-year">CBSE Class 10</p>
         <p class="edu-title">Kendriya Vidyalaya, Aurangabad</p>
         <p class="edu-detail">CGPA: 9.8</p>
@@ -266,7 +275,6 @@
     <div class="experience-inner">
       <div class="exp-header-row">
         <div>
-          <p class="section-eyebrow-light">Career</p>
           <h2 class="section-h-light">Professional<br><em>Experience</em></h2>
         </div>
         <p class="exp-count">02 roles</p>
@@ -276,15 +284,15 @@
 
         <div class="exp-block">
           <div class="exp-meta">
-            <p class="exp-date">Nov 2023 &ndash; May 2024</p>
+            <p class="exp-date">Nov 2023-May 2024</p>
             <p class="exp-location">Bengaluru, India</p>
           </div>
           <div class="exp-content">
             <p class="exp-company">ANKO (KAS Services)</p>
-            <h3 class="exp-role">Inventory Analyst &mdash; Intern</h3>
+            <h3 class="exp-role">Inventory Analyst, Intern</h3>
             <ul class="exp-bullets">
               <li>Handled execution, deployment, and monitoring of key supply chain metrics for a new division of products with a weekly sales revenue of ~1.8 million AUD.</li>
-              <li>Analyzed demand trends and optimized inventory planning to ensure timely product availability during peak periods like Mother's Day, Anzac Day, and Christmas.</li>
+              <li>Analyzed demand trends and optimized inventory planning to ensure timely product availability during peak periods like Mother&rsquo;s Day, Anzac Day, and Christmas.</li>
               <li>Collaborated with cross-functional teams to determine that an average 15% increase in inventory was needed to meet demand and prevent stockouts.</li>
               <li>Performed shrinkage analysis to identify inefficiencies in the supply chain; implemented corrective measures that reduced shrinkage by 7% and helped minimize stockouts, driving profitability.</li>
               <li>Built monitoring systems for real-time stock and business metric visibility across the division.</li>
@@ -299,12 +307,12 @@
 
         <div class="exp-block">
           <div class="exp-meta">
-            <p class="exp-date">Feb 2023 &ndash; Aug 2023</p>
+            <p class="exp-date">Feb 2023-Aug 2023</p>
             <p class="exp-location">Bengaluru, India</p>
           </div>
           <div class="exp-content">
             <p class="exp-company">Nokia</p>
-            <h3 class="exp-role">Technical Writer &mdash; Intern</h3>
+            <h3 class="exp-role">Technical Writer, Intern</h3>
             <ul class="exp-bullets">
               <li>Streamlined and redesigned over 70 key product documents and graphics as part of the company rebranding, incorporating new brand elements to create visually compelling marketing collateral.</li>
               <li>Created 3 comprehensive user manuals for new products from scratch by collaborating closely with the R&amp;D team; supported the development of installation guides and troubleshooting documentation.</li>
@@ -326,22 +334,22 @@
     <div class="projects-inner">
       <div class="proj-header-row">
         <h2 class="proj-h2">Selected Projects</h2>
-        <span class="proj-count-label">07 works</span>
+        <span class="proj-count-label">08 works</span>
       </div>
 
       <div class="proj-list">
 
         <!-- 01 Content Dashboard -->
-        <div class="proj-row featured-proj" onclick="window.open('https://contenttrackerdashboard.netlify.app/','_blank')">
+        <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="proj-row featured-proj" aria-label="Open the Content Tracking Dashboard project">
           <div class="proj-row-num">01</div>
           <div class="proj-row-body">
             <div class="proj-row-title">
               Content Tracking Dashboard
-              <span class="proj-featured-badge">Live &bull; 2024 &ndash; Current</span>
+              <span class="proj-featured-badge">Live &bull; 2024-Current</span>
             </div>
             <p class="proj-row-desc">
               Built an end-to-end personal media analytics dashboard using HTML, CSS, JavaScript,
-              Google Sheets API, and Apps Script to analyse 342+ titles &mdash; transforming raw viewing
+              Google Sheets API, and Apps Script to analyse 342+ titles, transforming raw viewing
               logs into interactive dashboards with calculated KPIs, derived metrics, YoY comparisons,
               dynamic filtering, and interactive visualisations across six analytics pages, without a
               traditional backend or external frameworks.
@@ -350,43 +358,43 @@
               <span class="ptag">JavaScript</span><span class="ptag">Google Sheets API</span><span class="ptag">Apps Script</span><span class="ptag">Data Pipeline</span><span class="ptag">Looker Studio</span>
             </div>
           </div>
-          <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Live Dashboard &rarr;</a>
-        </div>
+          <span class="proj-row-link">Live Dashboard &rarr;</span>
+        </a>
 
         <!-- 02 F1 Telemetry -->
-        <div class="proj-row" onclick="window.open('https://medium.com/@soni.soni.parth','_blank')">
+        <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="proj-row" aria-label="Read the Formula 1 Telemetry Analysis on Medium">
           <div class="proj-row-num">02</div>
           <div class="proj-row-body">
             <div class="proj-row-title">
               Formula 1 Telemetry Analysis
-              <span class="proj-featured-badge">Live &bull; Jan 2026 &ndash; Present</span>
+              <span class="proj-featured-badge">Live &bull; Jan 2026-Present</span>
             </div>
             <p class="proj-row-desc">
               Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy
               to collect, clean, transform, and analyse race telemetry across the 2026 Formula 1 season,
               publishing weekly data-driven performance reports. Developed 9+ visualisation types
               including lap-time evolution, tyre strategy analysis, minisector dominance, cumulative lap
-              delta, and sector performance &mdash; translating complex datasets into audience-friendly
+              delta, and sector performance, translating complex datasets into audience-friendly
               visual stories through 10+ published articles on Medium.
             </p>
             <div class="proj-row-tags">
               <span class="ptag">Python</span><span class="ptag">FastF1</span><span class="ptag">pandas</span><span class="ptag">NumPy</span><span class="ptag">Telemetry</span><span class="ptag">Medium</span>
             </div>
           </div>
-          <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Read on Medium &rarr;</a>
-        </div>
+          <span class="proj-row-link">Read on Medium &rarr;</span>
+        </a>
 
         <!-- 03 UCD PolicyBot -->
-        <div class="proj-row" onclick="window.open('https://github.com/shridharjoshi034-ai/LocalHost-Legends','_blank')">
+        <a href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener" class="proj-row" aria-label="View the UCD PolicyBot project on GitHub">
           <div class="proj-row-num">03</div>
           <div class="proj-row-body">
             <div class="proj-row-title">
               UCD PolicyBot
-              <span class="proj-featured-badge">May &ndash; Aug 2026</span>
+              <span class="proj-featured-badge">May-Aug 2026</span>
             </div>
             <p class="proj-row-desc">
               RAG chatbot using a local SLM (Phi-3 / Gemma-2-9B) and vector database to answer UCD
-              academic and admin policy questions &mdash; with mandatory citation (URL + page number) and a
+              academic and admin policy questions, with mandatory citation (URL + page number) and a
               self-correction loop that verifies output against retrieved context. Built a scraping and
               parsing pipeline with BeautifulSoup, Scrapy, pdfplumber, and PyMuPDF to scrape 200+ policy
               docs, preserving hierarchical structure for downstream vector indexing. Automated dedup and
@@ -396,11 +404,11 @@
               <span class="ptag">RAG</span><span class="ptag">Python</span><span class="ptag">LLM</span><span class="ptag">Vector DB</span><span class="ptag">BeautifulSoup</span><span class="ptag">pdfplumber</span>
             </div>
           </div>
-          <a href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
-        </div>
+          <span class="proj-row-link">GitHub &rarr;</span>
+        </a>
 
         <!-- 04 Irish Visa Tracker -->
-        <div class="proj-row featured-proj" onclick="window.open('https://irishvisaupdatetracker.netlify.app/','_blank')">
+        <div class="proj-row featured-proj">
           <div class="proj-row-num">04</div>
           <div class="proj-row-body">
             <div class="proj-row-title">
@@ -408,7 +416,7 @@
               <span class="proj-featured-badge">Live &bull; Personal Project</span>
             </div>
             <p class="proj-row-desc">
-              Tracks visa decisions published daily by the Embassy of Ireland, New Delhi &mdash; turning a
+              Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a
               flat daily spreadsheet (no history, no search, no trends) into a searchable, browsable
               dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s
               &lsquo;.ods&rsquo; file, handle weekends and public holidays gracefully, and upsert records
@@ -421,34 +429,56 @@
             </div>
           </div>
           <div class="proj-row-links-group">
-            <a href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Live Site &rarr;</a>
-            <a href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()" style="margin-left:1rem;">GitHub &rarr;</a>
+            <a href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener" class="proj-row-link">Live Site &rarr;</a>
+            <a href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener" class="proj-row-link proj-row-link-gap">GitHub &rarr;</a>
           </div>
         </div>
 
-        <!-- 05 Excel EDA -->
-        <div class="proj-row" onclick="window.open('https://github.com/parth-soni-10/Excel_EDA','_blank')">
+        <!-- 05 cents. Expense Tracker -->
+        <div class="proj-row proj-row-static">
           <div class="proj-row-num">05</div>
+          <div class="proj-row-body">
+            <div class="proj-row-title">
+              cents.: Personal Expense Tracker
+              <span class="proj-featured-badge">Personal Project &bull; 2026</span>
+            </div>
+            <p class="proj-row-desc">
+              Built a privacy-first personal expense tracker with no framework and no
+              build step. Just vanilla ES modules. Type a plain-language entry
+              like &ldquo;lidl groceries 4.47 revolut&rdquo; and it auto-parses amount,
+              category, and payment method. Data stays in localStorage with optional
+              private GitHub sync, secured by a PIN or Face ID / fingerprint lock.
+            </p>
+            <div class="proj-row-tags">
+              <span class="ptag">JavaScript</span><span class="ptag">ES Modules</span><span class="ptag">localStorage</span><span class="ptag">Netlify Functions</span><span class="ptag">Web Auth API</span>
+            </div>
+          </div>
+          <span class="proj-row-private">Private project</span>
+        </div>
+
+        <!-- 06 Excel EDA -->
+        <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener" class="proj-row" aria-label="View the Excel and Python EDA project on GitHub">
+          <div class="proj-row-num">06</div>
           <div class="proj-row-body">
             <div class="proj-row-title">Excel &amp; Python EDA</div>
             <p class="proj-row-desc">
               Cleaned and prepared public datasets using Excel and Python to ensure high data quality.
-              Performed exploratory statistical analysis on sales data &mdash; handling missing values,
-              outliers, and anomalies &mdash; and built Tableau charts to surface key correlations and
+              Performed exploratory statistical analysis on sales data, handling missing values,
+              outliers, and anomalies, and built Tableau charts to surface key correlations and
               actionable insights.
             </p>
             <div class="proj-row-tags">
               <span class="ptag">Python</span><span class="ptag">Excel</span><span class="ptag">Tableau</span><span class="ptag">EDA</span>
             </div>
           </div>
-          <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
-        </div>
+          <span class="proj-row-link">GitHub &rarr;</span>
+        </a>
 
-        <!-- 06 Pink Eye CNN -->
-        <div class="proj-row" onclick="window.open('https://github.com/parth-soni-10/Flask_webapp','_blank')">
-          <div class="proj-row-num">06</div>
+        <!-- 07 Pink Eye CNN -->
+        <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener" class="proj-row" aria-label="View the Pink Eye Detection CNN project on GitHub">
+          <div class="proj-row-num">07</div>
           <div class="proj-row-body">
-            <div class="proj-row-title">Pink Eye Detection &mdash; CNN</div>
+            <div class="proj-row-title">Pink Eye Detection: CNN</div>
             <p class="proj-row-desc">
               Developed a Convolutional Neural Network to classify eye images as healthy or infected
               with conjunctivitis. Implemented Conv2D, MaxPooling, ReLU, Dropout, and Dense layers;
@@ -459,12 +489,12 @@
               <span class="ptag">CNN</span><span class="ptag">Flask</span><span class="ptag">Python</span><span class="ptag">Machine Learning</span>
             </div>
           </div>
-          <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">GitHub &rarr;</a>
-        </div>
+          <span class="proj-row-link">GitHub &rarr;</span>
+        </a>
 
-        <!-- 07 Tableau -->
-        <div class="proj-row" onclick="window.open('https://public.tableau.com/app/profile/parth.soni7469','_blank')">
-          <div class="proj-row-num">07</div>
+        <!-- 08 Tableau -->
+        <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="proj-row" aria-label="View the Interactive Tableau Dashboards on Tableau Public">
+          <div class="proj-row-num">08</div>
           <div class="proj-row-body">
             <div class="proj-row-title">Interactive Tableau Dashboards</div>
             <p class="proj-row-desc">
@@ -477,8 +507,8 @@
               <span class="ptag">Tableau</span><span class="ptag">Data Viz</span><span class="ptag">Dashboards</span><span class="ptag">Storytelling</span>
             </div>
           </div>
-          <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="proj-row-link" onclick="event.stopPropagation()">Tableau Public &rarr;</a>
-        </div>
+          <span class="proj-row-link">Tableau Public &rarr;</span>
+        </a>
 
       </div>
     </div>
@@ -488,13 +518,10 @@
   <section id="dashboard" class="dash-section" aria-label="Analytics dashboard demo">
     <div class="dash-inner">
       <div class="dash-header">
-        <div>
-          <p class="section-eyebrow">Featured Build</p>
-          <h2 class="big-heading">Analytics<br>Dashboard.</h2>
-        </div>
+        <h2 class="big-heading">Analytics<br>Dashboard.</h2>
         <div class="dash-header-side">
           <p class="dash-intro">
-            A live slice of my Content Tracking Dashboard &mdash; 342+ titles, Google Sheets
+            A live slice of my Content Tracking Dashboard: 342+ titles, Google Sheets
             as the backend, no frameworks. The filters below re-compute every metric and
             chart instantly from the same pipeline the real app uses.
           </p>
@@ -535,7 +562,7 @@
       <div class="dash-charts">
         <div class="dash-card dash-chart-card">
           <div class="dash-chart-head">
-            <p class="dash-chart-title">Hours Watched &mdash; monthly trend</p>
+            <p class="dash-chart-title">Hours Watched: monthly trend</p>
             <p class="dash-chart-sub" id="lineSub">per month &middot; All Time</p>
           </div>
           <div class="dash-chart-figure" id="lineFigure">
@@ -554,11 +581,93 @@
     </div>
   </section>
 
+  <!-- ===================== EXPENSE TRACKER DEMO ===================== -->
+  <section id="expense" class="dash-section" aria-label="Expense tracker demo">
+    <div class="dash-inner">
+      <div class="dash-header">
+        <h2 class="big-heading">Spending,<br>Simplified.</h2>
+        <div class="dash-header-side">
+          <p class="dash-intro">
+            A live slice of <strong>cents.</strong> (my zero-dependency personal expense
+            tracker). Type a plain-language entry, just like the real app&rsquo;s
+            &ldquo;magic entry&rdquo;, and watch it parse the amount, category, and payment
+            method, then update the month&rsquo;s numbers instantly.
+          </p>
+        </div>
+      </div>
+
+      <!-- Magic entry -->
+      <div class="dash-card exp-magic-card">
+        <label class="exp-magic-label" for="expEntry">Magic entry: type like you&rsquo;d say it</label>
+        <div class="exp-magic-row">
+          <div class="exp-magic-input-wrap">
+            <input id="expEntry" class="exp-input" type="text"
+                   placeholder="lidl groceries 4.47 revolut&hellip;"
+                   autocomplete="off" spellcheck="false" />
+            <button type="button" class="exp-add-btn" id="expAdd">Add entry</button>
+          </div>
+          <p class="exp-hint">Try: <em>uber 12.50</em> &middot; <em>netflix 15.99 visa</em> &middot; <em>rent 950 aib</em></p>
+        </div>
+        <div class="exp-parsed" id="expParsed" aria-live="polite" hidden></div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="dash-metrics">
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Spending this month</p>
+          <p class="dash-metric-value" id="expSpending">€1,247</p>
+          <p class="dash-metric-sub">live, add an entry below</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Income</p>
+          <p class="dash-metric-value" id="expIncome">€2,480</p>
+          <p class="dash-metric-sub">net salary</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Net</p>
+          <p class="dash-metric-value" id="expNet">€1,233</p>
+          <p class="dash-metric-sub">income &minus; spending</p>
+        </div>
+        <div class="dash-card dash-metric">
+          <p class="dash-metric-label">Budget left</p>
+          <p class="dash-metric-value" id="expBudgetLeft">€253</p>
+          <p class="dash-metric-sub" id="expBudgetPct">83% of budget used</p>
+        </div>
+      </div>
+
+      <!-- Category bars + budget / recent entries -->
+      <div class="dash-charts">
+        <div class="dash-card dash-chart-card">
+          <div class="dash-chart-head">
+            <p class="dash-chart-title">Spending by category</p>
+            <p class="dash-chart-sub">this month &middot; live</p>
+          </div>
+          <div class="dash-chart-figure dash-bar-figure" id="expBarFigure" role="img"
+               aria-label="Bar chart of spending by category this month"></div>
+        </div>
+        <div class="dash-card dash-chart-card">
+          <div class="dash-chart-head">
+            <p class="dash-chart-title">Budget</p>
+            <p class="dash-chart-sub" id="expBudgetSubTop">€1,247 of €1,500</p>
+          </div>
+          <div class="exp-budget-bar" id="expBudgetBar" role="img" aria-label="Budget progress bar">
+            <div class="exp-budget-fill" id="expBudgetFill"></div>
+          </div>
+          <p class="exp-recent-label">Recent entries</p>
+          <ul class="exp-entries" id="expEntries" aria-live="polite">
+            <li class="exp-entry"><span class="exp-entry-desc">tesco groceries</span><span class="exp-entry-meta">Groceries &middot; Revolut, Today</span><span class="exp-entry-amt">€24.90</span></li>
+            <li class="exp-entry"><span class="exp-entry-desc">steam sale</span><span class="exp-entry-meta">Entertainment &middot; Revolut, Yesterday</span><span class="exp-entry-amt">€68.40</span></li>
+            <li class="exp-entry"><span class="exp-entry-desc">luas top-up</span><span class="exp-entry-meta">Transport &middot; Cash, Yesterday</span><span class="exp-entry-amt">€12.50</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== SKILLS FULL ===================== -->
   <section id="skills" class="skills-full-section">
     <div class="skills-full-inner">
-      <p class="section-eyebrow">Skills</p>
-      <h2 class="big-heading" style="margin-bottom:2.5rem;">What I<br>Bring.</h2>
+      <h2 class="big-heading">What I<br>Bring.</h2>
 
       <div class="skills-two-col">
         <div>
@@ -611,7 +720,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/QBHFUA673MO6"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-microsoft-powerbi-coursera.jpeg" alt="Microsoft Power BI Data Analyst Certificate" />
+            <img src="certificate-microsoft-powerbi-coursera.jpeg" alt="Microsoft Power BI Data Analyst Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Microsoft &bull; Coursera</p>
@@ -622,7 +731,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/JLDAR2MZXMWX"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-google-data-analytics-coursera.jpeg" alt="Google Data Analytics Certificate" />
+            <img src="certificate-google-data-analytics-coursera.jpeg" alt="Google Data Analytics Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Google &bull; Coursera</p>
@@ -633,7 +742,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/KSFA0JZ0YG2S"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-meta-data-analyst-coursera.jpeg" alt="Meta Data Analyst Certificate" />
+            <img src="certificate-meta-data-analyst-coursera.jpeg" alt="Meta Data Analyst Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Meta &bull; Coursera</p>
@@ -644,7 +753,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/27AVBDNU4DC5"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-ibm-data-analyst-coursera.jpeg" alt="IBM Data Analyst Certificate" />
+            <img src="certificate-ibm-data-analyst-coursera.jpeg" alt="IBM Data Analyst Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">IBM &bull; Coursera</p>
@@ -655,7 +764,7 @@
         <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/tMjbs76F526fF5v3G/NjynCWzGSaWXQCxSX_tMjbs76F526fF5v3G_kNjmYzfrRDT2cS5c7_1735733964804_completion_certificate.pdf"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-BA-datascience-simulation-forage.png" alt="Data Science Job Simulation Certificate" />
+            <img src="certificate-BA-datascience-simulation-forage.png" alt="Data Science Job Simulation Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">British Airways &bull; Forage</p>
@@ -666,7 +775,7 @@
         <a href="https://github.com/parth-soni-10/Certificates"
            target="_blank" rel="noopener" class="cert-card cert-more-card">
           <div class="cert-img-wrap">
-            <img src="certificate-other-certificates.png" alt="More Certificates on GitHub" />
+            <img src="certificate-other-certificates.png" alt="More Certificates on GitHub" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">GitHub</p>
@@ -681,8 +790,8 @@
   <!-- ===================== CONTACT & RESUME ===================== -->
   <footer id="contact">
     <div class="footer-left">
-      <h3 class="footer-h3">Let's work<br>together.</h3>
-      <p class="footer-sub">Open to Data Analyst &amp; Business Analyst opportunities.<br>Based in Dublin &mdash; available globally.</p>
+      <h2 class="footer-h3">Let&rsquo;s work<br>together.</h2>
+      <p class="footer-sub">Open to Data Analyst &amp; Business Analyst opportunities.<br>Based in Dublin, available globally.</p>
       <a href="mailto:soni.soni.parth@gmail.com" class="btn-footer-contact">Get In Touch &rarr;</a>
     </div>
 
@@ -699,8 +808,8 @@
       <div class="footer-links-block">
         <p class="footer-links-label">Resume</p>
         <a href="https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view?usp=drive_link"
-           target="_blank" rel="noopener" class="footer-link footer-link-accent">View Resume (PDF) &rarr;</a>
-        <p class="footer-resume-note">Google Drive &bull; Updated 2025</p>
+           target="_blank" rel="noopener" class="footer-link footer-link-accent">View Resume &rarr;</a>
+        <p class="footer-resume-note">Google Drive &bull; Updated 2026</p>
       </div>
 
       <p class="footer-copy">&copy; 2026 Parth Soni &bull; Dublin, Ireland</p>
@@ -715,7 +824,14 @@
           <div class="footer-grey-num">2</div>
           <div class="footer-grey-stat-label">Internships</div>
         </div>
-        
+        <div>
+          <div class="footer-grey-num">08</div>
+          <div class="footer-grey-stat-label">Projects</div>
+        </div>
+        <div>
+          <div class="footer-grey-num">05</div>
+          <div class="footer-grey-stat-label">Certificates</div>
+        </div>
       </div>
       <div class="footer-grey-tags">
         <span class="footer-grey-tag">Open to work</span>
