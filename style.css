@@ -105,7 +105,7 @@ a { text-decoration: none; }
 .skip-link:focus { transform: translateY(0); }
 
 /* Fixed 58px header — offset in-page anchor jumps */
-#hero, #connect, #about, #experience, #projects, #dashboard, #expense, #skills, #certificates, #contact {
+#hero, #connect, #about, #experience, #projects, #dashboard, #skills, #certificates, #contact {
   scroll-margin-top: 72px;
 }
 
@@ -1137,7 +1137,6 @@ nav a:hover { color: var(--orange); }
 .dash-section {
   background: var(--cream);
   border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
   padding: 5rem 0;
 }
 
@@ -1342,149 +1341,6 @@ nav a:hover { color: var(--orange); }
   text-overflow: ellipsis;
 }
 
-/* ============ EXPENSE TRACKER DEMO (same tokens as dashboard) ============ */
-.exp-magic-card { margin-bottom: 1rem; }
-
-.exp-magic-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-family: var(--dash-font);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  color: #777777;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.exp-magic-row { max-width: 600px; }
-
-.exp-magic-input-wrap { display: flex; gap: 0.6rem; }
-
-.exp-input {
-  flex: 1;
-  min-width: 0;
-  height: 40px;
-  padding: 0 12px;
-  border: 1px solid #d9d3c9;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #333333;
-  font-family: var(--dash-font);
-  font-size: 14px;
-  line-height: 20px;
-}
-.exp-input::placeholder { color: #a8a29a; }
-.exp-input:focus-visible { outline: 2px solid #0077E6; outline-offset: 2px; }
-
-.exp-add-btn {
-  height: 40px;
-  padding: 0 16px;
-  border: none;
-  border-radius: 6px;
-  background: #0077E6;
-  color: #ffffff;
-  font-family: var(--dash-font);
-  font-size: 13px;
-  line-height: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s, transform 0.12s;
-}
-.exp-add-btn:hover { background: #0b84f0; }
-.exp-add-btn:active { transform: translateY(1px); }
-.exp-add-btn.added { background: #1e8e3e; }
-
-.exp-hint {
-  margin-top: 0.5rem;
-  font-family: var(--dash-font);
-  font-size: 12px;
-  line-height: 16px;
-  color: #a8a29a;
-}
-.exp-hint em { font-style: normal; color: #777777; }
-
-.exp-parsed { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.75rem; }
-.exp-parsed[hidden] { display: none; }
-
-.exp-chip {
-  font-family: var(--dash-font);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  color: #333333;
-  background: #f2f5fb;
-  border: 1px solid #d9e2f5;
-  border-radius: 6px;
-  padding: 3px 9px;
-}
-.exp-chip-amt { background: #0077E6; border-color: #0077E6; color: #ffffff; font-weight: 600; font-variant-numeric: tabular-nums; }
-.exp-chip-desc { font-family: var(--dash-font); font-size: 12px; line-height: 16px; color: #777777; }
-
-.exp-budget-bar {
-  position: relative;
-  height: 10px;
-  background: #eef0f3;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-bottom: 1.25rem;
-}
-.exp-budget-fill {
-  position: absolute;
-  inset: 0;
-  background: #0077E6;
-  border-radius: 5px;
-  transform-origin: left center;
-  transform: scaleX(0);
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.exp-budget-fill.over { background: #E85D04; }
-
-.exp-recent-label {
-  margin-bottom: 0.5rem;
-  font-family: var(--dash-font);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  color: #777777;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.exp-entries { list-style: none; margin: 0; padding: 0; }
-
-.exp-entry {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.15rem 0.75rem;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid #f0ede6;
-  font-family: var(--dash-font);
-}
-.exp-entry:last-child { border-bottom: none; }
-
-.exp-entry-desc {
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
-  color: #333333;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.exp-entry-meta { font-size: 12px; line-height: 16px; color: #777777; }
-.exp-entry-amt {
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 600;
-  color: #333333;
-  font-variant-numeric: tabular-nums;
-  margin-left: auto;
-}
 
 /* Dashboard — responsive */
 @media (max-width: 1100px) {
@@ -1611,8 +1467,7 @@ footer { display: grid; grid-template-columns: 1fr 0.85fr 0.85fr; }
   .dash-tooltip,
   .mobile-nav,
   .skip-link,
-  .proj-row,
-  .exp-budget-fill {
+  .proj-row {
     transition: none !important;
   }
 }
@@ -1755,7 +1610,6 @@ button, a, .mobile-link, .menu-toggle {
   .proj-row {
     grid-template-columns: 36px 1fr;
     gap: 1rem;
-    padding: 1.5rem 0;
   }
   .proj-row-link,
   .proj-row-private { display: none; }
