@@ -453,48 +453,30 @@
   /* Locale-aware month labels (Intl, not a hardcoded array) */
   const MONTH_NAMES = Array.from({ length: 12 }, (_, i) =>
     new Date(2000, i, 1).toLocaleString('en-US', { month: 'short' }));
-  const GENRES      = ['Sci-Fi','Drama','Documentary','Comedy','Crime','Animation'];
 
-  /* Monthly hours watched + per-period KPIs (mirrors the live Content
-     Tracking Dashboard — Google Sheets backend, 342+ titles). */
-  const PERIODS = {
-    all: {
-      name: 'All Time',
-      months: [18,24,31,27,35,29,42,38,45,39,51,47, 44,52,48,61,55,63,58,72,66,70,62,75, 58,64,71,60,78,83,74],
-      titles: 342, hours: 1640, shows: 205, movies: 137,
-      sub: ['movies + series', 'since Jan 2024', '60% of titles', '40% of titles'],
-      monthsLabel: 'Jan 2024-Jul 2026'
-    },
-    '2024': {
-      name: '2024',
-      months: [18,24,31,27,35,29,42,38,45,39,51,47],
-      titles: 198, hours: 426, shows: 116, movies: 82,
-      sub: ['active in period', 'Jan-Dec 2024', '59% of titles', '41% of titles'],
-      monthsLabel: 'Jan-Dec 2024'
-    },
-    '2025': {
-      name: '2025',
-      months: [44,52,48,61,55,63,58,72,66,70,62,75],
-      titles: 289, hours: 726, shows: 168, movies: 121,
-      sub: ['active in period', 'Jan-Dec 2025', '58% of titles', '42% of titles'],
-      monthsLabel: 'Jan-Dec 2025'
-    },
-    '2026': {
-      name: '2026',
-      months: [58,64,71,60,78,83,74],
-      titles: 214, hours: 488, shows: 119, movies: 95,
-      sub: ['active in period', 'Jan-Jul 2026', '56% of titles', '44% of titles'],
-      monthsLabel: 'Jan-Jul 2026'
-    }
-  };
+  /* Parser for the sheet's `Month` column. Google writes full names
+     (e.g. "August"); short names are accepted too as a safety net. */
+  const MONTH_IDX = {};
+  ['January','February','March','April','May','June','July',
+   'August','September','October','November','December']
+    .forEach((m, i) => { MONTH_IDX[m] = i; });
+  MONTH_NAMES.forEach((m, i) => { MONTH_IDX[m] = i; });
 
-  /* Hours by genre per year (order matches GENRES). All Time = the sums. */
-  const GENRE_YEARS = {
-    '2024': [72, 89, 64, 60, 43, 38],
-    '2025': [138, 131, 109, 87, 87, 73],
-    '2026': [117, 78, 59, 54, 68, 49]
-  };
-  GENRE_YEARS.all = GENRES.map((_, i) => GENRE_YEARS['2024'][i] + GENRE_YEARS['2025'][i] + GENRE_YEARS['2026'][i]);
+  /* Live source: the public Content Tracking sheet, exported as CSV. Google
+     serves `/export?format=csv` with Access-Control-Allow-Origin:*, so a plain
+     fetch works from the browser — no backend and no Apps Script. */
+  const SHEET_ID  = '1rWMX8Ew3rWxZr1Se18kE_Q1N6JoodQ0RciqwdX31BUE';
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
+                  + '/export?format=csv';
+
+  /* Live data (populated from the sheet once fetched) */
+  let PERIODS     = null;
+  let GENRES      = [];
+  let GENRE_YEARS = {};
+  let START_YEAR  = 2024;
+  let YEAR_ORDER  = []; /* years present in the data, newest first (drives the tabs) */
+  let current     = 'all';
+  let inited      = false;
 
   /* ── Element refs ── */
   const els = {
@@ -503,7 +485,7 @@
     barFigure:  document.getElementById('barFigure'),
     lineSub:    document.getElementById('lineSub'),
     barSub:     document.getElementById('barSub'),
-    filters:    Array.from(sec.querySelectorAll('.dash-filter')),
+    filters:    [], /* populated by buildFilters() once the years are known */
     metrics: {
       titles: document.getElementById('mTitles'),
       hours:  document.getElementById('mHours'),
@@ -518,22 +500,249 @@
     ]
   };
 
-  let current = 'all';
-  let inited  = false;
+  /* ── Sheet fetch + aggregation ── */
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQ = false;
+        } else field += c;
+      } else if (c === '"') {
+        inQ = true;
+      } else if (c === ',') {
+        row.push(field); field = '';
+      } else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else {
+        field += c;
+      }
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
 
-  /* URL state: deep-link the active filter via ?period= */
-  const urlPeriod = new URLSearchParams(location.search).get('period');
-  if (urlPeriod && PERIODS[urlPeriod]) {
-    current = urlPeriod;
-    els.filters.forEach(f => {
-      const on = f.dataset.period === urlPeriod;
-      f.classList.toggle('active', on);
-      f.setAttribute('aria-pressed', String(on));
+  /* Turns the sheet rows into the PERIODS/GENRES/GENRE_YEARS the renderers use. */
+  function buildLive(rows) {
+    const headerIdx = rows.findIndex(r => r && String(r[0]).trim().toLowerCase() === 'name');
+    if (headerIdx < 0) throw new Error('Sheet layout not recognized');
+    const hdr = rows[headerIdx].map(h => String(h || '').trim().toLowerCase());
+    const col = (r, name) => {
+      const j = hdr.indexOf(name.toLowerCase());
+      return j >= 0 ? String(r[j] == null ? '' : r[j]).trim() : '';
+    };
+
+    const records = [];
+    for (let i = headerIdx + 1; i < rows.length; i++) {
+      const r = rows[i];
+      if (!r || !Array.isArray(r)) continue;
+      const name = col(r, 'Name');
+      if (!name) continue;
+      const st = parseFloat(col(r, 'Screentime'));
+      const type = col(r, 'Type').toLowerCase();
+      records.push({
+        genre: col(r, 'Details/Genre') || col(r, 'Genre'),
+        month: MONTH_IDX[col(r, 'Month')] >= 0 ? MONTH_IDX[col(r, 'Month')] : -1,
+        year:  /^\d{4}$/.test(col(r, 'Year')) ? col(r, 'Year') : '',
+        min:   isFinite(st) && st > 0 ? st : 0,
+        movie: /movie/.test(type),
+        show:  /(series|show)/.test(type)
+      });
+    }
+    if (!records.length) throw new Error('No rows parsed');
+
+    const years = [...new Set(records.filter(r => r.year).map(r => r.year))].sort();
+    const minYear = Number(years[0]);
+    const maxYear = years[years.length - 1];
+    START_YEAR = minYear;
+    YEAR_ORDER  = years.slice().reverse();
+
+    const sumMin = list => list.reduce((s, r) => s + r.min, 0);
+    const H = m => Math.round(m / 60);
+
+    /* top genres (all-time hours) drive the bar chart order */
+    const gHours = {};
+    records.forEach(r => { if (r.genre) gHours[r.genre] = (gHours[r.genre] || 0) + r.min; });
+    const GENRES6 = Object.keys(gHours)
+      .sort((a, b) => gHours[b] - gHours[a])
+      .slice(0, 6);
+
+    /* hours by genre per period, aligned to the top-6 order */
+    const genreYears = {};
+    ['all'].concat(years).forEach(p => {
+      const list = p === 'all' ? records : records.filter(r => r.year === p);
+      genreYears[p] = GENRES6.map(g => H(list.reduce((s, r) => (r.genre === g ? s + r.min : s), 0)));
     });
+
+    /* continuous month series (gap-filled) for the line chart */
+    const mc = r => (Number(r.year) - minYear) * 12 + r.month;
+    const dated = records.filter(r => r.year && r.month >= 0);
+    const startC = dated.length ? Math.min.apply(null, dated.map(mc)) : 0;
+    const maxC   = dated.length ? Math.max.apply(null, dated.map(mc)) : 0;
+    const bucket = (y, mo) => H(records.reduce((s, r) =>
+      (r.year === y && r.month === mo ? s + r.min : s), 0));
+    const allMonths = [];
+    for (let c = startC; c <= maxC; c++) allMonths.push(bucket(String(minYear + Math.floor(c / 12)), c % 12));
+    const firstY = minYear + Math.floor(startC / 12);
+    const lastY  = minYear + Math.floor(maxC / 12);
+
+    const mkSub = (list) => {
+      const s = list.filter(r => r.show).length;
+      const m = list.filter(r => r.movie).length;
+      const d = (s + m) || 1;
+      return [Math.round(100 * s / d), 100 - Math.round(100 * s / d)];
+    };
+    const [allS, allM] = mkSub(records);
+
+    const periods = {
+      all: {
+        name: 'All Time',
+        months: allMonths,
+        titles: records.length,
+        hours: H(sumMin(records)),
+        shows: records.filter(r => r.show).length,
+        movies: records.filter(r => r.movie).length,
+        sub: ['series + movies', 'since ' + MONTH_NAMES[startC % 12] + ' ' + firstY,
+              allS + '% of titles', allM + '% of titles'],
+        monthsLabel: MONTH_NAMES[startC % 12] + ' ' + firstY + '-' +
+                     MONTH_NAMES[maxC % 12] + ' ' + lastY
+      }
+    };
+
+    years.forEach(y => {
+      const titled = records.filter(r => r.year === y);
+      const isLast = y === maxYear;
+      const lastMonth = isLast
+        ? dated.filter(r => r.year === y).reduce((mx, r) => Math.max(mx, r.month), 0)
+        : 11;
+      const months = [];
+      for (let mo = 0; mo <= lastMonth; mo++) months.push(bucket(y, mo));
+      const [sp, mp] = mkSub(titled);
+      const label = isLast
+        ? 'Jan-' + MONTH_NAMES[lastMonth] + ' ' + y
+        : 'Jan-Dec ' + y;
+      periods[y] = {
+        name: y,
+        months,
+        titles: titled.length,
+        hours: H(sumMin(titled)),
+        shows: titled.filter(r => r.show).length,
+        movies: titled.filter(r => r.movie).length,
+        sub: ['active in period', label, sp + '% of titles', mp + '% of titles'],
+        monthsLabel: label
+      };
+    });
+
+    return { periods, genres: GENRES6, genreYears, startYear: minYear };
+  }
+
+  /* Snapshot used only if the sheet can't be reached (keeps the demo intact). */
+  function loadFallback() {
+    PERIODS = {
+      all: {
+        name: 'All Time',
+        months: [18,24,31,27,35,29,42,38,45,39,51,47, 44,52,48,61,55,63,58,72,66,70,62,75, 58,64,71,60,78,83,74],
+        titles: 342, hours: 1640, shows: 205, movies: 137,
+        sub: ['movies + series', 'since Jan 2024', '60% of titles', '40% of titles'],
+        monthsLabel: 'Jan 2024-Jul 2026'
+      },
+      '2024': {
+        name: '2024', months: [18,24,31,27,35,29,42,38,45,39,51,47],
+        titles: 198, hours: 426, shows: 116, movies: 82,
+        sub: ['active in period', 'Jan-Dec 2024', '59% of titles', '41% of titles'],
+        monthsLabel: 'Jan-Dec 2024'
+      },
+      '2025': {
+        name: '2025', months: [44,52,48,61,55,63,58,72,66,70,62,75],
+        titles: 289, hours: 726, shows: 168, movies: 121,
+        sub: ['active in period', 'Jan-Dec 2025', '58% of titles', '42% of titles'],
+        monthsLabel: 'Jan-Dec 2025'
+      },
+      '2026': {
+        name: '2026', months: [58,64,71,60,78,83,74],
+        titles: 214, hours: 488, shows: 119, movies: 95,
+        sub: ['active in period', 'Jan-Jul 2026', '56% of titles', '44% of titles'],
+        monthsLabel: 'Jan-Jul 2026'
+      }
+    };
+    GENRES = ['Sci-Fi','Drama','Documentary','Comedy','Crime','Animation'];
+    GENRE_YEARS = {
+      '2024': [72, 89, 64, 60, 43, 38],
+      '2025': [138, 131, 109, 87, 87, 73],
+      '2026': [117, 78, 59, 54, 68, 49]
+    };
+    GENRE_YEARS.all = GENRES.map((_, i) => GENRE_YEARS['2024'][i] + GENRE_YEARS['2025'][i] + GENRE_YEARS['2026'][i]);
+    START_YEAR = 2024;
+    YEAR_ORDER  = ['2026','2025','2024'];
+    setSourceStatus('snapshot');
+  }
+
+  let dataPromise = null;
+  function ensureData() {
+    if (PERIODS) return Promise.resolve();
+    if (dataPromise) return dataPromise;
+    dataPromise = fetch(SHEET_URL, { cache: 'no-store' })
+      .then(res => { if (!res.ok) throw new Error('Sheet HTTP ' + res.status); return res.text(); })
+      .then(parseCSV)
+      .then(rows => {
+        const built = buildLive(rows);
+        PERIODS     = built.periods;
+        GENRES      = built.genres;
+        GENRE_YEARS = built.genreYears;
+        START_YEAR  = built.startYear;
+        const count = document.getElementById('dashTotalTitles');
+        if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
+        setSourceStatus('live');
+      })
+      .catch(err => {
+        console.warn('Dashboard: live sheet unavailable, showing snapshot', err);
+        loadFallback();
+      });
+    return dataPromise;
+  }
+
+  /* Source-indicator feedback: 'pending' (loading) → 'live' (sheet reached)
+     or 'snapshot' (fetch failed, we're showing the embedded fallback). */
+  function setSourceStatus(state) {
+    const el = document.getElementById('dashSource');
+    if (!el) return;
+    const label = state === 'live'
+      ? 'live · Google Sheets'
+      : state === 'snapshot'
+        ? 'snapshot · sheet unreachable'
+        : 'syncing · Google Sheets';
+    el.innerHTML = '<span class="dash-source-dot" data-state="' + state +
+      '" aria-hidden="true"></span><span id="dashSourceText">' + label + '</span>';
+  }
+
+  /* Build the filter tabs from the data's years ('all' first, then each year
+     newest-first), so there are never dead buttons for a year with no rows. */
+  function buildFilters(active) {
+    const host = document.getElementById('dashFilters');
+    if (!host) return;
+    host.textContent = '';
+    const list = [];
+    ['all'].concat(YEAR_ORDER).forEach(p => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'dash-filter';
+      b.dataset.period = p;
+      b.setAttribute('aria-pressed', String(p === active));
+      if (p === active) b.classList.add('active');
+      b.textContent = p === 'all' ? 'All Time' : p;
+      b.addEventListener('click', () => setFilter(b.dataset.period));
+      list.push(b);
+    });
+    els.filters = list;
+    list.forEach(b => host.appendChild(b));
   }
 
   /* ── KPI count-up animation ── */
-  const values = { titles: 342, hours: 1640, shows: 205, movies: 137 };
+  const values = { titles: 0, hours: 0, shows: 0, movies: 0 };
   const FMTS = {
     titles: { key: 'titles', render: v => Math.round(v).toLocaleString('en-US') },
     hours:  { key: 'hours',  render: v => Math.round(v).toLocaleString('en-US') },
@@ -590,7 +799,7 @@
     const niceMax = Math.max(10, Math.ceil(max / 10) * 10);
     const x = i => PL + (months.length === 1 ? iw / 2 : (iw * i) / (months.length - 1));
     const y = v => PT + ih - (ih * v) / niceMax;
-    const baseYear = period === 'all' ? 2024 : Number(period);
+    const baseYear = period === 'all' ? START_YEAR : Number(period);
     const yearOf = i => baseYear + Math.floor(i / 12);
 
     /* gradient fill under the line */
@@ -751,7 +960,9 @@
 
   /* ── Filters ── */
   function setFilter(period) {
-    if (period === current) return;
+    /* Ignore clicks until the sheet has loaded (and period buttons that
+       aren't present in the data, e.g. a future year with no titles yet). */
+    if (!PERIODS || !PERIODS[period] || period === current) return;
     current = period;
     els.filters.forEach(f => {
       const on = f.dataset.period === period;
@@ -765,18 +976,26 @@
     if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel;
     if (els.barSub)  els.barSub.textContent  = 'top ' + GENRES.length + ' · ' + PERIODS[period].name;
   }
-  els.filters.forEach(f => f.addEventListener('click', () => setFilter(f.dataset.period)));
 
-  /* ── Init (render on first scroll into view) ── */
-  function init(animate) {
+  /* ── Init (render once data is ready, on first scroll into view) ── */
+  async function init(animate) {
     if (inited) return;
     inited = true;
+    await ensureData();
+    if (!PERIODS) return;
+
+    const urlPeriod = new URLSearchParams(location.search).get('period');
+    if (urlPeriod && PERIODS[urlPeriod]) current = urlPeriod;
+    buildFilters(current);
+
     updateMetrics(current, animate);
     renderLine(current, animate);
     renderBars(current, animate);
     if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[current].monthsLabel;
     if (els.barSub)  els.barSub.textContent  = 'top ' + GENRES.length + ' · ' + PERIODS[current].name;
   }
+
+  ensureData(); /* start the sheet fetch immediately, not on first scroll */
 
   if (reduceMotion) {
     init(false);

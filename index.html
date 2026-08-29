@@ -521,20 +521,20 @@
         <h2 class="big-heading">Analytics<br>Dashboard.</h2>
         <div class="dash-header-side">
           <p class="dash-intro">
-            A live slice of my Content Tracking Dashboard: 342+ titles, Google Sheets
-            as the backend, no frameworks. The filters below re-compute every metric and
-            chart instantly from the same pipeline the real app uses.
+            A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">342+</span>
+            titles, Google Sheets as the backend, no frameworks. The filters below re-compute
+            every metric and chart from the sheet itself, so the numbers stay current.
+          </p>
+          <p class="dash-source" id="dashSource" role="status">
+            <span class="dash-source-dot" data-state="pending" aria-hidden="true"></span>
+            <span id="dashSourceText">syncing · Google Sheets</span>
           </p>
           <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="btn-medium">Open Full Dashboard &rarr;</a>
         </div>
       </div>
 
-      <div class="dash-filters" role="group" aria-label="Filter dashboard by time period">
-        <button type="button" class="dash-filter active" data-period="all" aria-pressed="true">All Time</button>
-        <button type="button" class="dash-filter" data-period="2026" aria-pressed="false">2026</button>
-        <button type="button" class="dash-filter" data-period="2025" aria-pressed="false">2025</button>
-        <button type="button" class="dash-filter" data-period="2024" aria-pressed="false">2024</button>
-      </div>
+      <!-- Tabs are generated from the sheet's years (all + each year present). -->
+      <div class="dash-filters" id="dashFilters" role="group" aria-label="Filter dashboard by time period"></div>
 
       <div class="dash-metrics">
         <div class="dash-card dash-metric">
