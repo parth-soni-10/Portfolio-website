@@ -338,39 +338,74 @@
         <span class="proj-count-label">08 works</span>
       </div>
 
-      <div class="proj-list">
+      <div class="spot-wrap" id="spotWrap">
 
-        <!-- 01 Content Dashboard -->
-        <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="proj-row featured-proj" aria-label="Open the Content Tracking Dashboard project">
-          <div class="proj-row-num">01</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              Content Tracking Dashboard
+        <div class="spot-index" id="spotIndex" role="tablist" aria-label="Project list">
+
+          <button class="spot-item active" id="spotTab-01" role="tab" aria-selected="true" aria-controls="spotPanel-01">
+            <span class="si-num">01</span><span class="si-title">Content Tracking Dashboard</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-02" role="tab" aria-selected="false" aria-controls="spotPanel-02">
+            <span class="si-num">02</span><span class="si-title">Formula 1 Telemetry Analysis</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-03" role="tab" aria-selected="false" aria-controls="spotPanel-03">
+            <span class="si-num">03</span><span class="si-title">UCD PolicyBot</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-04" role="tab" aria-selected="false" aria-controls="spotPanel-04">
+            <span class="si-num">04</span><span class="si-title">Irish Visa Decision Tracker</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-05" role="tab" aria-selected="false" aria-controls="spotPanel-05">
+            <span class="si-num">05</span><span class="si-title">cents.: Personal Expense Tracker</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-06" role="tab" aria-selected="false" aria-controls="spotPanel-06">
+            <span class="si-num">06</span><span class="si-title">Excel &amp; Python EDA</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-07" role="tab" aria-selected="false" aria-controls="spotPanel-07">
+            <span class="si-num">07</span><span class="si-title">Pink Eye Detection: CNN</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-08" role="tab" aria-selected="false" aria-controls="spotPanel-08">
+            <span class="si-num">08</span><span class="si-title">Interactive Tableau Dashboards</span>
+          </button>
+
+        </div>
+
+        <div class="spot-panels" id="spotPanels">
+
+          <article class="spot-card active" id="spotPanel-01" role="tabpanel" aria-labelledby="spotTab-01">
+            <div class="sc-top">
+              <span class="sc-num">01</span>
+              <h3 class="sc-title">Content Tracking Dashboard</h3>
               <span class="proj-featured-badge">Live &bull; 2024-Current</span>
             </div>
-            <p class="proj-row-desc">
+            <p class="sc-desc">
               Built an end-to-end personal media analytics dashboard using HTML, CSS, JavaScript,
               Google Sheets API, and Apps Script to analyse 342+ titles, transforming raw viewing
               logs into interactive dashboards with calculated KPIs, derived metrics, YoY comparisons,
               dynamic filtering, and interactive visualisations across six analytics pages, without a
               traditional backend or external frameworks.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">JavaScript</span><span class="ptag">Google Sheets API</span><span class="ptag">Apps Script</span><span class="ptag">Data Pipeline</span><span class="ptag">Looker Studio</span>
             </div>
-          </div>
-          <span class="proj-row-link">Live Dashboard &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 02 F1 Telemetry -->
-        <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="proj-row" aria-label="Read the Formula 1 Telemetry Analysis on Medium">
-          <div class="proj-row-num">02</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              Formula 1 Telemetry Analysis
+          <article class="spot-card" id="spotPanel-02" role="tabpanel" aria-labelledby="spotTab-02">
+            <div class="sc-top">
+              <span class="sc-num">02</span>
+              <h3 class="sc-title">Formula 1 Telemetry Analysis</h3>
               <span class="proj-featured-badge">Live &bull; Jan 2026-Present</span>
             </div>
-            <p class="proj-row-desc">
+            <p class="sc-desc">
               Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy
               to collect, clean, transform, and analyse race telemetry across the 2026 Formula 1 season,
               publishing weekly data-driven performance reports. Developed 9+ visualisation types
@@ -378,22 +413,21 @@
               delta, and sector performance, translating complex datasets into audience-friendly
               visual stories through 10+ published articles on Medium.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">Python</span><span class="ptag">FastF1</span><span class="ptag">pandas</span><span class="ptag">NumPy</span><span class="ptag">Telemetry</span><span class="ptag">Medium</span>
             </div>
-          </div>
-          <span class="proj-row-link">Read on Medium &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener">Read on Medium &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 03 UCD PolicyBot -->
-        <a href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener" class="proj-row" aria-label="View the UCD PolicyBot project on GitHub">
-          <div class="proj-row-num">03</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              UCD PolicyBot
+          <article class="spot-card" id="spotPanel-03" role="tabpanel" aria-labelledby="spotTab-03">
+            <div class="sc-top">
+              <span class="sc-num">03</span>
+              <h3 class="sc-title">UCD PolicyBot</h3>
               <span class="proj-featured-badge">May-Aug 2026</span>
             </div>
-            <p class="proj-row-desc">
+            <p class="sc-desc">
               RAG chatbot using a local SLM (Phi-3 / Gemma-2-9B) and vector database to answer UCD
               academic and admin policy questions, with mandatory citation (URL + page number) and a
               self-correction loop that verifies output against retrieved context. Built a scraping and
@@ -401,22 +435,21 @@
               docs, preserving hierarchical structure for downstream vector indexing. Automated dedup and
               validation checks cut malformed records by ~30% and pushed retrieval precision above 80%.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">RAG</span><span class="ptag">Python</span><span class="ptag">LLM</span><span class="ptag">Vector DB</span><span class="ptag">BeautifulSoup</span><span class="ptag">pdfplumber</span>
             </div>
-          </div>
-          <span class="proj-row-link">GitHub &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 04 Irish Visa Tracker -->
-        <div class="proj-row featured-proj">
-          <div class="proj-row-num">04</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              Irish Visa Decision Tracker
+          <article class="spot-card" id="spotPanel-04" role="tabpanel" aria-labelledby="spotTab-04">
+            <div class="sc-top">
+              <span class="sc-num">04</span>
+              <h3 class="sc-title">Irish Visa Decision Tracker</h3>
               <span class="proj-featured-badge">Live &bull; Personal Project</span>
             </div>
-            <p class="proj-row-desc">
+            <p class="sc-desc">
               Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a
               flat daily spreadsheet (no history, no search, no trends) into a searchable, browsable
               dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s
@@ -425,91 +458,95 @@
               by the four-tab Netlify dashboard: live snapshot, daily summary, full history with
               date-picker, and a suggestions form.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">Python</span><span class="ptag">GitHub Actions</span><span class="ptag">Google Sheets</span><span class="ptag">Apps Script</span><span class="ptag">Netlify</span><span class="ptag">Scraping</span>
             </div>
-          </div>
-          <div class="proj-row-links-group">
-            <a href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener" class="proj-row-link">Live Site &rarr;</a>
-            <a href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener" class="proj-row-link proj-row-link-gap">GitHub &rarr;</a>
-          </div>
-        </div>
+            <div class="spot-links">
+              <a class="spot-link" href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener">Live Site &rarr;</a>
+              <a class="spot-link" href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 05 cents. Expense Tracker -->
-        <div class="proj-row proj-row-static">
-          <div class="proj-row-num">05</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">
-              cents.: Personal Expense Tracker
+          <article class="spot-card" id="spotPanel-05" role="tabpanel" aria-labelledby="spotTab-05">
+            <div class="sc-top">
+              <span class="sc-num">05</span>
+              <h3 class="sc-title">cents.: Personal Expense Tracker</h3>
               <span class="proj-featured-badge">Personal Project &bull; 2026</span>
             </div>
-            <p class="proj-row-desc">
+            <p class="sc-desc">
               Built a privacy-first personal expense tracker with no framework and no
               build step. Just vanilla ES modules. Type a plain-language entry
               like &ldquo;lidl groceries 4.47 revolut&rdquo; and it auto-parses amount,
               category, and payment method. Data stays in localStorage with optional
               private GitHub sync, secured by a PIN or Face ID / fingerprint lock.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">JavaScript</span><span class="ptag">ES Modules</span><span class="ptag">localStorage</span><span class="ptag">Netlify Functions</span><span class="ptag">Web Auth API</span>
             </div>
-          </div>
-          <span class="proj-row-private">Private project</span>
-        </div>
+            <div class="spot-links">
+              <span class="spot-private">Private project</span>
+            </div>
+          </article>
 
-        <!-- 06 Excel EDA -->
-        <a href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener" class="proj-row" aria-label="View the Excel and Python EDA project on GitHub">
-          <div class="proj-row-num">06</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">Excel &amp; Python EDA</div>
-            <p class="proj-row-desc">
+          <article class="spot-card" id="spotPanel-06" role="tabpanel" aria-labelledby="spotTab-06">
+            <div class="sc-top">
+              <span class="sc-num">06</span>
+              <h3 class="sc-title">Excel &amp; Python EDA</h3>
+            </div>
+            <p class="sc-desc">
               Cleaned and prepared public datasets using Excel and Python to ensure high data quality.
               Performed exploratory statistical analysis on sales data, handling missing values,
               outliers, and anomalies, and built Tableau charts to surface key correlations and
               actionable insights.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">Python</span><span class="ptag">Excel</span><span class="ptag">Tableau</span><span class="ptag">EDA</span>
             </div>
-          </div>
-          <span class="proj-row-link">GitHub &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 07 Pink Eye CNN -->
-        <a href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener" class="proj-row" aria-label="View the Pink Eye Detection CNN project on GitHub">
-          <div class="proj-row-num">07</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">Pink Eye Detection: CNN</div>
-            <p class="proj-row-desc">
+          <article class="spot-card" id="spotPanel-07" role="tabpanel" aria-labelledby="spotTab-07">
+            <div class="sc-top">
+              <span class="sc-num">07</span>
+              <h3 class="sc-title">Pink Eye Detection: CNN</h3>
+            </div>
+            <p class="sc-desc">
               Developed a Convolutional Neural Network to classify eye images as healthy or infected
               with conjunctivitis. Implemented Conv2D, MaxPooling, ReLU, Dropout, and Dense layers;
               trained on a labeled dataset of healthy and infected eyes. Integrated with a Flask app
               for real-time camera input, allowing users to self-screen and take timely action.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">CNN</span><span class="ptag">Flask</span><span class="ptag">Python</span><span class="ptag">Machine Learning</span>
             </div>
-          </div>
-          <span class="proj-row-link">GitHub &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </article>
 
-        <!-- 08 Tableau -->
-        <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="proj-row" aria-label="View the Interactive Tableau Dashboards on Tableau Public">
-          <div class="proj-row-num">08</div>
-          <div class="proj-row-body">
-            <div class="proj-row-title">Interactive Tableau Dashboards</div>
-            <p class="proj-row-desc">
+          <article class="spot-card" id="spotPanel-08" role="tabpanel" aria-labelledby="spotTab-08">
+            <div class="sc-top">
+              <span class="sc-num">08</span>
+              <h3 class="sc-title">Interactive Tableau Dashboards</h3>
+            </div>
+            <p class="sc-desc">
               Designed a collection of interactive dashboards to tell data-driven stories with clarity
               and strong visual hierarchy. Implemented filters, parameters, and calculated fields to
               enable interactive exploration of datasets. Focused on dashboard usability, fast insight
               extraction, and storytelling.
             </p>
-            <div class="proj-row-tags">
+            <div class="sc-tags">
               <span class="ptag">Tableau</span><span class="ptag">Data Viz</span><span class="ptag">Dashboards</span><span class="ptag">Storytelling</span>
             </div>
-          </div>
-          <span class="proj-row-link">Tableau Public &rarr;</span>
-        </a>
+            <div class="spot-links">
+              <a class="spot-link" href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener">Tableau Public &rarr;</a>
+            </div>
+          </article>
+
+          <p class="spot-hint">Tip: click a title or use the &uarr; &darr; arrow keys to browse &middot; your pick stays highlighted<span class="spot-autoplay-note"> &middot; auto-playing</span></p>
+        </div>
 
       </div>
     </div>

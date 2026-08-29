@@ -35,7 +35,7 @@
     '.profile-kicker, .hero-stat-block, .profile-pill-row, .pull-quote, ' +
     '.connect-card, ' +
     '.dash-filters, .dash-card, ' +
-    '.exp-block, .proj-row, .cert-card, .edu-entry, ' +
+    '.exp-block, .spot-wrap, .cert-card, .edu-entry, ' +
     '.about-body, .open-to-block, .medium-callout, ' +
     '.skills-two-col, .footer-grey'
   );
@@ -1007,4 +1007,105 @@
   } else {
     init(true);
   }
+})();
+
+/* ── PROJECTS SPOTLIGHT INDEX ─────────────────────── */
+/* Master-detail picker: a numbered index rail on the left, a large
+   detail panel that swaps on the right. Click to select, arrow keys
+   to roam (Home/End included). Panels stack in one grid cell so the
+   container takes the tallest card with no JS height measuring. */
+(function () {
+  'use strict';
+
+  const wrap = document.getElementById('spotWrap');
+  if (!wrap) return;
+
+  const tablist = document.getElementById('spotIndex');
+  const tabs    = Array.from(wrap.querySelectorAll('.spot-item'));
+  const panels  = Array.from(wrap.querySelectorAll('.spot-card'));
+  if (!tablist || !tabs.length || !panels.length) return;
+
+  let active = tabs.findIndex(t => t.classList.contains('active'));
+  if (active < 0) active = 0;
+
+  function setSpot(i) {
+    if (i < 0 || i >= tabs.length) return;
+    active = i;
+    tabs.forEach((t, j) => {
+      t.classList.toggle('active', j === i);
+      t.setAttribute('aria-selected', String(j === i));
+      t.tabIndex = j === i ? 0 : -1;
+    });
+    panels.forEach((p, j) => p.classList.toggle('active', j === i));
+  }
+
+  tabs.forEach((t, i) => {
+    t.tabIndex = i === active ? 0 : -1;
+    t.addEventListener('click', () => { markInteracted(); setSpot(i); });
+  });
+
+  tablist.addEventListener('keydown', (e) => {
+    markInteracted();
+    const n = tabs.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      setSpot((active + 1) % n);
+      tabs[active].focus();
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setSpot((active - 1 + n) % n);
+      tabs[active].focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setSpot(0);
+      tabs[0].focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setSpot(n - 1);
+      tabs[n - 1].focus();
+    }
+  });
+
+  /* ── Auto-rotation: a gentle showcase that never fights the user ──
+     Starts when the section scrolls into view, cycles every 7s, pauses
+     while the pointer is over the section, and stops permanently on the
+     first click or key press. Never runs under prefers-reduced-motion. */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const projectsSec  = document.getElementById('projects');
+  const autoNote     = wrap.querySelector('.spot-autoplay-note');
+  let interacted = false;
+  let rotTimer   = null;
+
+  function stopRotation() {
+    if (rotTimer) { window.clearInterval(rotTimer); rotTimer = null; }
+    wrap.classList.remove('rotating');
+    if (autoNote) autoNote.hidden = true;
+  }
+
+  function startRotation() {
+    if (reduceMotion || interacted || rotTimer || !projectsSec) return;
+    rotTimer = window.setInterval(() => setSpot((active + 1) % tabs.length), 7000);
+    wrap.classList.add('rotating');
+    if (autoNote) autoNote.hidden = false;
+  }
+
+  function markInteracted() {
+    interacted = true;
+    stopRotation();
+  }
+
+  if (projectsSec && 'IntersectionObserver' in window) {
+    const rotIO = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) startRotation();
+        else stopRotation();
+      });
+    }, { threshold: 0.35 });
+    rotIO.observe(projectsSec);
+  } else {
+    startRotation();
+  }
+
+  wrap.addEventListener('pointerenter', stopRotation, { passive: true });
+  wrap.addEventListener('pointerleave', () => { if (!interacted) startRotation(); }, { passive: true });
 })();
