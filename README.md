@@ -1,81 +1,40 @@
-# 🗂️ Parth Soni — Personal Portfolio Website
+# Parth Soni — Portfolio
+
+A small personal website that shows who I am and what I like to build: a data analyst and MSc Computer Science student who loves turning messy numbers into clear stories.
+
+It's a single-page site — quick to load, easy to browse, and built by hand.
 
 > *"Data is only as powerful as the story it tells."*
 
-A fully hand-coded personal portfolio website built with **pure HTML, CSS, and vanilla JavaScript** — no frameworks, no build tools, no dependencies. Just clean, fast, and intentional front-end code.
+## What's on the page
 
-Live and deployed at: **[your-url-here]**
+- **About** — a short intro, my education, and a few non-work facts
+- **Experience** — internships and what I worked on
+- **Projects** — tools and dashboards I've built, with links to each
+- **Skills** — the tools and ways of working I use
+- **Certificates** — professional certifications and courses
+- **Contact** — ways to reach me
 
----
+## Things you may notice
 
-## 📸 Preview
+- **Live GitHub activity** — the site pulls my contribution graph in real time
+- **Live dashboard preview** — a working slice of my content-tracking dashboard, updated straight from its data
+- **Easy to browse** — smooth scrolling, a mobile menu, and calm, readable styling
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  PARTH SONI ᴾᴼᴿᵀᶠᴼᴸᴵᴼ                    About  Exp … │
-├──────────────────────────┬──────────────────────────────┤
-│                          │  Profile — Parth Shirish Soni│
-│  Making data             │                              │
-│  speak clearly.          │  5+   Certifications         │
-│                          │  MSc  CS · UCD Dublin        │
-│  [ View Resume → ]       │                              │
-│  [ Get In Touch  ]       │  SQL  Python  Power BI  …    │
-└──────────────────────────┴──────────────────────────────┘
-```
+## Run it locally
 
----
-
-## 🗃️ File Structure
+No setup needed. Either open `index.html` directly in your browser, or run a tiny local server from this folder:
 
 ```
-portfolio/
-│
-├── index.html                          # All page content & markup
-├── style.css                           # All styles — variables, layout, components
-├── script.js                           # Mobile menu, scroll animations, active nav
-│
-├── certificate-microsoft-powerbi-coursera.jpeg
-├── certificate-google-data-analytics-coursera.jpeg
-├── certificate-meta-data-analyst-coursera.jpeg
-├── certificate-ibm-data-analyst-coursera.jpeg
-├── certificate-BA-datascience-simulation-forage.png
-└── certificate-other-certificates.png
+python -m http.server
 ```
 
----
+Then visit `http://localhost:8000`. The "live" sections need an internet connection.
 
-## 🚀 Deployment
+## Built with
 
-Deployed via **Netlify** — drag and drop the project folder onto [netlify.com](https://netlify.com). Live in seconds with a free custom subdomain, no configuration needed.
-
----
-
-## 🧰 Built With
-
-| Technology | Purpose |
-|---|---|
-| HTML5 | Semantic page structure |
-| CSS3 | Layout (Grid + Flexbox), variables, transitions, animations |
-| Vanilla JS | Scroll observer, mobile menu, active nav |
-| Google Fonts | Playfair Display + DM Sans |
-| Looker Studio | Embedded content dashboard (iFrame) |
+Plain **HTML, CSS, and JavaScript** — no frameworks, no build tools. That keeps it fast, simple, and dependable.
 
 ---
 
-## 👤 About Me
-
-**Parth Shirish Soni** — Data Analyst · Dublin, Ireland
-
-MSc Computer Science student at University College Dublin with a background in inventory analysis and technical writing. I built this portfolio to practice front-end development alongside my data analytics work and to have a space that actually reflects who I am — not just a template.
-
-- 📧 [soni.soni.parth@gmail.com](mailto:soni.soni.parth@gmail.com)
-- 💼 [LinkedIn](https://www.linkedin.com/in/parth-soni-1a6025191/)
-- 🐙 [GitHub](https://github.com/parth-soni-10)
-- 📊 [Tableau Public](https://public.tableau.com/app/profile/parth.soni7469)
-- 📄 [Resume (Google Drive)](https://drive.google.com/file/d/1BxofR4M47SU1znwB5USGRos4UFbDcM3s/view?usp=drive_link)
-
----
-
-<p align="center">
-  Designed & coded by <strong>Parth Soni</strong> &bull; © 2026
-</p>
+Made with a lot of coffee by **Parth Soni**.

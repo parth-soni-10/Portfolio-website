@@ -297,8 +297,8 @@
     .then(d => {
       const repos = document.getElementById('ghRepos');
       const followers = document.getElementById('ghFollowers');
-      if (repos)     repos.textContent = String(d.public_repos ?? '\u2014');
-      if (followers) followers.textContent = String(d.followers ?? '\u2014');
+      if (repos)     repos.textContent = String(d.public_repos ?? '-');
+      if (followers) followers.textContent = String(d.followers ?? '-');
     })
     .catch(() => {});
 
@@ -377,8 +377,8 @@
               cell.classList.add('lvl-' + level);
               const dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
               cell.title = count > 0
-                ? dateLabel + ' \u2014 ' + count + (count === 1 ? ' contribution' : ' contributions')
-                : dateLabel + ' \u2014 No contributions';
+                ? dateLabel + ' - ' + count + (count === 1 ? ' contribution' : ' contributions')
+                : dateLabel + ' - No contributions';
               total += count;
             } else {
               cell.style.visibility = 'hidden'; // filler days outside the window
@@ -441,7 +441,7 @@
 /* ── ANALYTICS DASHBOARD DEMO ───────────────────────── */
 /* Design spec: Inter 18/24 SemiBold metrics (-0.1px tracking), 12/16 Medium
    labels, 28px/13px/6px filter pills, 14px-radius / 16px-padding cards,
-   #519DFA line chart, #0077E6 bar chart, #333333 / #777777 text. */
+   #519DFA line chart, #0077E6 bar chart,   orange line/bar charts · #333333 / #777777 text. */
 (function () {
   'use strict';
 
@@ -778,7 +778,7 @@
     els.subs.forEach((el, i) => { if (el) el.textContent = d.sub[i]; });
   }
 
-  /* ── Line chart (#519DFA) ── */
+  /* ── Line chart (orange accent) ── */
   const NS = 'http://www.w3.org/2000/svg';
   const svgEl = (tag, attrs) => {
     const n = document.createElementNS(NS, tag);
@@ -804,8 +804,8 @@
 
     /* gradient fill under the line */
     const grad = svgEl('linearGradient', { id: 'dashLineGrad', x1: '0', y1: '0', x2: '0', y2: '1' });
-    grad.appendChild(svgEl('stop', { offset: '0%',   'stop-color': '#519DFA', 'stop-opacity': '0.28' }));
-    grad.appendChild(svgEl('stop', { offset: '100%', 'stop-color': '#519DFA', 'stop-opacity': '0' }));
+    grad.appendChild(svgEl('stop', { offset: '0%',   'stop-color': '#e85d04', 'stop-opacity': '0.28' }));
+    grad.appendChild(svgEl('stop', { offset: '100%', 'stop-color': '#e85d04', 'stop-opacity': '0' }));
     svg.appendChild(grad);
 
     /* gridlines + y-axis labels */
@@ -907,7 +907,7 @@
       'Line chart: hours watched per month, ' + months.length + ' points, ' + PERIODS[period].monthsLabel);
   }
 
-  /* ── Bar chart (#0077E6) ── */
+  /* ── Bar chart (orange accent) ── */
   function renderBars(period, animate) {
     const fig = els.barFigure;
     if (!fig) return;
