@@ -815,14 +815,34 @@
       const yy = y(v);
       svg.appendChild(svgEl('line', { x1: PL, x2: W - PR, y1: yy, y2: yy, class: 'dash-grid-line' }));
       const t = svgEl('text', { x: PL - 7, y: yy + 3.5, 'text-anchor': 'end', class: 'dash-y-label' });
-      t.textContent = v + 'h';
+      t.textContent = Math.round(v) + 'h';  /* round: niceMax/3 yields repeating decimals (e.g. 93.333…) */
       svg.appendChild(t);
     }
 
-    /* x-axis labels (sparse, to stay readable) */
+    /* x-axis labels (sparse, to stay readable). Regular cadence is set by
+       `every`, but the final month is always labelled too — which can land just
+       a few px from the penultimate regular label (e.g. Jul 2026 / Aug 2026 at
+       17px apart) and overlap. Dedup: keep the first and last labels, drop any
+       regular label closer than MIN_GAP px to its predecessor, and when the
+       last label crowds the one before it, shed that penultimate label instead
+       so the end of the data is still shown. */
     const every = months.length > 24 ? 6 : 3;
-    months.forEach((m, i) => {
-      if (i % every !== 0 && i !== months.length - 1) return;
+    const MIN_GAP = 46; /* px */
+    const cand = [];
+    months.forEach((_, i) => { if (i % every === 0) cand.push(i); });
+    if (cand[cand.length - 1] !== months.length - 1) cand.push(months.length - 1);
+    const keep = [];
+    cand.forEach(i => {
+      if (keep.length === 0) { keep.push(i); return; }
+      const gap = x(i) - x(keep[keep.length - 1]);
+      if (i === months.length - 1) {
+        if (gap < MIN_GAP) keep.pop(); /* prefer the final month over its crowded neighbour */
+        keep.push(i);
+      } else if (gap >= MIN_GAP) {
+        keep.push(i);
+      }
+    });
+    keep.forEach(i => {
       const t = svgEl('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', class: 'dash-x-label' });
       t.textContent = MONTH_NAMES[i % 12] + ' ' + yearOf(i);
       svg.appendChild(t);
