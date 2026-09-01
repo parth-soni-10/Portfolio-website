@@ -770,26 +770,6 @@ nav a:hover { color: var(--orange); }
   border-right: 1px solid var(--rule);
 }
 
-.section-eyebrow {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--orange-deep);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.25rem;
-  font-weight: 600;
-}
-
-.section-eyebrow::after {
-  content: '';
-  flex: 1;
-  max-width: 60px;
-  height: 1px;
-  background: var(--rule);
-}
-
 .big-heading {
   font-family: var(--serif);
   font-size: clamp(2.2rem, 3vw, 3.2rem);
@@ -889,15 +869,6 @@ nav a:hover { color: var(--orange); }
 
 /* Education aside */
 .edu-aside { padding: 4rem 2.5rem; background: var(--cream); }
-
-.section-eyebrow-sm {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--orange-deep);
-  font-weight: 600;
-  margin-bottom: 1.75rem;
-}
 
 .edu-entry { margin-bottom: 1.75rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--rule); }
 .edu-entry-last { margin-bottom: 0; border-bottom: none; }
