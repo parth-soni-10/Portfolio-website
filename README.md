@@ -11,6 +11,7 @@ It's a single-page site — quick to load, easy to browse, and built by hand.
 - **About** — a short intro, my education, and a few non-work facts
 - **Experience** — internships and what I worked on
 - **Projects** — tools and dashboards I've built, with links to each
+- **Dashboard demo** — a working analytics dashboard with charts you can filter by year
 - **Skills** — the tools and ways of working I use
 - **Certificates** — professional certifications and courses
 - **Contact** — ways to reach me
@@ -19,6 +20,7 @@ It's a single-page site — quick to load, easy to browse, and built by hand.
 
 - **Live GitHub activity** — the site pulls my contribution graph in real time
 - **Live dashboard preview** — a working slice of my content-tracking dashboard, updated straight from its data
+- **Clean share previews** — links to the site show a branded card when shared
 - **Easy to browse** — smooth scrolling, a mobile menu, and calm, readable styling
 
 ## Run it locally
