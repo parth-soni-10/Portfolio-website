@@ -91,7 +91,7 @@
   if (header) {
     window.addEventListener('scroll', () => {
       header.style.boxShadow = window.scrollY > 60
-        ? '0 2px 24px rgba(0,0,0,0.45)'
+        ? '0 1px 2px rgba(22,19,14,.05), 0 10px 28px -14px rgba(22,19,14,.18)'
         : 'none';
     }, { passive: true });
   }
@@ -897,15 +897,23 @@
       hDot.setAttribute('opacity', '1');
       els.lineTip.textContent = MONTH_NAMES[i % 12] + ' ' + yearOf(i) + ' · ' + months[i] + ' hrs';
       els.lineTip.hidden = false;
-      /* Keep the tooltip fully inside the figure (clamp horizontally, flip below near the top) */
-      const figW = els.lineTip.parentElement.clientWidth;
-      const figH = els.lineTip.parentElement.clientHeight;
-      const tipW = els.lineTip.offsetWidth;
-      const tipH = els.lineTip.offsetHeight;
-      const inset = ((tipW / 2 + 8) / figW) * 100;
-      let pct = (vx / W) * 100;
-      pct = Math.min(100 - inset, Math.max(inset, pct));
-      els.lineTip.style.left = pct + '%';
+      /* Keep the tooltip on the hovered point and fully inside the visible
+         figure. The chart scrolls horizontally on small screens (the svg
+         keeps a 540px min-width), and an absolutely positioned child of a
+         scroll container rides along with the content — so the element's
+         `left` must be (visible offset + scrollLeft), with the edge clamp
+         computed in visible-space coordinates. The percentage-based math
+         it replaces only worked when the svg filled the figure's width. */
+      const figEl   = els.lineTip.parentElement;
+      const figW    = figEl.clientWidth;
+      const figH    = figEl.clientHeight;
+      const svgW    = svg.getBoundingClientRect().width || W;
+      const tipW    = els.lineTip.offsetWidth;
+      const tipH    = els.lineTip.offsetHeight;
+      const scrollL = figEl.scrollLeft || 0;
+      let visCx     = (vx / W) * svgW - scrollL;
+      visCx = Math.min(figW - tipW / 2 - 8, Math.max(tipW / 2 + 8, visCx));
+      els.lineTip.style.left = (visCx + scrollL) + 'px';
       els.lineTip.style.top  = ((vy / H) * 100) + '%';
       els.lineTip.style.transform = (vy / H) * figH < tipH + 12
         ? 'translate(-50%, 12px)'

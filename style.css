@@ -77,6 +77,9 @@ img { max-width: 100%; display: block; }
 a { color: inherit; }
 button { font-family: inherit; cursor: pointer; }
 
+/* In-page anchors land below the sticky header (redesign dropped the old 72px rule) */
+section[id], div[id], footer[id] { scroll-margin-top: 80px; }
+
 /* Data numerals render tabular (stable widths) everywhere numbers matter */
 .big-num, .dash-metric-value, .exp-count, .proj-count-label,
 .footer-grey-num, .connect-gh-total, .si-num, .sc-num, .gh-cell {
@@ -1042,7 +1045,9 @@ button { font-family: inherit; cursor: pointer; }
   #hero { grid-template-columns: 1fr; gap: 40px; }
   .two-col-layout { grid-template-columns: 1fr; gap: 44px; }
   .dash-metrics { grid-template-columns: repeat(2, 1fr); }
-  .dash-charts { grid-template-columns: 1fr; }
+  /* minmax(0,…): the line chart's 540px svg min-width must not stretch the
+     single column and force the whole page to scroll sideways */
+  .dash-charts { grid-template-columns: minmax(0, 1fr); }
   .dash-header { grid-template-columns: 1fr; gap: 16px; }
   .exp-block { grid-template-columns: 1fr; gap: 12px; }
   .exp-divider { margin-left: 0; }
@@ -1051,8 +1056,10 @@ button { font-family: inherit; cursor: pointer; }
   .spot-item { padding: 10px 14px; }
   .cert-grid { grid-template-columns: repeat(2, 1fr); }
   .skills-two-col { grid-template-columns: 1fr; gap: 32px; }
-  #contact { grid-template-columns: 1fr; gap: 40px; }
-  .footer-grey { grid-template-columns: 1fr; gap: 28px; }
+  /* minmax(0,…): bare 1fr lets wide content (resume CTAs, stat rows) force
+     the footer past the viewport and give the page a sideways scroll */
+  #contact { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .footer-grey { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }
 
 @media (max-width: 640px) {
@@ -1061,6 +1068,14 @@ button { font-family: inherit; cursor: pointer; }
   #hero { padding: 48px var(--pad) 48px; }
   .hero-h1 { font-size: clamp(38px, 11vw, 52px); }
   .dash-metrics { grid-template-columns: 1fr; }
+  .dash-chart-figure { overflow-x: auto; }
+  /* Keep the SVG line chart legible on phones: it scales with its 600-unit
+     viewBox, so at card width its 11px axis labels would shrink to ~4px.
+     Enforce a minimum canvas width and let the card scroll instead. */
+  .dash-chart-figure svg { min-width: 540px; }
+  /* Same idea for the bar chart: give each column enough room for its
+     genre label and scroll the card instead of crushing them */
+  .dash-bar-figure .dash-bar-col { min-width: 78px; }
   .cert-grid { grid-template-columns: 1fr; }
   .connect-body { padding: 22px 18px 24px; }
   .spot-panels { padding: 24px 20px; }
