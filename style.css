@@ -618,6 +618,7 @@ button { font-family: inherit; cursor: pointer; }
 .si-num {
   font-size: 12px; font-weight: 700; color: var(--ink-mute);
   min-width: 22px;
+  transition: opacity .3s ease;
 }
 .spot-item.active .si-num { color: var(--accent-deep); }
 .si-title { font-size: 14.5px; font-weight: 600; color: var(--ink-soft); line-height: 1.35; }
@@ -668,6 +669,8 @@ button { font-family: inherit; cursor: pointer; }
   font-family: var(--data);
 }
 .spot-autoplay-note { color: var(--accent-deep); font-weight: 600; }
+/* Inactive index numbers dim while auto-rotation runs (JS toggles .rotating) */
+.spot-wrap.rotating .spot-item:not(.active) .si-num { opacity: .35; }
 
 /* ===================== ANALYTICS DASHBOARD ===================== */
 .dash-section { border-top: 1px solid var(--line); background: var(--paper-raise); }
@@ -689,10 +692,12 @@ button { font-family: inherit; cursor: pointer; }
 .dash-source-dot {
   width: 8px; height: 8px; border-radius: 50%;
   background: var(--line-strong);
+  transition: background-color .3s ease;
 }
-.dash-source-dot[data-state="ok"] { background: var(--green); }
-.dash-source-dot[data-state="pending"] { background: var(--amber); }
-.dash-source-dot[data-state="error"] { background: var(--red); }
+/* States match what JS sets (setSourceStatus): pending = base grey while
+   syncing, live = green, snapshot = amber (sheet unreachable, showing data). */
+.dash-source-dot[data-state="live"] { background: var(--green); }
+.dash-source-dot[data-state="snapshot"] { background: var(--amber); }
 
 .dash-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .dash-filter {
