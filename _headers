@@ -1,0 +1,31 @@
+# Response headers for the portfolio.
+#
+# Read by hosts that support the `_headers` convention (Netlify, Cloudflare
+# Pages) and ignored harmlessly by hosts that do not - so the directive set
+# that a meta tag cannot express has to live here. The Content-Security-Policy
+# below MUST stay in step with the <meta http-equiv="Content-Security-Policy">
+# in index.html: when either changes, change both, or the browser enforces the
+# intersection of the two policies and the site breaks in confusing ways.
+#
+# index.html explains what each origin is for. In short: cdnjs serves Font
+# Awesome's stylesheet and webfonts, and the connect-src origins are the live
+# GitHub graph, the contributions API and the dashboard's Google Sheet.
+#
+# googleusercontent.com must stay: the sheet export 302s to a sharded
+# doc-??-??-sheets.googleusercontent.com host, CSP checks the redirect target
+# too, and without it the dashboard quietly falls back to its snapshot.
+
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
+  # frame-ancestors is the one directive a <meta> tag cannot carry - it is what
+  # actually stops the site being framed, so it is paired with the legacy
+  # header below for engines that predate it.
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Nothing here uses a device API; denying them costs nothing and keeps a
+  # future embedded widget from inheriting a permission the page never asked for.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(), midi=(), magnetometer=(), gyroscope=(), accelerometer=()
+  # Deliberately without includeSubDomains or preload: this pins HTTPS for this
+  # host alone, which cannot strand a sibling host that is still HTTP-only.
+  Strict-Transport-Security: max-age=31536000

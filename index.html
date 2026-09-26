@@ -3,6 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Security headers, declared in the document as well as in ./_headers:
+       the meta form takes effect on any static host, while the _headers file
+       carries the directives a meta tag cannot express (frame-ancestors) plus
+       the standalone headers (X-Frame-Options, nosniff, Permissions-Policy,
+       HSTS). The two CSPs must stay in step - when one changes, change both.
+
+       The policy is strict because the page allows it: style.css and script.js
+       are same-origin, there is no inline <script>, no inline style="", no
+       eval/new Function, no javascript: URL and no Web Worker. The only
+       third-party origins are Font Awesome from cdnjs (stylesheet + its
+       webfonts) and the endpoints the live widgets fetch: the GitHub API, the
+       contributions API, and the dashboard's Google Sheet. Anything else -
+       images, frames, objects, form posts, workers - is denied outright.
+
+       googleusercontent.com is not optional. The sheet is read through
+       docs.google.com/.../export?format=csv, which 302s to a *sharded*
+       hostname like doc-08-74-sheets.googleusercontent.com, and CSP checks
+       the redirect target as well as the first hop. Without the wildcard the
+       dashboard silently drops to its embedded snapshot instead of failing
+       loudly - which is precisely how this policy first shipped broken. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <!-- Browser default made explicit, and pinned for older engines: full URL
+       same-origin, origin only across sites, nothing at all on a downgrade. -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="description" content="Parth Soni, Data Analyst in Dublin. MSc CS at UCD. SQL, Python, Power BI, Tableau. I turn messy data into clear decisions." />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="website" />
@@ -25,10 +50,32 @@
 </head>
 <body>
 
+  <!-- ===================== OPENING SPLASH ===================== -->
+  <!-- A one-shot paper curtain: PS mark, wordmark and rule assemble, then the
+       panel dissolves to reveal the page. Decorative only — style.css hides it
+       on its own, so a visitor whose script never ran is never stuck behind
+       it, and script.js skips it entirely on a repeat visit. -->
+  <div id="splash" aria-hidden="true">
+    <div class="splash-stage">
+      <div class="splash-mark">PS</div>
+      <div class="splash-name">Parth Soni</div>
+      <div class="splash-rule"></div>
+      <div class="splash-kicker">Data Analyst &bull; Dublin</div>
+    </div>
+  </div>
+
+  <!-- Bottom-of-viewport progressive blur. script.js fades it in only while
+       there is more report below, so it never sits over the footer. -->
+  <div class="edge-blur" aria-hidden="true"><span></span><span></span></div>
+
   <a class="skip-link" href="#hero">Skip to content</a>
 
   <!-- ===================== HEADER ===================== -->
   <header id="site-header">
+    <!-- Progressive blur veil (see style.css): three masked backdrop layers
+         ramp from a strong blur at the viewport edge to none at the bar's
+         lower edge, so content dissolves as it slides under. -->
+    <div class="header-blur" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="header-inner">
       <div class="logo-box">PARTH SONI<sup>PORTFOLIO</sup></div>
       <nav aria-label="Main navigation">

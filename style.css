@@ -109,11 +109,54 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .skip-link:focus { top: 16px; }
 
 /* ===================== HEADER ===================== */
+/* Progressive blur. Instead of one uniform translucent bar, three stacked
+   backdrop layers each carry their own mask, so the veil is strongest at the
+   viewport edge and dissolves to nothing at the bar's lower edge — content
+   melts as it slides under rather than hitting a hard blurred brick. The
+   paper tint rides the same layers, so it fades in step with the blur. */
 #site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(246,245,241,.92);
-  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
+}
+.header-blur {
+  position: absolute; inset: 0 0 -40px; /* bleed past the hairline into the page */
+  pointer-events: none;
+  z-index: 0;
+}
+.header-blur span {
+  position: absolute; inset: 0;
+  background: rgba(246,245,241,.54);
+}
+/* The ramp is tuned so the bar itself is as opaque as the flat veil it
+   replaces: the three tints stack to ~.90 across the 64px bar, and every mask
+   holds full strength until past the hairline. Only the 40px bleed below the
+   hairline dissolves to nothing — that dissolve is the effect, so content
+   emerges from the bar instead of being cut off by it. */
+.header-blur span:nth-child(1) {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+}
+.header-blur span:nth-child(2) {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.92) 60%, transparent 88%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.92) 60%, transparent 88%);
+}
+.header-blur span:nth-child(3) {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.8) 58%, transparent 78%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.8) 58%, transparent 78%);
+}
+.header-inner { position: relative; z-index: 1; }
+/* No backdrop-filter (older Safari, locked-down build): fall back to a single
+   flat translucent bar so the header stays legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header-blur span { backdrop-filter: none; -webkit-backdrop-filter: none; mask-image: none; -webkit-mask-image: none; background: none; }
+  .header-blur span:nth-child(2), .header-blur span:nth-child(3) { display: none; }
+  .header-blur span:nth-child(1) { background: rgba(246,245,241,.94); }
 }
 .header-inner {
   max-width: var(--maxw); margin: 0 auto;
@@ -1028,6 +1071,80 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   color: var(--ink-soft);
   border: 1px solid var(--line); border-radius: 999px;
   padding: 5px 13px;
+}
+
+/* ===================== OPENING SPLASH ===================== */
+/* A one-shot paper curtain: the PS mark, wordmark and rule assemble, then the
+   panel dissolves. Transform/opacity only, and it hides itself from CSS alone
+   (splash-out ends at opacity 0 / visibility hidden), so a visitor whose
+   script never ran is never trapped behind it. script.js only removes the
+   node a beat later and skips the curtain on a repeat visit. */
+/* Holds the page still while the curtain plays. Taking the viewport scrollbar
+   away for those two seconds would widen the layout by its width and pop every
+   centred element sideways the instant the curtain lifts, so script.js pays
+   the scrollbar back with an equal padding-right (see the splash controller).
+   `scrollbar-gutter: stable` cannot stand in for it: Chrome does not reserve
+   the gutter for a viewport whose overflow propagated as hidden. */
+body.is-splashing { overflow: hidden; }
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-items: center;
+  background: var(--paper);
+  animation: splash-out .6s cubic-bezier(.76,0,.24,1) 1.2s forwards;
+}
+.splash-stage { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.splash-mark {
+  width: 62px; height: 62px;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--data); font-size: 22px; font-weight: 700;
+  letter-spacing: .04em;
+  animation: splash-mark .55s cubic-bezier(.22,1,.36,1) both;
+}
+.splash-name {
+  font-family: var(--data); font-size: 13px; font-weight: 600;
+  letter-spacing: .34em; text-transform: uppercase; color: var(--ink);
+  padding-left: .34em; /* offsets the trailing letter-space so it reads centred */
+  animation: splash-rise .5s cubic-bezier(.22,1,.36,1) .16s both;
+}
+.splash-rule {
+  width: 54px; height: 2px; background: var(--accent);
+  animation: splash-rule .5s cubic-bezier(.22,1,.36,1) .34s both;
+}
+.splash-kicker {
+  font-size: 11px; font-weight: 500; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-mute);
+  animation: splash-rise .5s cubic-bezier(.22,1,.36,1) .46s both;
+}
+@keyframes splash-mark { from { opacity: 0; transform: scale(.82) rotate(-6deg); } to { opacity: 1; transform: none; } }
+@keyframes splash-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes splash-rule { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; transform: translateY(-2%) scale(1.015); } }
+@media (prefers-reduced-motion: reduce) { #splash { display: none; } }
+
+/* ===================== EDGE BLUR ===================== */
+/* Bottom-of-viewport progressive blur — the same layered, masked-blur trick as
+   the header, here hinting at the report below the fold. script.js owns the
+   opacity: it stays off until scroll is confirmed, turns off again at the end
+   of the page, and steps aside for a focused field, so it never sits over the
+   footer or a form being typed into. */
+.edge-blur {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 96px;
+  z-index: 90; pointer-events: none;
+  opacity: 0; transition: opacity .3s ease;
+}
+.edge-blur span { position: absolute; inset: 0; }
+.edge-blur span:nth-child(1) {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to top, #000 0%, transparent 62%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 62%);
+}
+.edge-blur span:nth-child(2) {
+  backdrop-filter: blur(11px) saturate(140%);
+  -webkit-backdrop-filter: blur(11px) saturate(140%);
+  mask-image: linear-gradient(to top, #000 0%, transparent 34%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 34%);
 }
 
 /* ===================== REVEAL MOTION ===================== */

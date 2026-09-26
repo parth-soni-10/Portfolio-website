@@ -1,6 +1,49 @@
 (function () {
   'use strict';
 
+  /* ── OPENING SPLASH ───────────────────────────────── */
+  /* The curtain is decorative and hides itself from CSS alone; this only skips
+     it on a repeat visit, holds the page still while it plays, and removes the
+     node once it has dissolved. A backstop timer means even a stalled
+     animation can't leave the visitor behind it. */
+  (function () {
+    const splash = document.getElementById('splash');
+    if (!splash) return;
+
+    let seen = false;
+    try { seen = sessionStorage.getItem('ps-splash-seen') === '1'; } catch (e) {}
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (seen || reduce) { splash.remove(); return; }
+    try { sessionStorage.setItem('ps-splash-seen', '1'); } catch (e) {}
+
+    // Hold the page still while the curtain plays, and pay the scrollbar back:
+    // locking the viewport takes the scrollbar away, which would widen the
+    // layout by its width and pop every centred element sideways the moment
+    // the curtain lifted. Measured before the lock, released with it.
+    // Clamped: a scrollbar is ~15-40 CSS px, so anything larger means the
+    // measurement is meaningless (an unrendered document) and must be ignored
+    // rather than turned into a page-wrecking padding.
+    const bar = window.innerWidth - document.documentElement.clientWidth;
+    if (bar > 0 && bar <= 64) document.documentElement.style.paddingRight = bar + 'px';
+    document.body.classList.add('is-splashing');
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      splash.remove();
+      document.body.classList.remove('is-splashing');
+      document.documentElement.style.paddingRight = '';
+    };
+
+    // Only the curtain's own animation ends the sequence — the child
+    // animations bubble their animationend up to #splash too.
+    splash.addEventListener('animationend', (e) => {
+      if (e.animationName === 'splash-out') finish();
+    });
+    setTimeout(finish, 2400);
+  })();
+
   /* ── MOBILE MENU ─────────────────────────────────── */
   const menuToggle = document.getElementById('menuToggle');
   const mobileNav  = document.getElementById('mobileNav');
@@ -86,15 +129,35 @@
 
   document.querySelectorAll('section[id], div[id], footer[id]').forEach(sec => navObserver.observe(sec));
 
-  /* ── HEADER SHADOW ON SCROLL ─────────────────────── */
-  const header = document.getElementById('site-header');
-  if (header) {
-    window.addEventListener('scroll', () => {
+  /* ── HEADER SHADOW + EDGE BLUR ON SCROLL ─────────── */
+  const header   = document.getElementById('site-header');
+  const edgeBlur = document.querySelector('.edge-blur');
+
+  /* Runs for scroll, resize and focus changes — the three things that can
+     change whether the edge blur belongs on screen. */
+  function syncScrollState() {
+    if (header) {
       header.style.boxShadow = window.scrollY > 60
         ? '0 1px 2px rgba(22,19,14,.05), 0 10px 28px -14px rgba(22,19,14,.18)'
         : 'none';
-    }, { passive: true });
+    }
+    if (edgeBlur) {
+      // Only while there is report left below the fold — the blur is a
+      // "more to come" cue, not a permanent frame over the footer. It also
+      // steps aside for a focused field, so typing at a form's bottom edge is
+      // never hazy.
+      const active  = document.activeElement;
+      const typing  = active && active.matches && active.matches('input, textarea, select');
+      const remaining = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      edgeBlur.style.opacity = !typing && window.scrollY > 40 && remaining > 48 ? '1' : '0';
+    }
   }
+
+  window.addEventListener('scroll', syncScrollState, { passive: true });
+  window.addEventListener('resize', syncScrollState, { passive: true });
+  document.addEventListener('focusin', syncScrollState);
+  document.addEventListener('focusout', syncScrollState);
+  syncScrollState();
 
 })();
 
