@@ -752,7 +752,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px; padding: 8px 16px;
-  transition: all .2s ease;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
 }
 .dash-filter:hover { border-color: var(--line-strong); }
 .dash-filter.active {
