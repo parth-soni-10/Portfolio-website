@@ -242,10 +242,11 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   font-weight: 800;
 }
 /* Kinetic hero headline: each line rises out of its own mask (the gsap
-   signature move, vanilla). The hidden state exists only under .js-anim,
-   which script.js adds before first paint and never under
-   prefers-reduced-motion, so no-JS and motion-sensitive visitors always
-   see the headline instantly. */
+   signature move, vanilla). Pure CSS animation — it starts the moment the
+   stylesheet applies, with no JS dependency, so it plays identically for
+   no-JS visitors and never delays the headline behind script.js. The
+   prefers-reduced-motion blocks below and in the global reduce section
+   flatten it to instant. */
 .hero-line {
   display: block;
   overflow: hidden;
@@ -253,13 +254,32 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   margin: -.06em 0 -.14em; /* ...cancelled out, so line spacing is unchanged */
 }
 .hero-line-in { display: block; }
-.js-anim .hero-line-in {
-  transform: translateY(122%);
-  transition: transform .9s cubic-bezier(.19, 1, .22, 1);
-  will-change: transform;
+.hero-line-in {
+  animation: hero-line-rise .55s cubic-bezier(.19, 1, .22, 1) .3s both;
 }
-.js-anim .hero-h1.hero-go .hero-line-in { transform: translateY(0); }
-.js-anim .hero-h1.hero-go .hero-line:nth-child(2) .hero-line-in { transition-delay: .13s; }
+.hero-line:nth-child(2) .hero-line-in { animation-delay: .42s; }
+@keyframes hero-line-rise {
+  from { transform: translateY(122%); }
+  to   { transform: translateY(0); }
+}
+
+/* The rest of the hero follows the headline on a fixed CSS beat. These
+   elements are deliberately NOT in script.js's IO-driven fade-up list:
+   stylesheet-driven timing keeps the entrance deterministic (and the LCP
+   text never waits on JS). */
+@media (prefers-reduced-motion: no-preference) {
+  .issue-tag        { animation: hero-fade-in .45s ease .15s both; }
+  .hero-sub         { animation: hero-fade-in .45s ease .42s both; }
+  .hero-cta-row     { animation: hero-fade-in .45s ease .52s both; }
+  .profile-kicker   { animation: hero-fade-in .45s ease .3s  both; }
+  .hero-stat-block  { animation: hero-fade-in .45s ease .38s both; }
+  .profile-pill-row { animation: hero-fade-in .45s ease .46s both; }
+  .pull-quote       { animation: hero-fade-in .45s ease .54s both; }
+}
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .hero-sub {
   font-size: 17.5px; line-height: 1.6; color: var(--ink-soft);
   max-width: 46ch; margin-bottom: 32px;
@@ -1111,7 +1131,7 @@ body.is-splashing { overflow: hidden; }
   position: fixed; inset: 0; z-index: 9999;
   display: grid; place-items: center;
   background: var(--paper);
-  animation: splash-out .6s cubic-bezier(.76,0,.24,1) 1.2s forwards;
+  animation: splash-out .5s cubic-bezier(.76,0,.24,1) .7s forwards;
 }
 .splash-stage { display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .splash-mark {
@@ -1120,22 +1140,22 @@ body.is-splashing { overflow: hidden; }
   background: var(--ink); color: var(--paper);
   font-family: var(--data); font-size: 22px; font-weight: 700;
   letter-spacing: .04em;
-  animation: splash-mark .55s cubic-bezier(.22,1,.36,1) both;
+  animation: splash-mark .45s cubic-bezier(.22,1,.36,1) both;
 }
 .splash-name {
   font-family: var(--data); font-size: 13px; font-weight: 600;
   letter-spacing: .34em; text-transform: uppercase; color: var(--ink);
   padding-left: .34em; /* offsets the trailing letter-space so it reads centred */
-  animation: splash-rise .5s cubic-bezier(.22,1,.36,1) .16s both;
+  animation: splash-rise .4s cubic-bezier(.22,1,.36,1) .08s both;
 }
 .splash-rule {
   width: 54px; height: 2px; background: var(--accent);
-  animation: splash-rule .5s cubic-bezier(.22,1,.36,1) .34s both;
+  animation: splash-rule .4s cubic-bezier(.22,1,.36,1) .18s both;
 }
 .splash-kicker {
   font-size: 11px; font-weight: 500; letter-spacing: .16em;
   text-transform: uppercase; color: var(--ink-mute);
-  animation: splash-rise .5s cubic-bezier(.22,1,.36,1) .46s both;
+  animation: splash-rise .4s cubic-bezier(.22,1,.36,1) .26s both;
 }
 @keyframes splash-mark { from { opacity: 0; transform: scale(.82) rotate(-6deg); } to { opacity: 1; transform: none; } }
 @keyframes splash-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -1231,7 +1251,7 @@ body.is-splashing { overflow: hidden; }
   .fade-up, .fade-up.visible {
     opacity: 1; transform: none; transition: none; will-change: auto;
   }
-  .hero-line-in { transform: none !important; transition: none !important; }
+  .hero-line-in { animation: none !important; }
 }
 
 /* ===================== ANTIGRAVITY DEPTH ===================== */
