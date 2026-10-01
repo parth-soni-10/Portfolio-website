@@ -78,7 +78,7 @@
     '.profile-kicker, .hero-stat-block, .profile-pill-row, .pull-quote, ' +
     '.connect-card, ' +
     '.dash-filters, .dash-card, ' +
-    '.exp-block, .spot-wrap, .cert-card, .edu-entry, ' +
+    '.exp-block, .spot-wrap, .cert-grid, .edu-entry, ' +
     '.about-body, .open-to-block, .medium-callout, ' +
     '.skills-two-col, .footer-grey'
   );
@@ -102,11 +102,6 @@
   /* ── STAGGERED HERO ENTRANCE ─────────────────────── */
   document.querySelectorAll('#hero .fade-up').forEach((el, i) => {
     el.style.transitionDelay = `${i * 90}ms`;
-  });
-
-  /* ── STAGGERED CERT REVEAL ───────────────────────── */
-  document.querySelectorAll('.cert-card').forEach((card, i) => {
-    card.style.transitionDelay = `${i * 55}ms`;
   });
 
   /* ── STAGGERED DASHBOARD CARD REVEAL ─────────────── */
@@ -1199,4 +1194,57 @@
 
   wrap.addEventListener('pointerenter', stopRotation, { passive: true });
   wrap.addEventListener('pointerleave', () => { if (!interacted) startRotation(); }, { passive: true });
+})();
+
+/* ── MICRO-INTERACTIONS (tilt + glare) ──────────────── */
+/* Cursor-tracked tilt on certificate cards and a soft glare sweep on the
+   dashboard cards — the threeui.com / 21st.dev touch. rAF-throttled,
+   pointer-devices only, skipped entirely under prefers-reduced-motion.
+   Only CSS custom properties are written here; every visual state lives
+   in style.css, so this stays CSP-clean (no inline styles). */
+(function () {
+  'use strict';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (reduceMotion || !finePointer) return;
+
+  function trackVars(el, onMove, resetOnLeave) {
+    let raf = null;
+    el.addEventListener('pointermove', (e) => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const r  = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        onMove(el, px, py);
+      });
+    });
+    if (resetOnLeave) {
+      el.addEventListener('pointerleave', () => {
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        el.style.setProperty('--tilt-x', '0deg');
+        el.style.setProperty('--tilt-y', '0deg');
+      });
+    }
+  }
+
+  /* Certificates: 3D tilt (max 5deg) + glare position */
+  document.querySelectorAll('.cert-card').forEach((card) => {
+    trackVars(card, (el, px, py) => {
+      el.style.setProperty('--tilt-x', ((0.5 - py) * 5).toFixed(2) + 'deg');
+      el.style.setProperty('--tilt-y', ((px - 0.5) * 5).toFixed(2) + 'deg');
+      el.style.setProperty('--glare-x', (px * 100).toFixed(1) + '%');
+      el.style.setProperty('--glare-y', (py * 100).toFixed(1) + '%');
+    }, true);
+  });
+
+  /* Dashboard cards: sheen only — the charts stay flat and readable */
+  document.querySelectorAll('.dash-card').forEach((card) => {
+    trackVars(card, (el, px, py) => {
+      el.style.setProperty('--glare-x', (px * 100).toFixed(1) + '%');
+      el.style.setProperty('--glare-y', (py * 100).toFixed(1) + '%');
+    }, false);
+  });
 })();

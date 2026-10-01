@@ -210,6 +210,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 
 /* ===================== HERO ===================== */
 #hero {
+  position: relative; /* anchors the dot-grid backdrop pseudo below */
   max-width: var(--maxw); margin: 0 auto;
   padding: 72px var(--pad) 64px;
   display: grid;
@@ -1227,4 +1228,133 @@ body.is-splashing { overflow: hidden; }
                 0 20px 44px -18px rgba(22,19,14,.24);
     border-color: color-mix(in srgb, var(--ink) 16%, var(--line));
   }
+}
+
+/* ===================== COMPONENT POLISH ===================== */
+/* Upgrades borrowed from the Oct 2026 reel stack (gsap.com / threeui.com /
+   stackkit.dev / 21st.dev), rebuilt as vanilla CSS+JS so the strict CSP
+   keeps holding: a skills ticker, cursor tilt + glare on certificate cards,
+   a soft sheen on dashboard cards, a nav underline slide, a live-source
+   ping ring, button icon nudges, a hero dot-grid and numbered kickers.
+   All of it is transform/opacity only and switches off for touch devices
+   and prefers-reduced-motion. */
+
+/* — Skills ticker (between hero and connect) — */
+.skill-ticker {
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+  padding: 13px 0 12px;
+}
+.skill-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 36s linear infinite;
+}
+.skill-ticker:hover .skill-ticker-track { animation-play-state: paused; }
+.skill-ticker-seq {
+  display: flex; align-items: center; gap: 30px;
+  font-family: var(--data);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+.skill-ticker-seq span::after {
+  content: "✦";
+  margin-left: 30px;
+  color: var(--accent);
+  font-size: 10px;
+}
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+
+/* — Numbered section kickers — */
+.section-kicker {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--data);
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 16px;
+}
+.section-kicker::before {
+  content: ""; width: 28px; height: 2px; border-radius: 2px;
+  background: var(--accent);
+}
+.section-kicker b { color: var(--accent-deep); font-weight: 700; }
+
+/* — Hero dot-grid backdrop — */
+#hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background-image: radial-gradient(rgba(22,19,14,.10) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(620px 420px at 76% 6%, #000, transparent 72%);
+  mask-image: radial-gradient(620px 420px at 76% 6%, #000, transparent 72%);
+}
+
+/* — Nav underline slide — */
+#site-header nav a { position: relative; }
+#site-header nav a::after {
+  content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px;
+  height: 2px; border-radius: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+#site-header nav a:hover::after { transform: scaleX(1); }
+
+/* — Live-source ping ring — */
+.dash-source-dot[data-state="live"] { position: relative; }
+.dash-source-dot[data-state="live"]::after {
+  content: ""; position: absolute; inset: -3px; border-radius: 50%;
+  border: 1.5px solid var(--green);
+  opacity: 0;
+  animation: dot-ping 2.2s ease-out infinite;
+}
+@keyframes dot-ping {
+  0% { transform: scale(.5); opacity: .9; }
+  70%, 100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* — Button icon nudge — */
+.btn-editorial i, .btn-ghost-hero i, .btn-footer-contact i {
+  transition: transform .2s ease;
+}
+.btn-editorial:hover i, .btn-ghost-hero:hover i, .btn-footer-contact:hover i {
+  transform: translateX(3px);
+}
+
+/* — Certificate cards: cursor tilt + glare (pointer devices only; JS drives
+     the tilt and glare custom properties, CSS only reads them) — */
+.cert-card {
+  position: relative;
+  transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform .18s ease-out, box-shadow .35s ease, border-color .35s ease;
+  will-change: transform;
+}
+.cert-card:hover {
+  transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-5px);
+}
+.cert-card::after {
+  content: ""; position: absolute; inset: 0; z-index: 2;
+  border-radius: inherit; pointer-events: none;
+  background: radial-gradient(240px circle at var(--glare-x, 50%) var(--glare-y, 40%), rgba(255,255,255,.34), transparent 65%);
+  opacity: 0; transition: opacity .25s ease;
+}
+.cert-card:hover::after { opacity: 1; }
+
+/* — Dashboard cards: soft cursor-tracked sheen (no tilt; charts stay flat) — */
+.dash-card { position: relative; }
+.dash-card::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  border-radius: inherit; pointer-events: none;
+  background: radial-gradient(280px circle at var(--glare-x, 50%) var(--glare-y, -30%), rgba(232,93,4,.07), transparent 62%);
+  opacity: 0; transition: opacity .3s ease;
+}
+.dash-card:hover::after { opacity: 1; }
+
+/* — Touch devices / reduced motion: tilt, glare, ticker and ping off — */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cert-card, .cert-card:hover { transform: none; }
+  .cert-card::after, .dash-card::after { display: none; }
+  .skill-ticker-track { animation: none; }
+  .dash-source-dot[data-state="live"]::after { animation: none; opacity: 0; }
 }
