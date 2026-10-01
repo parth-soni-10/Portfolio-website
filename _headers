@@ -16,7 +16,7 @@
 # too, and without it the dashboard quietly falls back to its snapshot.
 
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
   # frame-ancestors is the one directive a <meta> tag cannot carry - it is what
   # actually stops the site being framed, so it is paired with the legacy
   # header below for engines that predate it.

@@ -25,7 +25,7 @@
        the redirect target as well as the first hop. Without the wildcard the
        dashboard silently drops to its embedded snapshot instead of failing
        loudly - which is precisely how this policy first shipped broken. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
