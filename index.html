@@ -12,10 +12,11 @@
 
        The policy is strict because the page allows it: style.css and script.js
        are same-origin, there is no inline <script>, no inline style="", no
-       eval/new Function, no javascript: URL and no Web Worker. The only
-       third-party origins are Font Awesome from cdnjs (stylesheet + its
-       webfonts) and the endpoints the live widgets fetch: the GitHub API, the
-       contributions API, and the dashboard's Google Sheet. Anything else -
+       eval/new Function, no javascript: URL and no Web Worker. All assets -
+       styles, scripts and webfonts (including the icon subset) - are
+       self-hosted; the only third-party origins are the endpoints the live
+       widgets fetch: the GitHub API, the contributions API, and the
+       dashboard's Google Sheet. Anything else -
        images, frames, objects, form posts, workers - is denied outright.
 
        googleusercontent.com is not optional. The sheet is read through
@@ -24,7 +25,7 @@
        the redirect target as well as the first hop. Without the wildcard the
        dashboard silently drops to its embedded snapshot instead of failing
        loudly - which is precisely how this policy first shipped broken. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -44,9 +45,9 @@
   <link rel="preload" href="fonts/dmsans-italic.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="preconnect" href="https://api.github.com" crossorigin />
   <link rel="preconnect" href="https://github-contributions-api.jogruber.de" crossorigin />
+  <link rel="preconnect" href="https://docs.google.com" crossorigin />
 </head>
 <body>
 
@@ -100,19 +101,24 @@
     <a href="#contact" class="mobile-link">Get In Touch</a>
   </div>
 
+  <main id="main">
+
   <!-- ===================== HERO ===================== -->
   <section id="hero" aria-label="Introduction">
     <div class="hero-left">
       <p class="issue-tag">Data Analyst &bull; Dublin, Ireland</p>
-      <h1 class="hero-h1">Making <em>data</em><br>speak <em>clearly.</em></h1>
+      <h1 class="hero-h1">
+        <span class="hero-line"><span class="hero-line-in">Making <em>data</em></span></span>
+        <span class="hero-line"><span class="hero-line-in">speak <em>clearly.</em></span></span>
+      </h1>
       <p class="hero-sub">
         From raw CSV files to boardroom-ready dashboards. I translate complexity into
         clarity, and numbers into decisions.
       </p>
       <div class="hero-cta-row">
         <a href="https://rxresu.me/parth_soni_10/parth-resume-da-ba"
-           target="_blank" rel="noopener" class="btn-editorial"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> View Resume</a>
-        <a href="#contact" class="btn-ghost-hero">Get In Touch <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+           target="_blank" rel="noopener" class="btn-editorial"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg> View Resume</a>
+        <a href="#contact" class="btn-ghost-hero">Get In Touch <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></a>
       </div>
     </div>
 
@@ -165,9 +171,9 @@
       <div class="connect-card" id="connectCard">
         <div class="connect-tabs" role="tablist" aria-label="Profile views">
           <button type="button" class="connect-tab active" role="tab" aria-selected="true" tabindex="0"
-                  aria-controls="pane-github" data-view="github" id="tab-github"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</button>
+                  aria-controls="pane-github" data-view="github" id="tab-github"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> GitHub</button>
           <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
-                  aria-controls="pane-linkedin" data-view="linkedin" id="tab-linkedin"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn</button>
+                  aria-controls="pane-linkedin" data-view="linkedin" id="tab-linkedin"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg> LinkedIn</button>
           <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
                   aria-controls="pane-availability" data-view="availability" id="tab-availability">Open to work</button>
           <button type="button" class="connect-tab" role="tab" aria-selected="false" tabindex="-1"
@@ -446,7 +452,7 @@
 
         <div class="spot-panels" id="spotPanels">
 
-          <article class="spot-card active" id="spotPanel-01" role="tabpanel" aria-labelledby="spotTab-01">
+          <div class="spot-card active" id="spotPanel-01" role="tabpanel" aria-labelledby="spotTab-01">
             <div class="sc-top">
               <span class="sc-num">01</span>
               <h3 class="sc-title">Content Tracking Dashboard</h3>
@@ -465,9 +471,9 @@
             <div class="spot-links">
               <a class="spot-link" href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-02" role="tabpanel" aria-labelledby="spotTab-02">
+          <div class="spot-card" id="spotPanel-02" role="tabpanel" aria-labelledby="spotTab-02">
             <div class="sc-top">
               <span class="sc-num">02</span>
               <h3 class="sc-title">Formula 1 Telemetry Analysis</h3>
@@ -487,9 +493,9 @@
             <div class="spot-links">
               <a class="spot-link" href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener">Read on Medium &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-03" role="tabpanel" aria-labelledby="spotTab-03">
+          <div class="spot-card" id="spotPanel-03" role="tabpanel" aria-labelledby="spotTab-03">
             <div class="sc-top">
               <span class="sc-num">03</span>
               <h3 class="sc-title">UCD PolicyBot</h3>
@@ -509,9 +515,9 @@
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-04" role="tabpanel" aria-labelledby="spotTab-04">
+          <div class="spot-card" id="spotPanel-04" role="tabpanel" aria-labelledby="spotTab-04">
             <div class="sc-top">
               <span class="sc-num">04</span>
               <h3 class="sc-title">Irish Visa Decision Tracker</h3>
@@ -533,9 +539,9 @@
               <a class="spot-link" href="https://irishvisaupdatetracker.netlify.app/" target="_blank" rel="noopener">Live Site &rarr;</a>
               <a class="spot-link" href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-05" role="tabpanel" aria-labelledby="spotTab-05">
+          <div class="spot-card" id="spotPanel-05" role="tabpanel" aria-labelledby="spotTab-05">
             <div class="sc-top">
               <span class="sc-num">05</span>
               <h3 class="sc-title">cents.: Personal Expense Tracker</h3>
@@ -554,9 +560,9 @@
             <div class="spot-links">
               <span class="spot-private">Private project</span>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-06" role="tabpanel" aria-labelledby="spotTab-06">
+          <div class="spot-card" id="spotPanel-06" role="tabpanel" aria-labelledby="spotTab-06">
             <div class="sc-top">
               <span class="sc-num">06</span>
               <h3 class="sc-title">Excel &amp; Python EDA</h3>
@@ -573,9 +579,9 @@
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-07" role="tabpanel" aria-labelledby="spotTab-07">
+          <div class="spot-card" id="spotPanel-07" role="tabpanel" aria-labelledby="spotTab-07">
             <div class="sc-top">
               <span class="sc-num">07</span>
               <h3 class="sc-title">Pink Eye Detection: CNN</h3>
@@ -592,9 +598,9 @@
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
-          </article>
+          </div>
 
-          <article class="spot-card" id="spotPanel-08" role="tabpanel" aria-labelledby="spotTab-08">
+          <div class="spot-card" id="spotPanel-08" role="tabpanel" aria-labelledby="spotTab-08">
             <div class="sc-top">
               <span class="sc-num">08</span>
               <h3 class="sc-title">Interactive Tableau Dashboards</h3>
@@ -611,7 +617,7 @@
             <div class="spot-links">
               <a class="spot-link" href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener">Tableau Public &rarr;</a>
             </div>
-          </article>
+          </div>
 
           <p class="spot-hint">Tip: click a title or use the &uarr; &darr; arrow keys to browse &middot; your pick stays highlighted<span class="spot-autoplay-note"> &middot; auto-playing</span></p>
         </div>
@@ -789,7 +795,7 @@
         <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/tMjbs76F526fF5v3G/NjynCWzGSaWXQCxSX_tMjbs76F526fF5v3G_kNjmYzfrRDT2cS5c7_1735733964804_completion_certificate.pdf"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-BA-datascience-simulation-forage.png" alt="Data Science Job Simulation Certificate" width="640" height="360" loading="lazy" />
+            <img src="certificate-BA-datascience-simulation-forage.jpeg" alt="Data Science Job Simulation Certificate" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">British Airways &bull; Forage</p>
@@ -800,7 +806,7 @@
         <a href="https://github.com/parth-soni-10/Certificates"
            target="_blank" rel="noopener" class="cert-card cert-more-card">
           <div class="cert-img-wrap">
-            <img src="certificate-other-certificates.png" alt="More Certificates on GitHub" width="640" height="360" loading="lazy" />
+            <img src="certificate-other-certificates.jpeg" alt="More Certificates on GitHub" width="640" height="360" loading="lazy" />
           </div>
           <div class="cert-info">
             <p class="cert-issuer">GitHub</p>
@@ -812,28 +818,30 @@
     </div>
   </section>
 
+  </main>
+
   <!-- ===================== CONTACT & RESUME ===================== -->
   <footer id="contact">
     <div class="footer-left">
       <h2 class="footer-h3">Let&rsquo;s work<br>together.</h2>
       <p class="footer-sub">Open to Data Analyst &amp; Business Analyst opportunities.<br>Based in Dublin, available globally.</p>
-      <a href="mailto:soni.soni.parth@gmail.com" class="btn-footer-contact">Get In Touch <i class="fa-solid fa-paper-plane" aria-hidden="true"></i></a>
+      <a href="mailto:soni.soni.parth@gmail.com" class="btn-footer-contact">Get In Touch <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/></svg></a>
     </div>
 
     <div class="footer-right">
       <div class="footer-links-block">
         <p class="footer-links-label">Connect</p>
-        <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank" rel="noopener" class="footer-link"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
-        <a href="https://github.com/parth-soni-10" target="_blank" rel="noopener" class="footer-link"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
-        <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="footer-link"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> Tableau Public</a>
-        <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="footer-link"><i class="fa-brands fa-medium" aria-hidden="true"></i> Medium</a>
-        <a href="https://x.com/theimprfectkid" target="_blank" rel="noopener" class="footer-link"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i> X (Twitter)</a>
+        <a href="https://www.linkedin.com/in/parth-soni-1a6025191/" target="_blank" rel="noopener" class="footer-link"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg> LinkedIn</a>
+        <a href="https://github.com/parth-soni-10" target="_blank" rel="noopener" class="footer-link"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> GitHub</a>
+        <a href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener" class="footer-link"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg> Tableau Public</a>
+        <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="footer-link"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 640 512"><path d="M180.5,74.262C80.813,74.262,0,155.633,0,256S80.819,437.738,180.5,437.738,361,356.373,361,256,280.191,74.262,180.5,74.262Zm288.25,10.646c-49.845,0-90.245,76.619-90.245,171.095s40.406,171.1,90.251,171.1,90.251-76.619,90.251-171.1H559C559,161.5,518.6,84.908,468.752,84.908Zm139.506,17.821c-17.526,0-31.735,68.628-31.735,153.274s14.2,153.274,31.735,153.274S640,340.631,640,256C640,171.351,625.785,102.729,608.258,102.729Z"/></svg> Medium</a>
+        <a href="https://x.com/theimprfectkid" target="_blank" rel="noopener" class="footer-link"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg> X (Twitter)</a>
       </div>
 
       <div class="footer-links-block">
         <p class="footer-links-label">Resume</p>
         <a href="https://rxresu.me/parth_soni_10/parth-resume-da-ba"
-           target="_blank" rel="noopener" class="footer-link footer-link-accent">View Resume <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+           target="_blank" rel="noopener" class="footer-link footer-link-accent">View Resume <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></a>
         <p class="footer-resume-note">RxResu &bull; Updated 2026</p>
       </div>
 

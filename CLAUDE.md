@@ -6,7 +6,7 @@ Single-page personal portfolio for Parth Soni (Data Analyst). Fully hand-coded: 
 ## Tech Stack
 - Vanilla HTML + CSS + JS — no npm, no build, no package.json
 - Fonts: self-hosted woff2 (Playfair, DM Sans) in `fonts/`
-- Icons: Font Awesome 6 (CDN) — solid (`fa-solid`) and brands (`fa-brands`) for buttons, connect tabs, social links
+- Icons: inline `<svg class="icon">` (Font Awesome 6 free path data inlined, `aria-hidden` + `focusable="false"`) for buttons, connect tabs, social links. No icon CDN — the old Font Awesome stylesheet/webfonts were replaced by these SVGs
 - Runtime APIs: GitHub REST + github-contributions-api (contribution graph), Google Sheets (dashboard metrics)
 
 ## Files
@@ -20,7 +20,7 @@ fonts/      → self-hosted webfonts
 
 ## Code Style / Conventions
 - Semantic class names; keep inline `style=""` out of new markup and add classes to `style.css`
-- Icons: add `<i class="fa-solid fa-..." aria-hidden="true"></i>` (or `fa-brands` for social). Icon spacing CSS lives at the bottom of `style.css` under "Icon library (Font Awesome)" — `.footer-link i`, `.btn-editorial i`, `.connect-tab i`, etc.
+- Icons: add `<svg class="icon" aria-hidden="true" focusable="false" viewBox="…"><path d="…"/></svg>` (copy `<path>` from Font Awesome 6 free SVGs). Icon spacing/size CSS lives at the bottom of `style.css` under "Inline icon SVGs" — `svg.icon`, `.footer-link svg.icon`, `.connect-tab svg.icon`, etc.
 - CTA buttons get a leading/trailing arrow icon; social/connect links use brand icons (GitHub, LinkedIn, Medium, X, and `fa-chart-simple` for Tableau)
 
 ## Build & Run
@@ -28,4 +28,4 @@ fonts/      → self-hosted webfonts
 
 ## Git
 - Work on `main`; imperative one-line commit messages, pushed straight to main.
-- Do not remove the Font Awesome `<link>` without also removing the icons that depend on it.
+- The icon set is inline SVG; there is no Font Awesome `<link>` anymore. If you swap an icon, inline the new `<path>` — nothing to remove from the CSP

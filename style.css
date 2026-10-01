@@ -236,12 +236,30 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   font-size: clamp(44px, 6.4vw, 76px);
   font-weight: 800; letter-spacing: -.035em; line-height: 1.02;
   margin-bottom: 22px;
-  text-wrap: balance;
 }
 .hero-h1 em {
   font-style: italic; color: var(--accent-deep);
   font-weight: 800;
 }
+/* Kinetic hero headline: each line rises out of its own mask (the gsap
+   signature move, vanilla). The hidden state exists only under .js-anim,
+   which script.js adds before first paint and never under
+   prefers-reduced-motion, so no-JS and motion-sensitive visitors always
+   see the headline instantly. */
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding: .06em 0 .14em;  /* ascender/descender headroom inside the clip */
+  margin: -.06em 0 -.14em; /* ...cancelled out, so line spacing is unchanged */
+}
+.hero-line-in { display: block; }
+.js-anim .hero-line-in {
+  transform: translateY(122%);
+  transition: transform .9s cubic-bezier(.19, 1, .22, 1);
+  will-change: transform;
+}
+.js-anim .hero-h1.hero-go .hero-line-in { transform: translateY(0); }
+.js-anim .hero-h1.hero-go .hero-line:nth-child(2) .hero-line-in { transition-delay: .13s; }
 .hero-sub {
   font-size: 17.5px; line-height: 1.6; color: var(--ink-soft);
   max-width: 46ch; margin-bottom: 32px;
@@ -363,7 +381,8 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .connect-tab:hover { color: var(--ink); }
 .connect-tab.active { color: var(--ink); }
 .connect-tab i { font-size: 14px; color: var(--ink-mute); }
-.connect-tab.active i { color: var(--accent-deep); }
+.connect-tab svg.icon { color: var(--ink-mute); }
+.connect-tab.active i, .connect-tab.active svg.icon { color: var(--accent-deep); }
 .connect-indicator {
   position: absolute; z-index: 0; top: 10px; bottom: 10px;
   left: 0; width: 100%;
@@ -805,7 +824,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 }
 .dash-chart-sub {
   font-family: var(--data); font-size: 12px; line-height: 16px;
-  font-weight: 500; color: #777777;
+  font-weight: 500; color: #6f6f6f;
 }
 .dash-chart-figure { position: relative; min-height: 200px; }
 .dash-chart-figure svg { display: block; width: 100%; height: auto; }
@@ -817,7 +836,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-y-label,
 .dash-x-label {
   font-family: var(--data); font-size: 11px; font-weight: 500;
-  fill: #777777; font-variant-numeric: tabular-nums;
+  fill: #6f6f6f; font-variant-numeric: tabular-nums;
 }
 .dash-line-path {
   fill: none;
@@ -893,7 +912,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--data); font-size: 11px; line-height: 14px;
-  font-weight: 600; color: #777777;
+  font-weight: 600; color: #6f6f6f;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   /* bottom is set per-bar in JS: sits just above the bar's visual top */
@@ -902,7 +921,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-bar-genre {
   margin-top: 8px;
   font-family: var(--data); font-size: 12px; line-height: 16px;
-  font-weight: 500; color: #777777;
+  font-weight: 500; color: #6f6f6f;
   text-align: center;
   white-space: nowrap;
   max-width: 100%;
@@ -1028,6 +1047,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 }
 .footer-link:hover { color: var(--ink); }
 .footer-link i { color: var(--accent-deep); font-size: 14px; width: 18px; }
+.footer-link svg.icon { color: var(--accent-deep); width: 18px; height: 14px; }
 .footer-link-accent { color: var(--accent-deep); font-weight: 700; }
 .footer-resume-note { font-size: 12.5px; color: var(--ink-mute); }
 .footer-copy {
@@ -1211,6 +1231,7 @@ body.is-splashing { overflow: hidden; }
   .fade-up, .fade-up.visible {
     opacity: 1; transform: none; transition: none; will-change: auto;
   }
+  .hero-line-in { transform: none !important; transition: none !important; }
 }
 
 /* ===================== ANTIGRAVITY DEPTH ===================== */
@@ -1315,10 +1336,12 @@ body.is-splashing { overflow: hidden; }
 }
 
 /* — Button icon nudge — */
-.btn-editorial i, .btn-ghost-hero i, .btn-footer-contact i {
+.btn-editorial i, .btn-ghost-hero i, .btn-footer-contact i,
+.btn-editorial svg.icon, .btn-ghost-hero svg.icon, .btn-footer-contact svg.icon {
   transition: transform .2s ease;
 }
-.btn-editorial:hover i, .btn-ghost-hero:hover i, .btn-footer-contact:hover i {
+.btn-editorial:hover i, .btn-ghost-hero:hover i, .btn-footer-contact:hover i,
+.btn-editorial:hover svg.icon, .btn-ghost-hero:hover svg.icon, .btn-footer-contact:hover svg.icon {
   transform: translateX(3px);
 }
 
@@ -1350,6 +1373,17 @@ body.is-splashing { overflow: hidden; }
   opacity: 0; transition: opacity .3s ease;
 }
 .dash-card:hover::after { opacity: 1; }
+
+/* - Inline icon SVGs: Font Awesome 6 path data inlined; replaces the
+     ~290KB Font Awesome CSS + webfonts from the CDN. The 1em box tracks
+     the surrounding font-size exactly like the old <i> glyphs did. - */
+svg.icon {
+  width: 1em; height: 1em;
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: -.125em;
+  flex: none;
+}
 
 /* — Touch devices / reduced motion: tilt, glare, ticker and ping off — */
 @media (hover: none), (prefers-reduced-motion: reduce) {

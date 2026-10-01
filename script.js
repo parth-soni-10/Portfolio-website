@@ -1,6 +1,22 @@
 (function () {
   'use strict';
 
+  /* ── HERO ENTRANCE (gsap-style masked line rise) ─── */
+  /* Arms the headline (adds .js-anim to <html>) before first paint and
+     reveals it in step with the splash curtain: on a first visit the lines
+     start rising while the curtain is still dissolving; on repeat visits
+     (splash skipped) they rise immediately. Never runs under
+     prefers-reduced-motion — the headline simply shows. */
+  const heroReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!heroReduced) document.documentElement.classList.add('js-anim');
+  let heroStarted = false;
+  function startHero() {
+    if (heroStarted || heroReduced) return;
+    heroStarted = true;
+    const h1 = document.querySelector('.hero-h1');
+    if (h1) h1.classList.add('hero-go');
+  }
+
   /* ── OPENING SPLASH ───────────────────────────────── */
   /* The curtain is decorative and hides itself from CSS alone; this only skips
      it on a repeat visit, holds the page still while it plays, and removes the
@@ -8,12 +24,12 @@
      animation can't leave the visitor behind it. */
   (function () {
     const splash = document.getElementById('splash');
-    if (!splash) return;
+    if (!splash) { startHero(); return; }
 
     let seen = false;
     try { seen = sessionStorage.getItem('ps-splash-seen') === '1'; } catch (e) {}
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (seen || reduce) { splash.remove(); return; }
+    if (seen || reduce) { splash.remove(); startHero(); return; }
     try { sessionStorage.setItem('ps-splash-seen', '1'); } catch (e) {}
 
     // Hold the page still while the curtain plays, and pay the scrollbar back:
@@ -26,6 +42,10 @@
     const bar = window.innerWidth - document.documentElement.clientWidth;
     if (bar > 0 && bar <= 64) document.documentElement.style.paddingRight = bar + 'px';
     document.body.classList.add('is-splashing');
+
+    // The headline starts rising while the curtain is still dissolving
+    // (splash-out begins at 1.2s; 1.05s lands the reveal mid-lift).
+    setTimeout(startHero, 1050);
 
     let finished = false;
     const finish = () => {
@@ -74,7 +94,7 @@
 
   /* ── SCROLL FADE-IN (Relay-style blur + rise) ────── */
   const fadeTargets = document.querySelectorAll(
-    '.issue-tag, .hero-h1, .hero-sub, .hero-cta-row, ' +
+    '.issue-tag, .hero-sub, .hero-cta-row, ' +
     '.profile-kicker, .hero-stat-block, .profile-pill-row, .pull-quote, ' +
     '.connect-card, ' +
     '.dash-filters, .dash-card, ' +
@@ -100,9 +120,21 @@
   fadeTargets.forEach(el => observer.observe(el));
 
   /* ── STAGGERED HERO ENTRANCE ─────────────────────── */
-  document.querySelectorAll('#hero .fade-up').forEach((el, i) => {
-    el.style.transitionDelay = `${i * 90}ms`;
-  });
+  /* The h1 has its own masked line rise; the rest of the hero follows on an
+     explicit beat so the headline leads. Skipped under reduced motion
+     (the reduce CSS already shows everything at once). */
+  if (!heroReduced) {
+    const heroDelays = [
+      ['.issue-tag', 90], ['.hero-sub', 540], ['.hero-cta-row', 680],
+      ['.profile-kicker', 320], ['.hero-stat-block', 410],
+      ['.profile-pill-row', 500], ['.pull-quote', 590]
+    ];
+    heroDelays.forEach(([sel, delay]) => {
+      document.querySelectorAll('#hero ' + sel).forEach(el => {
+        el.style.transitionDelay = delay + 'ms';
+      });
+    });
+  }
 
   /* ── STAGGERED DASHBOARD CARD REVEAL ─────────────── */
   document.querySelectorAll('.dash-card').forEach((card, i) => {
