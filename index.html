@@ -502,15 +502,18 @@
               <span class="proj-featured-badge">May-Aug 2026</span>
             </div>
             <p class="sc-desc">
-              RAG chatbot using a local SLM (Phi-3 / Gemma-2-9B) and vector database to answer UCD
-              academic and admin policy questions, with mandatory citation (URL + page number) and a
-              self-correction loop that verifies output against retrieved context. Built a scraping and
-              parsing pipeline with BeautifulSoup, Scrapy, pdfplumber, and PyMuPDF to scrape 200+ policy
-              docs, preserving hierarchical structure for downstream vector indexing. Automated dedup and
-              validation checks cut malformed records by ~30% and pushed retrieval precision above 80%.
+              RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant
+              vector database feed a Qwen2.5-1.5B SLM served by Ollama &mdash; the lowest-latency pick
+              from four stress-tested local models &mdash; to answer UCD academic and admin policy
+              questions, with mandatory citation (URL + page number) and answers grounded in retrieved
+              context (the model abstains when the docs do not support an answer). Built a scraping and
+              parsing pipeline with BeautifulSoup, markdownify, and PyMuPDF (pymupdf4llm) to convert
+              200+ policy docs to structured Markdown, preserving hierarchical structure for downstream
+              vector indexing. Automated dedup and validation checks cut malformed records by ~30% and
+              pushed retrieval precision above 80%.
             </p>
             <div class="sc-tags">
-              <span class="ptag">RAG</span><span class="ptag">Python</span><span class="ptag">LLM</span><span class="ptag">Vector DB</span><span class="ptag">BeautifulSoup</span><span class="ptag">pdfplumber</span>
+              <span class="ptag">RAG</span><span class="ptag">Python</span><span class="ptag">LLM</span><span class="ptag">Vector DB</span><span class="ptag">BeautifulSoup</span><span class="ptag">PyMuPDF</span>
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener">GitHub &rarr;</a>
