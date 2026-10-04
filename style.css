@@ -820,7 +820,9 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 
 .dash-charts {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  /* Stacked full-width: the monthly trend (34 points) needs every pixel of
+     the card — side by side it was crammed into ~600px of a 1440px screen. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 .dash-chart-card { padding: 24px 26px; }
@@ -859,6 +861,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   stroke-linejoin: round;
 }
 .dash-area-path { fill: url(#dashLineGrad); }
+.dash-dot { fill: var(--accent); stroke: #ffffff; stroke-width: 1.5; }
 .dash-hover-line {
   stroke: var(--accent); stroke-width: 1;
   stroke-dasharray: 3 3;

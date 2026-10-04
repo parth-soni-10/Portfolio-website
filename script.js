@@ -855,17 +855,72 @@
     return n;
   };
 
+  /* Round axis step: the smallest of 1 / 2 / 2.5 / 5 × 10ⁿ ≥ target, so
+     gridlines land on 0h/50h/100h… instead of 0h/83h/167h… */
+  function niceStep(target) {
+    if (!isFinite(target) || target <= 0) return 1;
+    const pow  = Math.pow(10, Math.floor(Math.log10(target)));
+    const f    = target / pow;
+    const nice = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
+    return nice * pow;
+  }
+
+  /* Monotone cubic interpolation (Fritsch–Carlson): a smooth curve through
+     every point that never overshoots the data — a plain Catmull-Rom spline
+     would draw peaks above the real hours and dips below zero. */
+  function monoPath(pts) {
+    const n = pts.length;
+    if (n < 2) return n ? 'M' + pts[0].x + ',' + pts[0].y : '';
+    const dx = [], dy = [], m = [];
+    for (let i = 0; i < n - 1; i++) {
+      dx[i] = pts[i + 1].x - pts[i].x;
+      dy[i] = pts[i + 1].y - pts[i].y;
+      m[i]  = dy[i] / dx[i];
+    }
+    const t = [m[0]];
+    for (let i = 1; i < n - 1; i++) {
+      if (m[i - 1] * m[i] <= 0) {
+        t[i] = 0;
+      } else {
+        const w1 = 2 * dx[i] + dx[i - 1];
+        const w2 = dx[i] + 2 * dx[i - 1];
+        t[i] = (w1 + w2) / (w1 / m[i - 1] + w2 / m[i]);
+      }
+    }
+    t[n - 1] = m[n - 2];
+    let d = 'M' + pts[0].x + ',' + pts[0].y;
+    for (let i = 0; i < n - 1; i++) {
+      const h = dx[i] / 3;
+      d += 'C' + (pts[i].x + h) + ',' + (pts[i].y + t[i] * h) +
+           ' ' + (pts[i + 1].x - h) + ',' + (pts[i + 1].y - t[i + 1] * h) +
+           ' ' + pts[i + 1].x + ',' + pts[i + 1].y;
+    }
+    return d;
+  }
+
+  let lastLineW = 0; /* width the line chart last rendered at (resize sync) */
+
   function renderLine(period, animate) {
     const svg = els.lineSvg;
     if (!svg) return;
     svg.textContent = '';
 
     const months = PERIODS[period].months;
-    const W = 600, H = 220, PL = 36, PR = 14, PT = 12, PB = 26;
+    /* Render in real pixels: the viewBox tracks the figure's width (540px
+       floor = the mobile scroll canvas), so 1 unit = 1px — axis text never
+       scales and the trend gets the card's full width instead of a squeezed
+       600-unit box that shrank every label into its neighbour. */
+    const figBox = svg.parentElement;
+    const W = Math.max(540, (figBox && figBox.clientWidth) || 0) || 600;
+    const H = W >= 700 ? 300 : 250;
+    const PL = 40, PR = 16, PT = 14, PB = 30;
     const iw = W - PL - PR;
     const ih = H - PT - PB;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    lastLineW = W;
     const max = Math.max.apply(null, months);
-    const niceMax = Math.max(10, Math.ceil(max / 10) * 10);
+    const step = niceStep(max / 3.5);
+    const niceMax = Math.max(step, Math.ceil((max || 1) / step) * step);
     const x = i => PL + (months.length === 1 ? iw / 2 : (iw * i) / (months.length - 1));
     const y = v => PT + ih - (ih * v) / niceMax;
     const baseYear = period === 'all' ? START_YEAR : Number(period);
@@ -877,61 +932,75 @@
     grad.appendChild(svgEl('stop', { offset: '100%', 'stop-color': '#e85d04', 'stop-opacity': '0' }));
     svg.appendChild(grad);
 
-    /* gridlines + y-axis labels */
-    const N_LINES = 4;
-    for (let g = 0; g < N_LINES; g++) {
-      const v  = (niceMax / (N_LINES - 1)) * g;
+    /* gridlines + y-axis labels at the round step */
+    for (let k = 0; k * step <= niceMax + 1e-9; k++) {
+      const v  = k * step;
       const yy = y(v);
       svg.appendChild(svgEl('line', { x1: PL, x2: W - PR, y1: yy, y2: yy, class: 'dash-grid-line' }));
       const t = svgEl('text', { x: PL - 7, y: yy + 3.5, 'text-anchor': 'end', class: 'dash-y-label' });
-      t.textContent = Math.round(v) + 'h';  /* round: niceMax/3 yields repeating decimals (e.g. 93.333…) */
+      t.textContent = (Math.round(v * 10) / 10) + 'h';
       svg.appendChild(t);
     }
 
-    /* x-axis labels (sparse, to stay readable). Regular cadence is set by
-       `every`, but the final month is always labelled too — which can land just
-       a few px from the penultimate regular label (e.g. Jul 2026 / Aug 2026 at
-       17px apart) and overlap. Dedup: keep the first and last labels, drop any
-       regular label closer than MIN_GAP px to its predecessor, and when the
-       last label crowds the one before it, shed that penultimate label instead
-       so the end of the data is still shown. */
-    const every = months.length > 24 ? 6 : 3;
-    const MIN_GAP = 46; /* px */
+    /* x-axis labels. Cadence adapts to real pixel width: pick the densest
+       schedule (monthly → every-2 → quarterly → bi-monthly → yearly) whose
+       spacing still clears the widest label (~49px at 11px + 14px air), then
+       keep first + last and drop any label whose estimated boxes would touch.
+       The old fixed 46px center-to-center gap matched the labels' own width,
+       so "Jul 2026" and "Oct 2026" landed 1px apart at the right edge. */
+    const CADENCE   = [1, 2, 3, 6, 12];
+    const spacing   = months.length > 1 ? iw / (months.length - 1) : iw;
+    const every     = CADENCE.find(c => spacing * c >= 64) || 12;
+    const labText   = i => MONTH_NAMES[i % 12] + ' ' + yearOf(i);
+    const labW      = i => labText(i).length * 6.1;
     const cand = [];
     months.forEach((_, i) => { if (i % every === 0) cand.push(i); });
     if (cand[cand.length - 1] !== months.length - 1) cand.push(months.length - 1);
     const keep = [];
     cand.forEach(i => {
       if (keep.length === 0) { keep.push(i); return; }
-      const gap = x(i) - x(keep[keep.length - 1]);
+      const prev = keep[keep.length - 1];
+      const gap  = x(i) - x(prev);
+      const need = (labW(i) + labW(prev)) / 2 + 14;
       if (i === months.length - 1) {
-        if (gap < MIN_GAP) keep.pop(); /* prefer the final month over its crowded neighbour */
+        /* prefer the final month over its crowded neighbour: shed the
+           predecessor if needed, but always keep the end of the data */
+        if (gap < need) keep.pop();
         keep.push(i);
-      } else if (gap >= MIN_GAP) {
+      } else if (gap >= need) {
         keep.push(i);
       }
     });
     keep.forEach(i => {
-      const t = svgEl('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', class: 'dash-x-label' });
-      t.textContent = MONTH_NAMES[i % 12] + ' ' + yearOf(i);
+      const t = svgEl('text', { x: x(i), y: H - 9, 'text-anchor': 'middle', class: 'dash-x-label' });
+      t.textContent = labText(i);
       svg.appendChild(t);
     });
 
-    /* line + area paths */
-    const pts = months.map((v, i) => x(i) + ',' + y(v));
+    /* line + area paths — one monotone curve shared by both */
+    const curve = months.map((v, i) => ({ x: x(i), y: y(v) }));
+    const d = monoPath(curve);
     const area = svgEl('path', {
-      d: 'M' + PL + ',' + y(0) + ' L' + pts.join(' L') + ' L' + x(months.length - 1) + ',' + (PT + ih) + ' Z',
+      d: d + ' L' + x(months.length - 1) + ',' + y(0) + ' L' + PL + ',' + y(0) + ' Z',
       class: 'dash-area-path'
     });
-    const line = svgEl('polyline', { points: pts.join(' '), class: 'dash-line-path' });
+    const line = svgEl('path', { d: d, class: 'dash-line-path' });
     svg.appendChild(area);
     svg.appendChild(line);
+
+    /* haloed data points so individual months stay readable where the line
+       is dense (smaller dots when all-time's 34 points share the width) */
+    const dotR = months.length > 18 ? 2 : 3;
+    const dots = svgEl('g', { class: 'dash-dots' });
+    curve.forEach(p => dots.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: dotR, class: 'dash-dot' })));
+    svg.appendChild(dots);
 
     /* draw-on animation */
     const total = line.getTotalLength();
     line.style.strokeDasharray  = String(total);
     line.style.strokeDashoffset = String(total);
     area.style.opacity = '0';
+    dots.style.opacity = '0';
     if (animate && !reduceMotion) {
       const t0 = performance.now();
       const dur = 800;
@@ -940,12 +1009,14 @@
         const p = Math.min(1, (now - t0) / dur);
         line.style.strokeDashoffset = String(total * (1 - ease(p)));
         area.style.opacity = String(0.06 + 0.94 * ease(p));
+        dots.style.opacity = String(0.06 + 0.94 * ease(p));
         if (p < 1) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     } else {
       line.style.strokeDashoffset = '0';
       area.style.opacity = '1';
+      dots.style.opacity = '1';
     }
 
     /* hover: crosshair + tooltip */
@@ -1093,6 +1164,20 @@
   }
 
   ensureData(); /* start the sheet fetch immediately, not on first scroll */
+
+  /* The line chart renders in real pixels, so re-render it when the
+     container's width actually changes (window resize, phone rotate). */
+  let rzTimer = 0;
+  window.addEventListener('resize', () => {
+    if (!inited || !PERIODS) return;
+    clearTimeout(rzTimer);
+    rzTimer = setTimeout(() => {
+      const fig = els.lineSvg && els.lineSvg.parentElement;
+      const w = fig ? Math.max(540, fig.clientWidth) : 0;
+      if (Math.abs(w - lastLineW) < 8) return;
+      renderLine(current, false);
+    }, 160);
+  });
 
   if (reduceMotion) {
     init(false);
