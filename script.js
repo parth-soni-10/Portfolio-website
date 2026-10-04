@@ -526,6 +526,9 @@
   let GENRES      = [];
   let GENRE_YEARS = {};
   let START_YEAR  = 2024;
+  let START_C     = 0; /* continuous month index (from minYear) of the first
+                          month with data — the all-time axis labels count
+                          from here, not from January */
   let YEAR_ORDER  = []; /* years present in the data, newest first (drives the tabs) */
   let current     = 'all';
   let inited      = false;
@@ -697,7 +700,7 @@
       };
     });
 
-    return { periods, genres: GENRES6, genreYears, startYear: minYear };
+    return { periods, genres: GENRES6, genreYears, startYear: minYear, startC: startC };
   }
 
   /* Snapshot used only if the sheet can't be reached (keeps the demo intact).
@@ -742,6 +745,7 @@
       all:   [905, 491, 441, 421, 250, 141]
     };
     START_YEAR = 2024;
+    START_C    = 0;
     YEAR_ORDER  = ['2026','2025','2024'];
     const count = document.getElementById('dashTotalTitles');
     if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
@@ -763,6 +767,7 @@
         GENRES      = built.genres;
         GENRE_YEARS = built.genreYears;
         START_YEAR  = built.startYear;
+        START_C     = built.startC;
         const count = document.getElementById('dashTotalTitles');
         if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
         setSourceStatus('live');
@@ -923,8 +928,13 @@
     const niceMax = Math.max(step, Math.ceil((max || 1) / step) * step);
     const x = i => PL + (months.length === 1 ? iw / 2 : (iw * i) / (months.length - 1));
     const y = v => PT + ih - (ih * v) / niceMax;
-    const baseYear = period === 'all' ? START_YEAR : Number(period);
-    const yearOf = i => baseYear + Math.floor(i / 12);
+    /* Absolute month index into the sheet's continuous series: the all-time
+       series starts at the first month that actually has data (not
+       necessarily January — labels used to say Jan for a March start), while
+       a year period's months always start at January of its year. */
+    const absIdx  = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + i;
+    const monthOf = i => MONTH_NAMES[absIdx(i) % 12];
+    const yearOf  = i => START_YEAR + Math.floor(absIdx(i) / 12);
 
     /* gradient fill under the line */
     const grad = svgEl('linearGradient', { id: 'dashLineGrad', x1: '0', y1: '0', x2: '0', y2: '1' });
@@ -951,7 +961,7 @@
     const CADENCE   = [1, 2, 3, 6, 12];
     const spacing   = months.length > 1 ? iw / (months.length - 1) : iw;
     const every     = CADENCE.find(c => spacing * c >= 64) || 12;
-    const labText   = i => MONTH_NAMES[i % 12] + ' ' + yearOf(i);
+    const labText   = i => monthOf(i) + ' ' + yearOf(i);
     const labW      = i => labText(i).length * 6.1;
     const cand = [];
     months.forEach((_, i) => { if (i % every === 0) cand.push(i); });
@@ -1035,7 +1045,7 @@
       hLine.setAttribute('opacity', '1');
       hDot.setAttribute('cx', vx); hDot.setAttribute('cy', vy);
       hDot.setAttribute('opacity', '1');
-      els.lineTip.textContent = MONTH_NAMES[i % 12] + ' ' + yearOf(i) + ' · ' + months[i] + ' hrs';
+      els.lineTip.textContent = monthOf(i) + ' ' + yearOf(i) + ' · ' + months[i] + ' hrs';
       els.lineTip.hidden = false;
       /* Keep the tooltip on the hovered point and fully inside the visible
          figure. The chart scrolls horizontally on small screens (the svg
