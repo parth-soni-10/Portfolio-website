@@ -14,9 +14,14 @@
 # googleusercontent.com must stay: the sheet export 302s to a sharded
 # doc-??-??-sheets.googleusercontent.com host, CSP checks the redirect target
 # too, and without it the dashboard quietly falls back to its snapshot.
+#
+# api.rss2json.com serves the Medium feed for the Writing-on-Medium cell:
+# Medium's own feed endpoint answers browsers with a Cloudflare challenge
+# (403), while rss2json exposes it as CORS JSON (and may cache it up to
+# 30 minutes behind Medium itself).
 
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
   # frame-ancestors is the one directive a <meta> tag cannot carry - it is what
   # actually stops the site being framed, so it is paired with the legacy
   # header below for engines that predate it.

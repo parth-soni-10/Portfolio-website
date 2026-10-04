@@ -1191,6 +1191,59 @@
   }
 })();
 
+/* ── WRITING ON MEDIUM: 2 LATEST POSTS ────────────────── */
+/* The cell in the Education section shows the two newest articles, refreshed
+   on every page load. Medium answers browser requests to its own feeds with
+   a Cloudflare challenge (HTTP 403), so the feed is read through rss2json's
+   CORS API instead — its edge cache can lag the feed by up to 30 minutes.
+   Any failure (offline, rate limit, response shape change) leaves the two
+   articles hard-coded in index.html untouched, so the cell is never empty. */
+(function () {
+  'use strict';
+
+  const list = document.querySelector('.medium-recent');
+  if (!list) return;
+
+  const FEED = 'https://api.rss2json.com/v1/api.json?rss_url=' +
+               encodeURIComponent('https://medium.com/feed/@soni.soni.parth');
+  const MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  fetch(FEED, { cache: 'no-store' })
+    .then(res => { if (!res.ok) throw new Error('feed HTTP ' + res.status); return res.json(); })
+    .then(data => {
+      if (!data || data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('bad feed payload');
+      const latest = data.items
+        .filter(it => it && typeof it.title === 'string' && it.title.trim() && typeof it.link === 'string')
+        .map(it => ({ title: it.title.trim(), url: it.link.split('?')[0], pub: String(it.pubDate || '') }))
+        .filter(it => { /* only plain https Medium links survive */
+          try {
+            const u = new URL(it.url);
+            return u.protocol === 'https:' && /(^|\.)medium\.com$/.test(u.hostname);
+          } catch (e) { return false; }
+        })
+        .sort((a, b) => (a.pub < b.pub ? 1 : a.pub > b.pub ? -1 : 0))
+        .slice(0, 2);
+      if (!latest.length) return; /* keep the hard-coded pair */
+
+      list.textContent = '';
+      latest.forEach(it => {
+        const li   = document.createElement('li');
+        const a    = document.createElement('a');
+        const span = document.createElement('span');
+        const m    = /^(\d{4})-(\d{2})/.exec(it.pub); /* pubDate is 'YYYY-MM-DD HH:MM:SS' */
+        a.href = it.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = it.title;
+        span.textContent = m ? MON[Number(m[2]) - 1] + ' ' + m[1] : '';
+        li.appendChild(a);
+        li.appendChild(span);
+        list.appendChild(li);
+      });
+    })
+    .catch(() => { /* silent fallback: the hard-coded articles stay */ });
+})();
+
 /* ── PROJECTS SPOTLIGHT INDEX ─────────────────────── */
 /* Master-detail picker: a numbered index rail on the left, a large
    detail panel that swaps on the right. Click to select, arrow keys

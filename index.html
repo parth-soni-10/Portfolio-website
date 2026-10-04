@@ -15,8 +15,10 @@
        eval/new Function, no javascript: URL and no Web Worker. All assets -
        styles, scripts and webfonts (including the icon subset) - are
        self-hosted; the only third-party origins are the endpoints the live
-       widgets fetch: the GitHub API, the contributions API, and the
-       dashboard's Google Sheet. Anything else -
+       widgets fetch: the GitHub API, the contributions API, the
+       dashboard's Google Sheet, and the Medium feed read through
+       api.rss2json.com (Medium's own feed answers browsers with a Cloudflare
+       challenge, so it cannot be fetched directly). Anything else -
        images, frames, objects, form posts, workers - is denied outright.
 
        googleusercontent.com is not optional. The sheet is read through
@@ -25,7 +27,7 @@
        the redirect target as well as the first hop. Without the wildcard the
        dashboard silently drops to its embedded snapshot instead of failing
        loudly - which is precisely how this policy first shipped broken. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
