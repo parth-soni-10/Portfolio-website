@@ -77,7 +77,7 @@
     '.connect-card, ' +
     '.dash-filters, .dash-card, ' +
     '.exp-block, .spot-wrap, .cert-grid, .edu-entry, ' +
-    '.about-body, .open-to-block, .medium-callout, ' +
+    '.about-body, .medium-callout, ' +
     '.skills-two-col, .footer-grey'
   );
 
@@ -99,8 +99,17 @@
 
 
   /* ── STAGGERED DASHBOARD CARD REVEAL ─────────────── */
+  /* The inline transition-delay staggers the reveal — but it would also lag
+     every later transition (the hover lift) behind the pointer, so drop it
+     as soon as the reveal's own transform transition ends. One delegated
+     listener covers all cards; transitionend bubbles up to the document. */
   document.querySelectorAll('.dash-card').forEach((card, i) => {
     card.style.transitionDelay = `${i * 70}ms`;
+  });
+  document.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'transform' && e.target.classList?.contains('dash-card')) {
+      e.target.style.transitionDelay = '';
+    }
   });
 
   /* ── ACTIVE NAV (IntersectionObserver, not a scroll listener) ── */
@@ -491,9 +500,8 @@
 })();
 
 /* ── ANALYTICS DASHBOARD DEMO ───────────────────────── */
-/* Design spec: Inter 18/24 SemiBold metrics (-0.1px tracking), 12/16 Medium
-   labels, 28px/13px/6px filter pills, 14px-radius / 16px-padding cards,
-   #519DFA line chart, #0077E6 bar chart,   orange line/bar charts · #333333 / #777777 text. */
+/* Live slice of the Content Tracking Dashboard: sheet CSV in, KPIs, filter
+   pills and two charts out. Orange accent, Inter data type, #333/#6f6f6f text. */
 (function () {
   'use strict';
 
@@ -594,7 +602,6 @@
     const records = [];
     for (let i = headerIdx + 1; i < rows.length; i++) {
       const r = rows[i];
-      if (!r || !Array.isArray(r)) continue;
       const name = col(r, 'Name');
       if (!name) continue;
       /* Same row rule as the full Content Tracking Dashboard (its mapRows
@@ -617,7 +624,7 @@
     }
     if (!records.length) throw new Error('No rows parsed');
 
-    const years = [...new Set(records.filter(r => r.year).map(r => r.year))].sort();
+    const years = [...new Set(records.map(r => r.year))].sort();
     const minYear = Number(years[0]);
     const maxYear = years[years.length - 1];
     START_YEAR = minYear;
@@ -817,38 +824,33 @@
 
   /* ── KPI count-up animation ── */
   const values = { titles: 0, hours: 0, shows: 0, movies: 0 };
-  const FMTS = {
-    titles: { key: 'titles', render: v => Math.round(v).toLocaleString('en-US') },
-    hours:  { key: 'hours',  render: v => Math.round(v).toLocaleString('en-US') },
-    shows:  { key: 'shows',  render: v => Math.round(v).toLocaleString('en-US') },
-    movies: { key: 'movies', render: v => Math.round(v).toLocaleString('en-US') }
-  };
+  const fmtCount = v => Math.round(v).toLocaleString('en-US');
 
   /* Cancel any in-flight count-up before starting a new one (rapid filter clicks) */
   const animIds = {};
-  function setMetric(el, fmt, target, animate) {
+  function setMetric(el, key, target, animate) {
     if (!el) return;
-    const from = values[fmt.key];
-    values[fmt.key] = target;
-    if (animIds[fmt.key]) { cancelAnimationFrame(animIds[fmt.key]); animIds[fmt.key] = 0; }
-    if (!animate || reduceMotion || from === target) { el.textContent = fmt.render(target); return; }
+    const from = values[key];
+    values[key] = target;
+    if (animIds[key]) { cancelAnimationFrame(animIds[key]); animIds[key] = 0; }
+    if (!animate || reduceMotion || from === target) { el.textContent = fmtCount(target); return; }
     const dur = 550;
     const t0  = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
     function frame(now) {
       const p = Math.min(1, (now - t0) / dur);
-      el.textContent = fmt.render(from + (target - from) * ease(p));
-      animIds[fmt.key] = p < 1 ? requestAnimationFrame(frame) : 0;
+      el.textContent = fmtCount(from + (target - from) * ease(p));
+      animIds[key] = p < 1 ? requestAnimationFrame(frame) : 0;
     }
-    animIds[fmt.key] = requestAnimationFrame(frame);
+    animIds[key] = requestAnimationFrame(frame);
   }
 
   function updateMetrics(period, animate) {
     const d = PERIODS[period];
-    setMetric(els.metrics.titles, FMTS.titles, d.titles, animate);
-    setMetric(els.metrics.hours,  FMTS.hours,  d.hours,  animate);
-    setMetric(els.metrics.shows,  FMTS.shows,  d.shows,  animate);
-    setMetric(els.metrics.movies, FMTS.movies, d.movies, animate);
+    setMetric(els.metrics.titles, 'titles', d.titles, animate);
+    setMetric(els.metrics.hours,  'hours',  d.hours,  animate);
+    setMetric(els.metrics.shows,  'shows',  d.shows,  animate);
+    setMetric(els.metrics.movies, 'movies', d.movies, animate);
     els.subs.forEach((el, i) => { if (el) el.textContent = d.sub[i]; });
   }
 
@@ -905,18 +907,17 @@
 
   let lastLineW = 0; /* width the line chart last rendered at (resize sync) */
 
+  /* The chart renders in real pixels: a 540px floor matches the mobile scroll
+     canvas in style.css, so 1 unit = 1px and axis text never scales. */
+  const chartW = () => Math.max(540, els.lineSvg.parentElement.clientWidth);
+
   function renderLine(period, animate) {
     const svg = els.lineSvg;
     if (!svg) return;
     svg.textContent = '';
 
     const months = PERIODS[period].months;
-    /* Render in real pixels: the viewBox tracks the figure's width (540px
-       floor = the mobile scroll canvas), so 1 unit = 1px — axis text never
-       scales and the trend gets the card's full width instead of a squeezed
-       600-unit box that shrank every label into its neighbour. */
-    const figBox = svg.parentElement;
-    const W = Math.max(540, (figBox && figBox.clientWidth) || 0) || 600;
+    const W = chartW();
     const H = W >= 700 ? 300 : 250;
     const PL = 40, PR = 16, PT = 14, PB = 30;
     const iw = W - PL - PR;
@@ -1151,6 +1152,10 @@
     updateMetrics(period, true);
     renderLine(period, true);
     renderBars(period, true);
+    updateSubs(period);
+  }
+
+  function updateSubs(period) {
     if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel;
     if (els.barSub)  els.barSub.textContent  = 'top ' + GENRES.length + ' · ' + PERIODS[period].name;
   }
@@ -1169,22 +1174,19 @@
     updateMetrics(current, animate);
     renderLine(current, animate);
     renderBars(current, animate);
-    if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[current].monthsLabel;
-    if (els.barSub)  els.barSub.textContent  = 'top ' + GENRES.length + ' · ' + PERIODS[current].name;
+    updateSubs(current);
   }
 
   ensureData(); /* start the sheet fetch immediately, not on first scroll */
 
-  /* The line chart renders in real pixels, so re-render it when the
-     container's width actually changes (window resize, phone rotate). */
+  /* The chart renders in real pixels, so re-render it when the container's
+     width actually changes (window resize, phone rotate). */
   let rzTimer = 0;
   window.addEventListener('resize', () => {
     if (!inited || !PERIODS) return;
     clearTimeout(rzTimer);
     rzTimer = setTimeout(() => {
-      const fig = els.lineSvg && els.lineSvg.parentElement;
-      const w = fig ? Math.max(540, fig.clientWidth) : 0;
-      if (Math.abs(w - lastLineW) < 8) return;
+      if (Math.abs(chartW() - lastLineW) < 8) return;
       renderLine(current, false);
     }, 160);
   });
@@ -1231,7 +1233,7 @@
             return u.protocol === 'https:' && /(^|\.)medium\.com$/.test(u.hostname);
           } catch (e) { return false; }
         })
-        .sort((a, b) => (a.pub < b.pub ? 1 : a.pub > b.pub ? -1 : 0))
+        .sort((a, b) => b.pub.localeCompare(a.pub))
         .slice(0, 2);
       if (!latest.length) return; /* keep the hard-coded pair */
 

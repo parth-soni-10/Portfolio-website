@@ -49,11 +49,7 @@
   --accent-deep:  #b44500;   /* text-on-light accent — WCAG AA on paper */
   --accent-soft:  #fdeee0;
   --green:        #15803d;
-  --green-soft:   #e6f4ea;
-  --red:          #b91c1c;
-  --red-soft:     #fbe9e9;
   --amber:        #b45309;
-  --amber-soft:   #fdf3e3;
   --shadow-card:  0 1px 2px rgba(22,19,14,.05), 0 10px 30px -14px rgba(22,19,14,.14);
   --sans:         'DM Sans', system-ui, -apple-system, sans-serif;
   --data:         'Inter', system-ui, -apple-system, sans-serif;
@@ -253,10 +249,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   padding: .06em 0 .14em;  /* ascender/descender headroom inside the clip */
   margin: -.06em 0 -.14em; /* ...cancelled out, so line spacing is unchanged */
 }
-.hero-line-in { display: block; }
-.hero-line-in {
-  animation: hero-line-rise .55s cubic-bezier(.19, 1, .22, 1) .3s both;
-}
+.hero-line-in { display: block; animation: hero-line-rise .55s cubic-bezier(.19, 1, .22, 1) .3s both; }
 .hero-line:nth-child(2) .hero-line-in { animation-delay: .42s; }
 @keyframes hero-line-rise {
   from { transform: translateY(122%); }
@@ -336,7 +329,6 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   color: var(--ink);
   line-height: 1.15;
 }
-.big-num-sm { font-size: 30px; }
 .big-desc { font-size: 13px; color: var(--ink-mute); margin-top: 4px; }
 
 .profile-pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -400,9 +392,8 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 }
 .connect-tab:hover { color: var(--ink); }
 .connect-tab.active { color: var(--ink); }
-.connect-tab i { font-size: 14px; color: var(--ink-mute); }
 .connect-tab svg.icon { color: var(--ink-mute); }
-.connect-tab.active i, .connect-tab.active svg.icon { color: var(--accent-deep); }
+.connect-tab.active svg.icon { color: var(--accent-deep); }
 .connect-indicator {
   position: absolute; z-index: 0; top: 10px; bottom: 10px;
   left: 0; width: 100%;
@@ -980,13 +971,6 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 /* ===================== CERTIFICATES ===================== */
 .certs-section { border-top: 1px solid var(--line); background: var(--paper-raise); }
 .certs-inner { max-width: var(--maxw); margin: 0 auto; padding: 88px var(--pad); }
-.section-eyebrow-light {
-  font-family: var(--data);
-  font-size: 11.5px; font-weight: 600;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--accent-deep);
-  margin-bottom: 12px;
-}
 .cert-grid {
   margin-top: 40px;
   display: grid;
@@ -1022,8 +1006,8 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .cert-more-card .cert-name { color: var(--accent-deep); }
 
 /* ===================== FOOTER ===================== */
-#contact { border-top: 1px solid var(--line); }
 #contact {
+  border-top: 1px solid var(--line);
   max-width: var(--maxw); margin: 0 auto;
   padding: 88px var(--pad) 0;
   display: grid;
@@ -1062,7 +1046,6 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   transition: color .2s ease;
 }
 .footer-link:hover { color: var(--ink); }
-.footer-link i { color: var(--accent-deep); font-size: 14px; width: 18px; }
 .footer-link svg.icon { color: var(--accent-deep); width: 18px; height: 14px; }
 .footer-link-accent { color: var(--accent-deep); font-weight: 700; }
 .footer-resume-note { font-size: 12.5px; color: var(--ink-mute); }
@@ -1191,9 +1174,6 @@ body.is-splashing { overflow: hidden; }
   #hero { grid-template-columns: 1fr; gap: 40px; }
   .two-col-layout { grid-template-columns: 1fr; gap: 44px; }
   .dash-metrics { grid-template-columns: repeat(2, 1fr); }
-  /* minmax(0,…): the line chart's 540px svg min-width must not stretch the
-     single column and force the whole page to scroll sideways */
-  .dash-charts { grid-template-columns: minmax(0, 1fr); }
   .dash-header { grid-template-columns: 1fr; gap: 16px; }
   .exp-block { grid-template-columns: 1fr; gap: 12px; }
   .exp-divider { margin-left: 0; }
@@ -1215,9 +1195,9 @@ body.is-splashing { overflow: hidden; }
   .hero-h1 { font-size: clamp(38px, 11vw, 52px); }
   .dash-metrics { grid-template-columns: 1fr; }
   .dash-chart-figure { overflow-x: auto; }
-  /* Keep the SVG line chart legible on phones: it scales with its 600-unit
-     viewBox, so at card width its 11px axis labels would shrink to ~4px.
-     Enforce a minimum canvas width and let the card scroll instead. */
+  /* Keep the SVG legible on phones: the viewBox is pixel-space with a 540px
+     floor (script.js), and this min-width is that floor — below it the card
+     scrolls instead of crushing the chart. */
   .dash-chart-figure svg { min-width: 540px; }
   /* Same idea for the bar chart: give each column enough room for its
      genre label and scroll the card instead of crushing them */
@@ -1344,11 +1324,9 @@ body.is-splashing { overflow: hidden; }
 }
 
 /* — Button icon nudge — */
-.btn-editorial i, .btn-ghost-hero i, .btn-footer-contact i,
 .btn-editorial svg.icon, .btn-ghost-hero svg.icon, .btn-footer-contact svg.icon {
   transition: transform .2s ease;
 }
-.btn-editorial:hover i, .btn-ghost-hero:hover i, .btn-footer-contact:hover i,
 .btn-editorial:hover svg.icon, .btn-ghost-hero:hover svg.icon, .btn-footer-contact:hover svg.icon {
   transform: translateX(3px);
 }
