@@ -34,3 +34,23 @@
   # Deliberately without includeSubDomains or preload: this pins HTTPS for this
   # host alone, which cannot strand a sibling host that is still HTTP-only.
   Strict-Transport-Security: max-age=31536000
+
+# Caching for the static assets. None of these filenames carry a content hash,
+# so none of them can be `immutable` — a changed file has to be able to reach a
+# returning visitor, and an immutable promise on a stable URL cannot be revoked.
+# A week plus stale-while-revalidate gets the repeat visit off the network while
+# leaving the next one free to pick up a new copy.
+#
+# Deliberately *not* applied to the HTML: index.html is the app, and a cached
+# copy of it is how a deploy appears not to have happened.
+/fonts/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.jpeg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

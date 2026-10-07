@@ -1,0 +1,31 @@
+name: Check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No build step, no package.json: the repo root IS the publish directory,
+      # so "does it still parse" is the whole of a static check.
+      - name: Syntax-check the script
+        run: node --check script.js
+
+      # The Content-Security-Policy exists twice on purpose: a <meta> tag cannot
+      # carry frame-ancestors, so _headers holds the full set and index.html
+      # holds everything except that one directive. Two copies drift, and a
+      # drifted copy means the browser enforces the intersection of both and the
+      # site breaks in ways that are hard to read — so the drift is checked.
+      - name: Check the two CSP copies are still in step
+        run: node tools/check-headers.mjs
