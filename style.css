@@ -1377,4 +1377,4 @@ svg.icon {
   .cert-card::after, .dash-card::after { display: none; }
   .skill-ticker-track { animation: none; }
   .dash-source-dot[data-state="live"]::after { animation: none; opacity: 0; }
-}
+}
