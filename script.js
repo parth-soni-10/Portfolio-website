@@ -633,18 +633,18 @@
     const sumMin = list => list.reduce((s, r) => s + r.min, 0);
     const H = m => Math.round(m / 60);
 
-    /* top genres (all-time hours) drive the bar chart order */
+    /* All genres (all-time hours) drive the bar chart order — no top-N cut:
+       with only six bars the full-width card sat mostly empty. */
     const gHours = {};
     records.forEach(r => { if (r.genre) gHours[r.genre] = (gHours[r.genre] || 0) + r.min; });
-    const GENRES6 = Object.keys(gHours)
-      .sort((a, b) => gHours[b] - gHours[a])
-      .slice(0, 6);
+    const ALL_GENRES = Object.keys(gHours)
+      .sort((a, b) => gHours[b] - gHours[a]);
 
-    /* hours by genre per period, aligned to the top-6 order */
+    /* hours by genre per period, aligned to the all-genre order */
     const genreYears = {};
     ['all'].concat(years).forEach(p => {
       const list = p === 'all' ? records : records.filter(r => r.year === p);
-      genreYears[p] = GENRES6.map(g => H(list.reduce((s, r) => (r.genre === g ? s + r.min : s), 0)));
+      genreYears[p] = ALL_GENRES.map(g => H(list.reduce((s, r) => (r.genre === g ? s + r.min : s), 0)));
     });
 
     /* continuous month series (gap-filled) for the line chart */
@@ -707,7 +707,7 @@
       };
     });
 
-    return { periods, genres: GENRES6, genreYears, startYear: minYear, startC: startC };
+    return { periods, genres: ALL_GENRES, genreYears, startYear: minYear, startC: startC };
   }
 
   /* Snapshot used only if the sheet can't be reached (keeps the demo intact).
@@ -718,9 +718,9 @@
     PERIODS = {
       all: {
         name: 'All Time',
-        months: [84,41,82,31,106,95,62,138,74,165,59,73, 138,121,74,110,140,115,85,248,112,64,78,48, 165,156,15,64,46,65,10,31,46,4],
-        titles: 369, hours: 2943, shows: 278, movies: 91,
-        sub: ['series + movies', 'since Jan 2024', '75.3% of titles', '24.7% of titles'],
+        months: [84,41,82,31,106,95,62,138,74,165,59,73, 138,121,74,110,140,115,85,248,112,64,78,48, 165,156,15,64,46,65,10,31,46,36],
+        titles: 375, hours: 2976, shows: 281, movies: 94,
+        sub: ['series + movies', 'since Jan 2024', '74.9% of titles', '25.1% of titles'],
         monthsLabel: 'Jan 2024-Oct 2026'
       },
       '2024': {
@@ -736,27 +736,26 @@
         monthsLabel: 'Jan-Dec 2025'
       },
       '2026': {
-        name: '2026', months: [165,156,15,64,46,65,10,31,46,4],
-        titles: 90, hours: 600, shows: 59, movies: 31,
-        sub: ['active in period', 'Jan-Oct 2026', '66% of titles', '34% of titles'],
+        name: '2026', months: [165,156,15,64,46,65,10,31,46,36],
+        titles: 96, hours: 633, shows: 62, movies: 34,
+        sub: ['active in period', 'Jan-Oct 2026', '65% of titles', '35% of titles'],
         monthsLabel: 'Jan-Oct 2026'
       }
     };
-    GENRES = ['Drama','Thriller','Crime','Comedy','Action','Sci-Fi'];
+    GENRES = ['Drama','Thriller','Crime','Comedy','Action','Sci-Fi','Romance','Documentary','Superhero','Sitcom','Mystery','Animation','Sci-Fi & Fantasy','Action/Horror','Tragic','Science Fiction','Horror'];
     GENRE_YEARS = {
-      '2024': [428, 88, 138, 123, 55, 90],
-      '2025': [349, 234, 204, 251, 111, 49],
-      '2026': [129, 169, 99, 47, 83, 3],
+      '2024': [428, 88, 138, 123, 55, 90, 47, 35, 0, 0, 0, 7, 0, 0, 0, 0, 0],
+      '2025': [349, 234, 204, 251, 111, 49, 38, 34, 31, 23, 0, 3, 0, 2, 0, 0, 2],
+      '2026': [129, 171, 120, 54, 85, 3, 22, 17, 6, 0, 14, 0, 9, 0, 2, 2, 0],
       /* rounded from all-time minutes directly (not the sum of the year
          values above), matching how buildLive derives the live series */
-      all:   [905, 491, 441, 421, 250, 141]
+      all:   [905, 493, 462, 428, 252, 141, 108, 86, 37, 23, 14, 10, 9, 2, 2, 2, 2]
     };
     START_YEAR = 2024;
     START_C    = 0;
     YEAR_ORDER  = ['2026','2025','2024'];
     const count = document.getElementById('dashTotalTitles');
     if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
-    setSourceStatus('snapshot');
   }
 
   let dataPromise = null;
@@ -777,27 +776,12 @@
         START_C     = built.startC;
         const count = document.getElementById('dashTotalTitles');
         if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
-        setSourceStatus('live');
       })
       .catch(err => {
         console.warn('Dashboard: live sheet unavailable, showing snapshot', err);
         loadFallback();
       });
     return dataPromise;
-  }
-
-  /* Source-indicator feedback: 'pending' (loading) → 'live' (sheet reached)
-     or 'snapshot' (fetch failed, we're showing the embedded fallback). */
-  function setSourceStatus(state) {
-    const el = document.getElementById('dashSource');
-    if (!el) return;
-    const label = state === 'live'
-      ? 'live · Google Sheets'
-      : state === 'snapshot'
-        ? 'snapshot · sheet unreachable'
-        : 'syncing · Google Sheets';
-    el.innerHTML = '<span class="dash-source-dot" data-state="' + state +
-      '" aria-hidden="true"></span><span id="dashSourceText">' + label + '</span>';
   }
 
   /* Build the filter tabs from the data's years ('all' first, then each year
@@ -1093,7 +1077,15 @@
     fig.textContent = '';
 
     const hours = GENRE_YEARS[period] || GENRE_YEARS.all;
-    const entries = GENRES.map((g, i) => ({ name: g, v: hours[i] })).sort((a, b) => b.v - a.v);
+    /* Year tabs skip genres with no hours in that period, so the card stays
+       dense instead of holding empty columns for absent genres. */
+    const entries = GENRES.map((g, i) => ({ name: g, v: hours[i] }))
+      .filter(e => e.v > 0)
+      .sort((a, b) => b.v - a.v);
+    if (!entries.length) {
+      fig.setAttribute('aria-label', 'Bar chart: no hours in ' + PERIODS[period].name);
+      return;
+    }
     const maxV = entries[0].v;
 
     entries.forEach(entry => {
@@ -1157,7 +1149,7 @@
 
   function updateSubs(period) {
     if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel;
-    if (els.barSub)  els.barSub.textContent  = 'top ' + GENRES.length + ' · ' + PERIODS[period].name;
+    if (els.barSub)  els.barSub.textContent  = GENRES.length + ' genres · ' + PERIODS[period].name;
   }
 
   /* ── Init (render once data is ready, on first scroll into view) ── */

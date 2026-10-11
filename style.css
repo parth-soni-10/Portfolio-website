@@ -754,20 +754,6 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-header-side { padding-top: 8px; }
 .dash-intro { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 14px; }
 .dash-intro span { font-weight: 700; color: var(--ink); font-family: var(--data); }
-.dash-source {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--data); font-size: 12.5px; color: var(--ink-mute);
-  margin-bottom: 16px;
-}
-.dash-source-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--line-strong);
-  transition: background-color .3s ease;
-}
-/* States match what JS sets (setSourceStatus): pending = base grey while
-   syncing, live = green, snapshot = amber (sheet unreachable, showing data). */
-.dash-source-dot[data-state="live"] { background: var(--green); }
-.dash-source-dot[data-state="snapshot"] { background: var(--amber); }
 
 .dash-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .dash-filter {
@@ -882,7 +868,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   height: 220px;
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+  gap: 8px;
   padding-top: 26px;
 }
 .dash-bar-col {
@@ -905,7 +891,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-bar {
   position: relative;
   width: 100%;
-  max-width: 44px;
+  max-width: 56px;
   height: 100%;
   transform: scaleY(0);
   transform-origin: bottom;
@@ -1310,19 +1296,6 @@ body.is-splashing { overflow: hidden; }
 }
 #site-header nav a:hover::after { transform: scaleX(1); }
 
-/* — Live-source ping ring — */
-.dash-source-dot[data-state="live"] { position: relative; }
-.dash-source-dot[data-state="live"]::after {
-  content: ""; position: absolute; inset: -3px; border-radius: 50%;
-  border: 1.5px solid var(--green);
-  opacity: 0;
-  animation: dot-ping 2.2s ease-out infinite;
-}
-@keyframes dot-ping {
-  0% { transform: scale(.5); opacity: .9; }
-  70%, 100% { transform: scale(1.9); opacity: 0; }
-}
-
 /* — Button icon nudge — */
 .btn-editorial svg.icon, .btn-ghost-hero svg.icon, .btn-footer-contact svg.icon {
   transition: transform .2s ease;
@@ -1371,10 +1344,9 @@ svg.icon {
   flex: none;
 }
 
-/* — Touch devices / reduced motion: tilt, glare, ticker and ping off — */
+/* — Touch devices / reduced motion: tilt, glare and ticker off — */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .cert-card, .cert-card:hover { transform: none; }
   .cert-card::after, .dash-card::after { display: none; }
   .skill-ticker-track { animation: none; }
-  .dash-source-dot[data-state="live"]::after { animation: none; opacity: 0; }
 }

@@ -452,7 +452,7 @@
             </div>
             <p class="sc-desc">
               Built an end-to-end personal media analytics dashboard using HTML, CSS, JavaScript,
-              Google Sheets API, and Apps Script to analyse 369+ titles, transforming raw viewing
+              Google Sheets API, and Apps Script to analyse 375+ titles, transforming raw viewing
               logs into interactive dashboards with calculated KPIs, derived metrics, YoY comparisons,
               dynamic filtering, and interactive visualisations across six analytics pages, without a
               traditional backend or external frameworks.
@@ -648,41 +648,37 @@
         <h2 class="big-heading">Analytics<br>Dashboard.</h2>
         <div class="dash-header-side">
           <p class="dash-intro">
-            A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">369+</span>
-            titles, Google Sheets as the backend, no frameworks. The filters below re-compute
-            every metric and chart from the sheet itself, so the numbers stay current.
-          </p>
-          <p class="dash-source" id="dashSource" role="status">
-            <span class="dash-source-dot" data-state="pending" aria-hidden="true"></span>
-            <span id="dashSourceText">syncing · Google Sheets</span>
+            A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">375+</span>
+            titles, no frameworks. The filters below re-compute
+            every metric and chart from the live data itself, so the numbers stay current.
           </p>
           <a href="https://contenttrackerdashboard.netlify.app/" target="_blank" rel="noopener" class="btn-medium">Open Full Dashboard &rarr;</a>
         </div>
       </div>
 
-      <!-- Tabs are generated from the sheet's years (all + each year present). -->
+      <!-- Tabs are generated from the data's years (all + each year present). -->
       <div class="dash-filters" id="dashFilters" role="group" aria-label="Filter dashboard by time period"></div>
 
       <div class="dash-metrics">
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Titles Tracked</p>
-          <p class="dash-metric-value" id="mTitles">369</p>
+          <p class="dash-metric-value" id="mTitles">375</p>
           <p class="dash-metric-sub" id="sTitles">series + movies</p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Hours Watched</p>
-          <p class="dash-metric-value" id="mHours">2,943</p>
+          <p class="dash-metric-value" id="mHours">2,976</p>
           <p class="dash-metric-sub" id="sHours">since Jan 2024</p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Shows Watched</p>
-          <p class="dash-metric-value" id="mShows">278</p>
-          <p class="dash-metric-sub" id="sShows">75.3% of titles</p>
+          <p class="dash-metric-value" id="mShows">281</p>
+          <p class="dash-metric-sub" id="sShows">74.9% of titles</p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Movies Watched</p>
-          <p class="dash-metric-value" id="mMovies">91</p>
-          <p class="dash-metric-sub" id="sMovies">24.7% of titles</p>
+          <p class="dash-metric-value" id="mMovies">94</p>
+          <p class="dash-metric-sub" id="sMovies">25.1% of titles</p>
         </div>
       </div>
 
@@ -700,7 +696,7 @@
         <div class="dash-card dash-chart-card">
           <div class="dash-chart-head">
             <p class="dash-chart-title">Hours by Genre</p>
-            <p class="dash-chart-sub" id="barSub">top 6 genres &middot; All Time</p>
+            <p class="dash-chart-sub" id="barSub">all genres &middot; All Time</p>
           </div>
           <div class="dash-chart-figure dash-bar-figure" id="barFigure" role="img" aria-label="Bar chart of hours by genre"></div>
         </div>
