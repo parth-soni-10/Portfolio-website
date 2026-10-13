@@ -8,7 +8,7 @@
 #   npx wrangler dev      → local test on http://localhost:8787
 #   npx wrangler deploy   → publish to <name>.<your-subdomain>.workers.dev
 
-name = "parth-portfolio"
+name = "portfolio"
 compatibility_date = "2026-10-01"
 
 [assets]

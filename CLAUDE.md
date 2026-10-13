@@ -27,7 +27,7 @@ fonts/      → self-hosted webfonts
 - No build step. Serve the folder with any static server (`python -m http.server`) and open `index.html`. Font Awesome + runtime APIs require network.
 
 ## Deploy
-- The site is a **static-assets-only Worker** named `parth-portfolio` — no Worker script, `wrangler.toml` just sets `[assets] directory = "."`, and `_headers` is applied by the assets layer.
+- The site is a **static-assets-only Worker** named `portfolio` (the URL reads `portfolio.parth10.workers.dev`; the account subdomain became `parth10` on 13 Oct 2026, and the Worker was renamed so "parth" appears once, not twice) — no Worker script, `wrangler.toml` just sets `[assets] directory = "."`, and `_headers` is applied by the assets layer.
 - A push to `main` publishes it: the repo is connected to that Worker in **Cloudflare Workers Builds** (production branch `main`, deploy command `npx wrangler deploy`, preview builds off). `npx wrangler deploy` on your own machine publishes exactly the same thing.
 - `.assetsignore` is what keeps `tools/`, the docs, `.git` and the config files out of the upload — a file that is never uploaded cannot be served, which is stronger than the 404 rules this site used to rely on.
 
