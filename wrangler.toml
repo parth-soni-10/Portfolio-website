@@ -1,0 +1,15 @@
+# Cloudflare Workers deployment (static assets only — no Worker script).
+#
+# The site is the repository root, exactly as it was configured for Netlify
+# (`publish = "."`, no build step). `_headers` in this directory is read by
+# the static-assets layer: its rules apply to asset responses, and the file
+# itself is kept out of the upload by `.assetsignore`.
+#
+#   npx wrangler dev      → local test on http://localhost:8787
+#   npx wrangler deploy   → publish to <name>.<your-subdomain>.workers.dev
+
+name = "parth-portfolio"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "."

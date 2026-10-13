@@ -1,0 +1,14 @@
+# Files in this repo that are NOT part of the published site.
+# Same role as the 404 redirects the Netlify projects used: the deploy
+# directory is the repo root, so anything not listed here would be served.
+tools/
+README.md
+CLAUDE.md
+LICENSE
+wrangler.toml
+.gitignore
+_headers
+.git/
+.github/
+.freebuff/
+.wrangler/
