@@ -12,3 +12,7 @@ _headers
 .github/
 .freebuff/
 .wrangler/
+# Build output of `node tools/deploy-pages.mjs`: the staged upload (what the
+# Pages build publishes) and, had this site a Worker script, its bundle.
+.pages-bundle/
+.pages-dist/

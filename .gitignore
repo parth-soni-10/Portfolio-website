@@ -1,3 +1,8 @@
 # Freebuff app data (local only)
 .freebuff/
 .wrangler/
+
+# Cloudflare Pages build output (the staged upload, and the bundle a Worker
+# script would be built into). Both are recreated by the build, never committed.
+.pages-bundle/
+.pages-dist/
