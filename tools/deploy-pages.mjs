@@ -12,7 +12,7 @@
  * `.assetsignore` listed `secret.txt` still answered 200 for `/secret.txt`. So
  * this repository's own `.assetsignore`, the file that says what is published,
  * is applied here before the upload: `tools/`, `README.md`, `CLAUDE.md`,
- * `LICENSE`, `wrangler.toml` and the dotfiles never reach the host, exactly as
+ * `LICENSE` and the dotfiles never reach the host, exactly as
  * they never reach the Worker.
  *
  * `_headers` / `_redirects` / `_routes.json` are always kept: the platform

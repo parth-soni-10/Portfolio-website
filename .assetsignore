@@ -1,18 +1,19 @@
 # Files in this repo that are NOT part of the published site.
 # Same role as the 404 redirects the Netlify projects used: the deploy
 # directory is the repo root, so anything not listed here would be served.
+# There is no wrangler.toml to list any more: this site is static files only,
+# and the config that enabled a Workers copy of it (a second hostname nothing
+# pointed at) was deleted with that deployment.
 tools/
 README.md
 CLAUDE.md
 LICENSE
-wrangler.toml
 .gitignore
 _headers
 .git/
 .github/
 .freebuff/
-.wrangler/
-# Build output of `node tools/deploy-pages.mjs`: the staged upload (what the
-# Pages build publishes) and, had this site a Worker script, its bundle.
+# Build output of `node tools/deploy-pages.mjs`: the staged upload, which is what
+# the Pages build publishes.
 .pages-bundle/
 .pages-dist/
