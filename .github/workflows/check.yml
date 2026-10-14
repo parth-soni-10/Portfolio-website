@@ -18,9 +18,15 @@ jobs:
           node-version: '20'
 
       # No build step, no package.json: the repo root IS the publish directory,
-      # so "does it still parse" is the whole of a static check.
-      - name: Syntax-check the script
-        run: node --check script.js
+      # so "does it still parse" is the whole of a static check. dash-aggregate.js
+      # loads before script.js, and the snapshot tool runs it under Node, so all
+      # three are checked; the tool is the only one of them that needs the store,
+      # and CI does not reach for it (see CLAUDE.md on refreshing the snapshot).
+      - name: Syntax-check the scripts
+        run: |
+          node --check dash-aggregate.js
+          node --check script.js
+          node --check tools/snapshot-dashboard-fallback.mjs
 
       # The Content-Security-Policy exists twice on purpose: a <meta> tag cannot
       # carry frame-ancestors, so _headers holds the full set and index.html

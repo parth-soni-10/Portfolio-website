@@ -755,6 +755,22 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-intro { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 14px; }
 .dash-intro span { font-weight: 700; color: var(--ink); font-family: var(--data); }
 
+/* The snapshot caveat. Rendered only when the store read failed and the section
+   is showing its embedded snapshot, so it sits above the figures it qualifies
+   (script.js sets the text and unsets [hidden]). Takes the accent-on-paper
+   idiom the active filter uses, because it is a caveat about the numbers below
+   and should be read before them, not discovered under them. */
+.dash-snapshot-note {
+  font-family: var(--data);
+  font-size: 13px; font-weight: 600; line-height: 1.5;
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border: 1px solid rgba(232,93,4,.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0 0 24px;
+}
+
 .dash-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .dash-filter {
   font-family: var(--data);

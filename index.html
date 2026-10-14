@@ -10,24 +10,31 @@
        the standalone headers (X-Frame-Options, nosniff, Permissions-Policy,
        HSTS). The two CSPs must stay in step - when one changes, change both.
 
-       The policy is strict because the page allows it: style.css and script.js
-       are same-origin, there is no inline <script>, no inline style="", no
-       eval/new Function, no javascript: URL and no Web Worker. All assets -
-       styles, scripts and webfonts (including the icon subset) - are
+       The policy is strict because the page allows it: style.css, script.js and
+       dash-aggregate.js are same-origin, there is no inline <script>, no inline
+       style="", no eval/new Function, no javascript: URL and no Web Worker. All
+       assets - styles, scripts and webfonts (including the icon subset) - are
        self-hosted; the only third-party origins are the endpoints the live
-       widgets fetch: the GitHub API, the contributions API, the
-       dashboard's Google Sheet, and the Medium feed read through
-       api.rss2json.com (Medium's own feed answers browsers with a Cloudflare
-       challenge, so it cannot be fetched directly). Anything else -
+       widgets fetch: the GitHub API, the contributions API, the Content
+       Tracking Dashboard's own watchlist endpoint, and the Medium feed read
+       through api.rss2json.com (Medium's own feed answers browsers with a
+       Cloudflare challenge, so it cannot be fetched directly). Anything else -
        images, frames, objects, form posts, workers - is denied outright.
 
-       googleusercontent.com is not optional. The sheet is read through
-       docs.google.com/.../export?format=csv, which 302s to a *sharded*
-       hostname like doc-08-74-sheets.googleusercontent.com, and CSP checks
-       the redirect target as well as the first hop. Without the wildcard the
-       dashboard silently drops to its embedded snapshot instead of failing
-       loudly - which is precisely how this policy first shipped broken. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://docs.google.com https://*.googleusercontent.com https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+       contenttrackerdashboard.pages.dev is the dashboard section's
+       only data source: the rows that dashboard renders, off the store it reads
+       them from. This page used to read the dashboard's Google Sheet instead,
+       which stopped being that store when the dashboard moved to D1 - two
+       copies of the same figures, free to drift, and they did drift: a title
+       saved without a year was counted here and not there. Reading the store
+       itself is what makes the two agree by construction. That endpoint answers
+       this origin and no other, which is why it is named here one host at a
+       time rather than with a wildcard.
+
+       Without it in connect-src the section silently drops to its embedded
+       snapshot instead of failing loudly - which is precisely how this policy
+       first shipped broken. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://contenttrackerdashboard.pages.dev https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -53,7 +60,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://api.github.com" crossorigin />
   <link rel="preconnect" href="https://github-contributions-api.jogruber.de" crossorigin />
-  <link rel="preconnect" href="https://docs.google.com" crossorigin />
+  <link rel="preconnect" href="https://contenttrackerdashboard.pages.dev" crossorigin />
 </head>
 <body>
 
@@ -398,7 +405,7 @@
       <p class="section-kicker"><b>03</b>Projects</p>
       <div class="proj-header-row">
         <h2 class="proj-h2">Selected Projects</h2>
-        <span class="proj-count-label">08 works</span>
+        <span class="proj-count-label">11 works</span>
       </div>
 
       <div class="spot-wrap" id="spotWrap">
@@ -437,6 +444,18 @@
             <span class="si-num">08</span><span class="si-title">cents.: Personal Expense Tracker</span>
           </button>
 
+          <button class="spot-item" id="spotTab-09" role="tab" aria-selected="false" aria-controls="spotPanel-09">
+            <span class="si-num">09</span><span class="si-title">RBI Weekly Dashboard</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-10" role="tab" aria-selected="false" aria-controls="spotPanel-10">
+            <span class="si-num">10</span><span class="si-title">CSNL Module Picker</span>
+          </button>
+
+          <button class="spot-item" id="spotTab-11" role="tab" aria-selected="false" aria-controls="spotPanel-11">
+            <span class="si-num">11</span><span class="si-title">Dashboard Portal</span>
+          </button>
+
         </div>
 
         <div class="spot-panels" id="spotPanels">
@@ -461,7 +480,7 @@
               <span class="ptag">JavaScript</span><span class="ptag">Google Sheets API</span><span class="ptag">Apps Script</span><span class="ptag">Data Pipeline</span><span class="ptag">Looker Studio</span>
             </div>
             <div class="spot-links">
-              <a class="spot-link" href="https://content-tracker-dashboard.parth10.workers.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
+              <a class="spot-link" href="https://contenttrackerdashboard.pages.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
             </div>
           </div>
 
@@ -508,14 +527,14 @@
               dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s
               &lsquo;.ods&rsquo; file, handle weekends and public holidays gracefully, and upsert records
               into a Google Sheet (the database). The Apps Script Web App exposes a clean HTTP API read
-              by the four-tab Netlify dashboard: live snapshot, daily summary, full history with
+              by a four-tab dashboard: live snapshot, daily summary, full history with
               date-picker, and a suggestions form.
             </p>
             <div class="sc-tags">
-              <span class="ptag">Python</span><span class="ptag">GitHub Actions</span><span class="ptag">Google Sheets</span><span class="ptag">Apps Script</span><span class="ptag">Netlify</span><span class="ptag">Scraping</span>
+              <span class="ptag">Python</span><span class="ptag">GitHub Actions</span><span class="ptag">Google Sheets</span><span class="ptag">Apps Script</span><span class="ptag">Cloudflare Workers</span><span class="ptag">Scraping</span>
             </div>
             <div class="spot-links">
-              <a class="spot-link" href="https://irish-visa-tracker.parth10.workers.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
+              <a class="spot-link" href="https://irishvisaupdatetracker.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
               <a class="spot-link" href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
           </div>
@@ -541,6 +560,7 @@
               <span class="ptag">Python</span><span class="ptag">FastF1</span><span class="ptag">pandas</span><span class="ptag">NumPy</span><span class="ptag">Telemetry</span><span class="ptag">Medium</span>
             </div>
             <div class="spot-links">
+              <a class="spot-link" href="https://f1-practice-session-analysis.pages.dev/" target="_blank" rel="noopener">Session Analyzer &rarr;</a>
               <a class="spot-link" href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener">Read on Medium &rarr;</a>
             </div>
           </div>
@@ -616,20 +636,97 @@
             <div class="sc-top">
               <span class="sc-num">08</span>
               <h3 class="sc-title">cents.: Personal Expense Tracker</h3>
-              <span class="proj-featured-badge">Personal Project &bull; 2026</span>
+              <span class="proj-featured-badge">Live &bull; 2026</span>
             </div>
             <p class="sc-desc">
               Built a privacy-first personal expense tracker with no framework and no
               build step. Just vanilla ES modules. Type a plain-language entry
               like &ldquo;lidl groceries 4.47 revolut&rdquo; and it auto-parses amount,
-              category, and payment method. Data stays in localStorage with optional
-              private GitHub sync, secured by a PIN or Face ID / fingerprint lock.
+              category, and payment method. Data stays on the device in localStorage,
+              with optional cloud sync to a Cloudflare KV store and a private GitHub
+              mirror as the backup copy, across separate profiles and locked behind a
+              PIN or Face ID / fingerprint.
             </p>
             <div class="sc-tags">
-              <span class="ptag">JavaScript</span><span class="ptag">ES Modules</span><span class="ptag">localStorage</span><span class="ptag">Netlify Functions</span><span class="ptag">Web Auth API</span>
+              <span class="ptag">JavaScript</span><span class="ptag">ES Modules</span><span class="ptag">localStorage</span><span class="ptag">Cloudflare KV</span><span class="ptag">Web Auth API</span>
             </div>
             <div class="spot-links">
-              <span class="spot-private">Private project</span>
+              <a class="spot-link" href="https://cents-app.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
+            </div>
+          </div>
+
+          <div class="spot-card" id="spotPanel-09" role="tabpanel" aria-labelledby="spotTab-09">
+            <div class="sc-top">
+              <span class="sc-num">09</span>
+              <h3 class="sc-title">RBI Weekly Dashboard</h3>
+              <span class="proj-featured-badge">Live &bull; Personal Project</span>
+            </div>
+            <p class="sc-desc">
+              The Reserve Bank of India publishes a new report as a raw spreadsheet every week
+              &mdash; no history, no comparison. A scheduled job fetches each Friday's figures once
+              the report lands (reserves, gold, the rupee against the dollar and euro, the main
+              market indexes, crude-import estimates and FII flows, plus the World Bank's quarterly
+              external-debt rankings) and commits whatever changed, so the dashboard shows what
+              moved and by how much rather than one week in isolation. Trend lines and a searchable
+              10/26/52-week history, a tab that compares any two Fridays metric by metric, RBI MPC
+              and Fed decisions annotated onto the rupee chart, an RSS feed of new weeks, and an
+              installable build that still renders the last week it fetched when the network is down.
+            </p>
+            <div class="sc-tags">
+              <span class="ptag">Node.js</span><span class="ptag">GitHub Actions</span><span class="ptag">Cloudflare Workers</span><span class="ptag">Scrapers</span><span class="ptag">World Bank</span>
+            </div>
+            <div class="spot-links">
+              <a class="spot-link" href="https://rbiweeklydashboard.pages.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
+              <a class="spot-link" href="https://github.com/parth-soni-10/RBI-Weekly-Data-Dashboard" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </div>
+
+          <div class="spot-card" id="spotPanel-10" role="tabpanel" aria-labelledby="spotTab-10">
+            <div class="sc-top">
+              <span class="sc-num">10</span>
+              <h3 class="sc-title">CSNL Module Picker</h3>
+              <span class="proj-featured-badge">Live &bull; UCD</span>
+            </div>
+            <p class="sc-desc">
+              A module picker for UCD Computer Science students that builds a clash-free weekly
+              timetable &mdash; and nothing about it is hardcoded. Class timings, offerings, module
+              titles and the academic year are fetched live from UCD's General Reference Timetable
+              on every load, and the module list comes from UCD's own CSNL page, re-read on every
+              request and daily by a scheduled function, so new modules appear and retired ones
+              disappear without a code change. Only the target year's timetable is ever served: when
+              UCD has published the year but not the schedule, a module says it has no timetable
+              rather than showing last year's times, and any module code can be added by hand.
+            </p>
+            <div class="sc-tags">
+              <span class="ptag">JavaScript</span><span class="ptag">Cloudflare Workers</span><span class="ptag">Live UCD Data</span><span class="ptag">Timetabling</span>
+            </div>
+            <div class="spot-links">
+              <a class="spot-link" href="https://ucdcsnlmodulepicker.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
+              <a class="spot-link" href="https://github.com/parth-soni-10/UCD-CSNL-Module_Picker" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </div>
+
+          <div class="spot-card" id="spotPanel-11" role="tabpanel" aria-labelledby="spotTab-11">
+            <div class="sc-top">
+              <span class="sc-num">11</span>
+              <h3 class="sc-title">Dashboard Portal</h3>
+            </div>
+            <p class="sc-desc">
+              One page that gathers every dashboard I have deployed, each previewed live inside its
+              own row with its real numbers &mdash; the Content Tracker's figures are read
+              server-side by a small Worker, because that dashboard's endpoint sends no CORS
+              headers. The whole page is driven by a single manifest: add a dashboard and its row,
+              its tags, its filter match and its link all follow, with the URL enforced as an
+              absolute address so a typo shows on the page instead of quietly linking somewhere
+              else. A dashboard not yet deployed dims and says so rather than offering a link that
+              goes nowhere, and any row that can't be framed is labelled instead of shown empty.
+            </p>
+            <div class="sc-tags">
+              <span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">JavaScript</span><span class="ptag">Cloudflare Workers</span>
+            </div>
+            <div class="spot-links">
+              <a class="spot-link" href="https://dashboards-home-portal.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
+              <a class="spot-link" href="https://github.com/parth-soni-10/dashboard-portal" target="_blank" rel="noopener">GitHub &rarr;</a>
             </div>
           </div>
 
@@ -648,37 +745,50 @@
         <h2 class="big-heading">Analytics<br>Dashboard.</h2>
         <div class="dash-header-side">
           <p class="dash-intro">
-            A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">375+</span>
-            titles, no frameworks. The filters below re-compute
-            every metric and chart from the live data itself, so the numbers stay current.
+            A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">&hellip;</span>
+            titles, read from the dashboard's own store rather than a copy of it,
+            so these are its numbers and not a second opinion on them. The filters
+            below re-compute every metric and chart from that data.
           </p>
-          <a href="https://content-tracker-dashboard.parth10.workers.dev/" target="_blank" rel="noopener" class="btn-medium">Open Full Dashboard &rarr;</a>
+          <a href="https://contenttrackerdashboard.pages.dev/" target="_blank" rel="noopener" class="btn-medium">Open Full Dashboard &rarr;</a>
         </div>
       </div>
+
+      <!-- Only shown when the store could not be reached and the section is
+           rendering its embedded snapshot; script.js fills in the date. A stale
+           snapshot that reads as live is the disagreement this section was
+           changed to remove, so it is never shown silently. -->
+      <p class="dash-snapshot-note" id="dashSnapshotNote" role="status" hidden></p>
 
       <!-- Tabs are generated from the data's years (all + each year present). -->
       <div class="dash-filters" id="dashFilters" role="group" aria-label="Filter dashboard by time period"></div>
 
+      <!-- Every figure in these cards is written by script.js from the rows it
+           read - none of them is typed here. They used to be: the same numbers
+           lived in this markup, in script.js's snapshot and in the dashboard, so
+           there were three copies free to drift apart, which is what the section
+           was changed to stop. Until the read lands there is nothing truthful to
+           print, so the placeholders stay empty rather than guess. -->
       <div class="dash-metrics">
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Titles Tracked</p>
-          <p class="dash-metric-value" id="mTitles">375</p>
-          <p class="dash-metric-sub" id="sTitles">series + movies</p>
+          <p class="dash-metric-value" id="mTitles">&hellip;</p>
+          <p class="dash-metric-sub" id="sTitles"></p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Hours Watched</p>
-          <p class="dash-metric-value" id="mHours">2,976</p>
-          <p class="dash-metric-sub" id="sHours">since Jan 2024</p>
+          <p class="dash-metric-value" id="mHours">&hellip;</p>
+          <p class="dash-metric-sub" id="sHours"></p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Shows Watched</p>
-          <p class="dash-metric-value" id="mShows">281</p>
-          <p class="dash-metric-sub" id="sShows">74.9% of titles</p>
+          <p class="dash-metric-value" id="mShows">&hellip;</p>
+          <p class="dash-metric-sub" id="sShows"></p>
         </div>
         <div class="dash-card dash-metric">
           <p class="dash-metric-label">Movies Watched</p>
-          <p class="dash-metric-value" id="mMovies">94</p>
-          <p class="dash-metric-sub" id="sMovies">25.1% of titles</p>
+          <p class="dash-metric-value" id="mMovies">&hellip;</p>
+          <p class="dash-metric-sub" id="sMovies"></p>
         </div>
       </div>
 
@@ -878,6 +988,12 @@
     </div>
   </footer>
 
+  <!-- The section's row→figure shaping, in its own file because
+       tools/snapshot-dashboard-fallback.mjs runs the same function under Node
+       when it regenerates the embedded snapshot - so the live figures and the
+       snapshot can never be counted two different ways. Must load before
+       script.js. -->
+  <script src="dash-aggregate.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -500,8 +500,11 @@
 })();
 
 /* ── ANALYTICS DASHBOARD DEMO ───────────────────────── */
-/* Live slice of the Content Tracking Dashboard: sheet CSV in, KPIs, filter
-   pills and two charts out. Orange accent, Inter data type, #333/#6f6f6f text. */
+/* Live slice of the Content Tracking Dashboard: the dashboard's own store in,
+   KPIs, filter pills and two charts out. Orange accent, Inter data type,
+   #333/#6f6f6f text. The row→figure shaping lives in dash-aggregate.js, because
+   the embedded snapshot is generated with that same function (see the
+   SNAPSHOT:START block below). */
 (function () {
   'use strict';
 
@@ -510,26 +513,19 @@
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Locale-aware month labels (Intl, not a hardcoded array) */
-  const MONTH_NAMES = Array.from({ length: 12 }, (_, i) =>
-    new Date(2000, i, 1).toLocaleString('en-US', { month: 'short' }));
+  const AGG = window.DashAggregate;
+  const MONTH_NAMES = AGG.MONTH_NAMES;
 
-  /* Parser for the sheet's `Month` column. Google writes full names
-     (e.g. "August"); short names are accepted too as a safety net. */
-  const MONTH_IDX = {};
-  ['January','February','March','April','May','June','July',
-   'August','September','October','November','December']
-    .forEach((m, i) => { MONTH_IDX[m] = i; });
-  MONTH_NAMES.forEach((m, i) => { MONTH_IDX[m] = i; });
+  /* Live source: the Content Tracking Dashboard's own read endpoint — the rows
+     its SPA renders, straight off its D1 store (lib/db.js). Deliberately NOT the
+     Google Sheet this used to read: the dashboard was migrated off the Sheet and
+     no longer touches it, so a copy read from there can drift away from the
+     numbers the dashboard shows. Reading the store is what makes the two agree
+     by construction. The endpoint carries the one CORS allowance this page needs
+     — see netlify/functions/watchlist.js in that project. */
+  const STORE_URL = 'https://contenttrackerdashboard.pages.dev/.netlify/functions/watchlist';
 
-  /* Live source: the public Content Tracking sheet, exported as CSV. Google
-     serves `/export?format=csv` with Access-Control-Allow-Origin:*, so a plain
-     fetch works from the browser — no backend and no Apps Script. */
-  const SHEET_ID  = '1rWMX8Ew3rWxZr1Se18kE_Q1N6JoodQ0RciqwdX31BUE';
-  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
-                  + '/export?format=csv';
-
-  /* Live data (populated from the sheet once fetched) */
+  /* Live data (populated from the store once fetched) */
   let PERIODS     = null;
   let GENRES      = [];
   let GENRE_YEARS = {};
@@ -563,223 +559,163 @@
     ]
   };
 
-  /* ── Sheet fetch + aggregation ── */
-  function parseCSV(text) {
-    const rows = [];
-    let row = [], field = '', inQ = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (inQ) {
-        if (c === '"') {
-          if (text[i + 1] === '"') { field += '"'; i++; }
-          else inQ = false;
-        } else field += c;
-      } else if (c === '"') {
-        inQ = true;
-      } else if (c === ',') {
-        row.push(field); field = '';
-      } else if (c === '\n' || c === '\r') {
-        if (c === '\r' && text[i + 1] === '\n') i++;
-        row.push(field); rows.push(row); row = []; field = '';
-      } else {
-        field += c;
-      }
-    }
-    if (field.length || row.length) { row.push(field); rows.push(row); }
-    return rows;
+  /* ── Store fetch ── */
+  /* ── Snapshot ───────────────────────────────────────── */
+  /* The section is reading its embedded snapshot, not the store — say so where
+     the numbers are. A snapshot that reads as live is exactly the disagreement
+     this section was changed to remove, so it is never shown silently. */
+  function noteSnapshot(on) {
+    const el = document.getElementById('dashSnapshotNote');
+    if (!el) return;
+    el.hidden = !on;
+    el.textContent = on && FALLBACK
+      ? 'Snapshot — the dashboard store could not be reached from this page, so these are the figures captured on ' + FALLBACK.taken + '.'
+      : '';
   }
 
-  /* Turns the sheet rows into the PERIODS/GENRES/GENRE_YEARS the renderers use. */
-  function buildLive(rows) {
-    const headerIdx = rows.findIndex(r => r && String(r[0]).trim().toLowerCase() === 'name');
-    if (headerIdx < 0) throw new Error('Sheet layout not recognized');
-    const hdr = rows[headerIdx].map(h => String(h || '').trim().toLowerCase());
-    const col = (r, name) => {
-      const j = hdr.indexOf(name.toLowerCase());
-      return j >= 0 ? String(r[j] == null ? '' : r[j]).trim() : '';
-    };
-
-    const records = [];
-    for (let i = headerIdx + 1; i < rows.length; i++) {
-      const r = rows[i];
-      const name = col(r, 'Name');
-      if (!name) continue;
-      /* Same row rule as the full Content Tracking Dashboard (its mapRows
-         keeps only `name && year > 0`): a title without a year can't be
-         bucketed into any period, and counting it in All Time only is what
-         made this section disagree with the live dashboard — and with the
-         sum of its own year tabs. */
-      const yv = parseInt(col(r, 'Year'), 10);
-      if (!(yv > 0)) continue;
-      const st = parseFloat(col(r, 'Screentime'));
-      const type = col(r, 'Type').toLowerCase();
-      records.push({
-        genre: col(r, 'Details/Genre') || col(r, 'Genre'),
-        month: MONTH_IDX[col(r, 'Month')] >= 0 ? MONTH_IDX[col(r, 'Month')] : -1,
-        year:  String(yv),
-        min:   isFinite(st) && st > 0 ? st : 0,
-        movie: type === 'movie',                                   /* exact match, as the live KPIs do */
-        show:  type.includes('series') || type.includes('show')
-      });
-    }
-    if (!records.length) throw new Error('No rows parsed');
-
-    const years = [...new Set(records.map(r => r.year))].sort();
-    const minYear = Number(years[0]);
-    const maxYear = years[years.length - 1];
-    START_YEAR = minYear;
-    YEAR_ORDER  = years.slice().reverse();
-
-    const sumMin = list => list.reduce((s, r) => s + r.min, 0);
-    const H = m => Math.round(m / 60);
-
-    /* All genres (all-time hours) drive the bar chart order — no top-N cut:
-       with only six bars the full-width card sat mostly empty. */
-    const gHours = {};
-    records.forEach(r => { if (r.genre) gHours[r.genre] = (gHours[r.genre] || 0) + r.min; });
-    const ALL_GENRES = Object.keys(gHours)
-      .sort((a, b) => gHours[b] - gHours[a]);
-
-    /* hours by genre per period, aligned to the all-genre order */
-    const genreYears = {};
-    ['all'].concat(years).forEach(p => {
-      const list = p === 'all' ? records : records.filter(r => r.year === p);
-      genreYears[p] = ALL_GENRES.map(g => H(list.reduce((s, r) => (r.genre === g ? s + r.min : s), 0)));
-    });
-
-    /* continuous month series (gap-filled) for the line chart */
-    const mc = r => (Number(r.year) - minYear) * 12 + r.month;
-    const dated = records.filter(r => r.year && r.month >= 0);
-    const startC = dated.length ? Math.min.apply(null, dated.map(mc)) : 0;
-    const maxC   = dated.length ? Math.max.apply(null, dated.map(mc)) : 0;
-    const bucket = (y, mo) => H(records.reduce((s, r) =>
-      (r.year === y && r.month === mo ? s + r.min : s), 0));
-    const allMonths = [];
-    for (let c = startC; c <= maxC; c++) allMonths.push(bucket(String(minYear + Math.floor(c / 12)), c % 12));
-    const firstY = minYear + Math.floor(startC / 12);
-    const lastY  = minYear + Math.floor(maxC / 12);
-
-    /* Show/movie share, printed exactly the way the full dashboard prints
-       it: one decimal on All Time, whole percents on a year page, each
-       share computed against the period's title count. */
-    const shares = (list, dec) => {
-      const p = n => (list.length ? (100 * n / list.length) : 0).toFixed(dec);
-      return [p(list.filter(r => r.show).length), p(list.filter(r => r.movie).length)];
-    };
-    const [allS, allM] = shares(records, 1);
-
-    const periods = {
-      all: {
-        name: 'All Time',
-        months: allMonths,
-        titles: records.length,
-        hours: H(sumMin(records)),
-        shows: records.filter(r => r.show).length,
-        movies: records.filter(r => r.movie).length,
-        sub: ['series + movies', 'since ' + MONTH_NAMES[startC % 12] + ' ' + firstY,
-              allS + '% of titles', allM + '% of titles'],
-        monthsLabel: MONTH_NAMES[startC % 12] + ' ' + firstY + '-' +
-                     MONTH_NAMES[maxC % 12] + ' ' + lastY
-      }
-    };
-
-    years.forEach(y => {
-      const titled = records.filter(r => r.year === y);
-      const isLast = y === maxYear;
-      const lastMonth = isLast
-        ? dated.filter(r => r.year === y).reduce((mx, r) => Math.max(mx, r.month), 0)
-        : 11;
-      const months = [];
-      for (let mo = 0; mo <= lastMonth; mo++) months.push(bucket(y, mo));
-      const [sp, mp] = shares(titled, 0);
-      const label = isLast
-        ? 'Jan-' + MONTH_NAMES[lastMonth] + ' ' + y
-        : 'Jan-Dec ' + y;
-      periods[y] = {
-        name: y,
-        months,
-        titles: titled.length,
-        hours: H(sumMin(titled)),
-        shows: titled.filter(r => r.show).length,
-        movies: titled.filter(r => r.movie).length,
-        sub: ['active in period', label, sp + '% of titles', mp + '% of titles'],
-        monthsLabel: label
-      };
-    });
-
-    return { periods, genres: ALL_GENRES, genreYears, startYear: minYear, startC: startC };
-  }
-
-  /* Snapshot used only if the sheet can't be reached (keeps the demo intact).
-     Mirrors the live dashboard's KPIs at the time of the last sync — if the
-     network copy is unreachable, the numbers still agree with the full
-     Content Tracking Dashboard instead of showing months-old figures. */
-  function loadFallback() {
-    PERIODS = {
-      all: {
-        name: 'All Time',
-        months: [84,41,82,31,106,95,62,138,74,165,59,73, 138,121,74,110,140,115,85,248,112,64,78,48, 165,156,15,64,46,65,10,31,46,36],
-        titles: 375, hours: 2976, shows: 281, movies: 94,
-        sub: ['series + movies', 'since Jan 2024', '74.9% of titles', '25.1% of titles'],
-        monthsLabel: 'Jan 2024-Oct 2026'
-      },
-      '2024': {
-        name: '2024', months: [84,41,82,31,106,95,62,138,74,165,59,73],
-        titles: 121, hours: 1011, shows: 97, movies: 24,
-        sub: ['active in period', 'Jan-Dec 2024', '80% of titles', '20% of titles'],
-        monthsLabel: 'Jan-Dec 2024'
-      },
-      '2025': {
-        name: '2025', months: [138,121,74,110,140,115,85,248,112,64,78,48],
-        titles: 158, hours: 1331, shows: 122, movies: 36,
-        sub: ['active in period', 'Jan-Dec 2025', '77% of titles', '23% of titles'],
-        monthsLabel: 'Jan-Dec 2025'
-      },
-      '2026': {
-        name: '2026', months: [165,156,15,64,46,65,10,31,46,36],
-        titles: 96, hours: 633, shows: 62, movies: 34,
-        sub: ['active in period', 'Jan-Oct 2026', '65% of titles', '35% of titles'],
-        monthsLabel: 'Jan-Oct 2026'
-      }
-    };
-    GENRES = ['Drama','Thriller','Crime','Comedy','Action','Sci-Fi','Romance','Documentary','Superhero','Sitcom','Mystery','Animation','Sci-Fi & Fantasy','Action/Horror','Tragic','Science Fiction','Horror'];
-    GENRE_YEARS = {
-      '2024': [428, 88, 138, 123, 55, 90, 47, 35, 0, 0, 0, 7, 0, 0, 0, 0, 0],
-      '2025': [349, 234, 204, 251, 111, 49, 38, 34, 31, 23, 0, 3, 0, 2, 0, 0, 2],
-      '2026': [129, 171, 120, 54, 85, 3, 22, 17, 6, 0, 14, 0, 9, 0, 2, 2, 0],
-      /* rounded from all-time minutes directly (not the sum of the year
-         values above), matching how buildLive derives the live series */
-      all:   [905, 493, 462, 428, 252, 141, 108, 86, 37, 23, 14, 10, 9, 2, 2, 2, 2]
-    };
-    START_YEAR = 2024;
-    START_C    = 0;
-    YEAR_ORDER  = ['2026','2025','2024'];
+  /* Apply one built data set — live rows or the snapshot — to module state. */
+  function applyBuilt(built, isSnapshot) {
+    if (!built) return;
+    PERIODS     = built.periods;
+    GENRES      = built.genres;
+    GENRE_YEARS = built.genreYears;
+    START_YEAR  = built.startYear;
+    START_C     = built.startC;
+    YEAR_ORDER  = built.yearOrder;
     const count = document.getElementById('dashTotalTitles');
     if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
+    noteSnapshot(isSnapshot);
   }
+
+  /* ── EMBEDDED SNAPSHOT ────────────────────────────────
+     Generated by tools/snapshot-dashboard-fallback.mjs from the store's own rows,
+     through the same buildLive() the live path runs — so the fallback agrees with
+     the dashboard by construction rather than by someone remembering to retype
+     it. Do not hand-edit: re-run the tool after the store changes; it rewrites
+     the SNAPSHOT:START/END block below. */
+  /* SNAPSHOT:START */
+  const FALLBACK = {
+    "taken": "2026-10-13",
+    "periods": {
+      "2024": {
+        "name": "2024",
+        "months": [84,41,82,31,106,95,63,139,74,165,59,73],
+        "titles": 121,
+        "hours": 1011,
+        "shows": 97,
+        "movies": 24,
+        "sub": ["active in period","Jan-Dec 2024","80% of titles","20% of titles"],
+        "monthsLabel": "Jan-Dec 2024"
+      },
+      "2025": {
+        "name": "2025",
+        "months": [138,121,74,110,140,115,85,248,112,64,78,48],
+        "titles": 158,
+        "hours": 1331,
+        "shows": 122,
+        "movies": 36,
+        "sub": ["active in period","Jan-Dec 2025","77% of titles","23% of titles"],
+        "monthsLabel": "Jan-Dec 2025"
+      },
+      "2026": {
+        "name": "2026",
+        "months": [165,156,15,64,46,65,10,39,46,38],
+        "titles": 98,
+        "hours": 643,
+        "shows": 63,
+        "movies": 35,
+        "sub": ["active in period","Jan-Oct 2026","64% of titles","36% of titles"],
+        "monthsLabel": "Jan-Oct 2026"
+      },
+      "all": {
+        "name": "All Time",
+        "months": [
+          84,
+          41,
+          82,
+          31,
+          106,
+          95,
+          63,
+          139,
+          74,
+          165,
+          59,
+          73,
+          138,
+          121,
+          74,
+          110,
+          140,
+          115,
+          85,
+          248,
+          112,
+          64,
+          78,
+          48,
+          165,
+          156,
+          15,
+          64,
+          46,
+          65,
+          10,
+          39,
+          46,
+          38
+        ],
+        "titles": 377,
+        "hours": 2985,
+        "shows": 282,
+        "movies": 95,
+        "sub": ["series + movies","since Jan 2024","74.8% of titles","25.2% of titles"],
+        "monthsLabel": "Jan 2024-Oct 2026"
+      }
+    },
+    "genres": [
+      "Drama",
+      "Thriller",
+      "Crime",
+      "Comedy",
+      "Action",
+      "Sci-Fi",
+      "Romance",
+      "Documentary",
+      "Superhero",
+      "Sitcom",
+      "Mystery",
+      "Animation",
+      "Sci-Fi & Fantasy",
+      "Action/Horror",
+      "Tragic",
+      "Science Fiction",
+      "Horror"
+    ],
+    "genreYears": {
+      "2024": [428,88,138,123,55,90,47,35,0,0,0,7,0,0,0,0,0],
+      "2025": [349,234,204,251,111,49,38,34,31,23,0,3,0,2,0,0,2],
+      "2026": [129,179,120,54,85,3,22,19,6,0,14,0,9,0,2,2,0],
+      "all": [905,501,462,428,252,141,108,88,37,23,14,10,9,2,2,2,2]
+    },
+    "startYear": 2024,
+    "startC": 0,
+    "yearOrder": ["2026","2025","2024"]
+  };
+  /* SNAPSHOT:END */
 
   let dataPromise = null;
   function ensureData() {
     if (PERIODS) return Promise.resolve();
     if (dataPromise) return dataPromise;
-    /* Cache-busting timestamp + no-store: every page load reads the sheet
+    /* Cache-busting timestamp + no-store: every page load reads the store
        fresh, so the KPIs can never lag behind the live dashboard. */
-    dataPromise = fetch(SHEET_URL + '&_ts=' + Date.now(), { cache: 'no-store' })
-      .then(res => { if (!res.ok) throw new Error('Sheet HTTP ' + res.status); return res.text(); })
-      .then(parseCSV)
-      .then(rows => {
-        const built = buildLive(rows);
-        PERIODS     = built.periods;
-        GENRES      = built.genres;
-        GENRE_YEARS = built.genreYears;
-        START_YEAR  = built.startYear;
-        START_C     = built.startC;
-        const count = document.getElementById('dashTotalTitles');
-        if (count) count.textContent = PERIODS.all.titles.toLocaleString('en-US') + '+';
-      })
+    dataPromise = fetch(STORE_URL + '?_ts=' + Date.now(), { cache: 'no-store' })
+      .then(res => { if (!res.ok) throw new Error('Store HTTP ' + res.status); return res.json(); })
+      .then(rows => applyBuilt(AGG.buildLive(rows), false))
       .catch(err => {
-        console.warn('Dashboard: live sheet unavailable, showing snapshot', err);
-        loadFallback();
+        console.warn('Dashboard: store unavailable, showing the embedded snapshot', err);
+        applyBuilt(FALLBACK, true);
       });
     return dataPromise;
   }
@@ -913,7 +849,7 @@
     const niceMax = Math.max(step, Math.ceil((max || 1) / step) * step);
     const x = i => PL + (months.length === 1 ? iw / 2 : (iw * i) / (months.length - 1));
     const y = v => PT + ih - (ih * v) / niceMax;
-    /* Absolute month index into the sheet's continuous series: the all-time
+    /* Absolute month index into the store's continuous series: the all-time
        series starts at the first month that actually has data (not
        necessarily January — labels used to say Jan for a March start), while
        a year period's months always start at January of its year. */
@@ -1131,7 +1067,7 @@
 
   /* ── Filters ── */
   function setFilter(period) {
-    /* Ignore clicks until the sheet has loaded (and period buttons that
+    /* Ignore clicks until the store has loaded (and period buttons that
        aren't present in the data, e.g. a future year with no titles yet). */
     if (!PERIODS || !PERIODS[period] || period === current) return;
     current = period;
@@ -1169,7 +1105,7 @@
     updateSubs(current);
   }
 
-  ensureData(); /* start the sheet fetch immediately, not on first scroll */
+  ensureData(); /* start the store fetch immediately, not on first scroll */
 
   /* The chart renders in real pixels, so re-render it when the container's
      width actually changes (window resize, phone rotate). */

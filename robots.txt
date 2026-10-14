@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio.parth10.workers.dev/sitemap.xml
+Sitemap: https://parth-portfolio-wb.pages.dev/sitemap.xml
