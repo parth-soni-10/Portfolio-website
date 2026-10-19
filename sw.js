@@ -13,13 +13,16 @@
    ===================================================== */
 'use strict';
 
-const VERSION = 'portfolio-v4';
+const VERSION = 'portfolio-v5';
 const SHELL = [
   '/',
   '/style.css',
   '/components.css',
   '/script.js',
   '/components.js',
+  '/hairline/kernel.js',
+  '/hairline/mount.js',
+  '/hairline/workbench.js',
   '/dash-aggregate.js',
   '/medium-feed.js',
   '/apple-touch-icon.png',
