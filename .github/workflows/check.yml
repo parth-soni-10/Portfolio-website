@@ -17,16 +17,23 @@ jobs:
         with:
           node-version: '20'
 
-      # No build step, no package.json: the repo root IS the publish directory,
-      # so "does it still parse" is the whole of a static check. dash-aggregate.js
-      # loads before script.js, and the snapshot tool runs it under Node, so all
-      # three are checked; the tool is the only one of them that needs the store,
-      # and CI does not reach for it (see CLAUDE.md on refreshing the snapshot).
+      # No build step, no package.json: the staged directory is the whole site, so
+      # "does it still parse" is what a static check can say. The two shared shaping
+      # modules (dash-aggregate.js, medium-feed.js) load before script.js, the two
+      # Pages Functions are bundled by Pages at deploy time (not here, so a parse
+      # error would otherwise only surface in production), and each snapshot tool
+      # runs its module under Node. The tools are the only files here that need the
+      # network, and CI does not reach for it (see CLAUDE.md on refreshing a snapshot).
       - name: Syntax-check the scripts
         run: |
           node --check dash-aggregate.js
+          node --check medium-feed.js
           node --check script.js
+          node --check functions/api/medium.js
+          node --check functions/api/contributions.js
           node --check tools/snapshot-dashboard-fallback.mjs
+          node --check tools/snapshot-medium-fallback.mjs
+          node --check tools/build-projects.mjs
 
       # The Content-Security-Policy exists twice on purpose: a <meta> tag cannot
       # carry frame-ancestors, so _headers holds the full set and index.html
@@ -35,3 +42,11 @@ jobs:
       # site breaks in ways that are hard to read — so the drift is checked.
       - name: Check the two CSP copies are still in step
         run: node tools/check-headers.mjs
+
+      # projects/<slug>/index.html is generated from the #projects panels in
+      # index.html, so a panel edit without a rebuild leaves a page that quietly
+      # disagrees with the home page. This re-derives every page, compares it
+      # with what is committed, and checks the canonical URL, the copied CSP and
+      # the sitemap entry each one needs.
+      - name: Check the project pages match their panels
+        run: node tools/build-projects.mjs --check

@@ -34,208 +34,240 @@
        Without it in connect-src the section silently drops to its embedded
        snapshot instead of failing loudly - which is precisely how this policy
        first shipped broken. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://contenttrackerdashboard.pages.dev https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="Parth Soni, Data Analyst in Dublin. MSc CS at UCD. SQL, Python, Power BI, Tableau. I turn messy data into clear decisions." />
+  <meta name="description" content="Parth Shirish Soni is a Data Analyst in Dublin, Ireland, turning complex data into clear decisions with SQL, Python, Power BI and Tableau. Explore analytics projects, experience and writing." />
+  <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/" />
   <meta name="theme-color" content="#f6f5f1" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Parth Soni | Data Analyst" />
-  <meta property="og:description" content="From raw CSV files to boardroom-ready dashboards. I translate complexity into clarity, and numbers into decisions." />
-  <meta property="og:image" content="og-card.png" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:site_name" content="Parth Soni | Data Analyst" />
+  <meta property="og:title" content="Parth Soni | Data Analyst in Dublin" />
+  <meta property="og:description" content="Parth Shirish Soni is a Data Analyst in Dublin, Ireland. Explore analytics projects, experience, skills and data-led writing." />
+  <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/" />
+  <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Parth Soni, Data Analyst in Dublin — portfolio and selected analytics projects" />
+  <meta property="profile:first_name" content="Parth" />
+  <meta property="profile:last_name" content="Soni" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="og-card.png" />
-  <meta name="twitter:title" content="Parth Soni | Data Analyst" />
-  <meta name="twitter:description" content="From raw CSV files to boardroom-ready dashboards. I translate complexity into clarity, and numbers into decisions." />
-  <title>Parth Soni | Data Analyst</title>
+  <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
+  <meta name="twitter:image:alt" content="Parth Soni, Data Analyst in Dublin — portfolio and selected analytics projects" />
+  <meta name="twitter:title" content="Parth Soni | Data Analyst in Dublin" />
+  <meta name="twitter:description" content="Explore the analytics work, experience and writing of Parth Shirish Soni, Data Analyst in Dublin, Ireland." />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni",
+          "name": "Parth Shirish Soni",
+          "givenName": "Parth",
+          "additionalName": "Shirish",
+          "familyName": "Soni",
+          "jobTitle": "Data Analyst",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dublin",
+            "addressCountry": "IE"
+          },
+          "url": "https://parth-portfolio-wb.pages.dev/",
+          "sameAs": [
+            "https://github.com/parth-soni-10",
+            "https://www.linkedin.com/in/parth-soni-1a6025191/",
+            "https://public.tableau.com/app/profile/parth.soni7469",
+            "https://medium.com/@soni.soni.parth"
+          ],
+          "knowsAbout": ["Data analysis", "SQL", "Python", "Power BI", "Tableau", "Data visualization", "Machine learning"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://parth-portfolio-wb.pages.dev/#website",
+          "url": "https://parth-portfolio-wb.pages.dev/",
+          "name": "Parth Soni | Data Analyst in Dublin",
+          "inLanguage": "en-IE",
+          "publisher": { "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni" }
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://parth-portfolio-wb.pages.dev/#profile",
+          "url": "https://parth-portfolio-wb.pages.dev/",
+          "name": "Parth Soni | Data Analyst in Dublin",
+          "mainEntity": { "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni" },
+          "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" },
+          "inLanguage": "en-IE"
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://parth-portfolio-wb.pages.dev/#featured-projects",
+          "name": "Selected analytics and software projects",
+          "description": "A selection of data analytics, dashboard and software projects featured in Parth Soni's portfolio.",
+          "numberOfItems": 10,
+          "itemListOrder": "https://schema.org/ItemListOrderAscending",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-content-dashboard",
+                "name": "Content Tracking Dashboard",
+                "description": "A personal media analytics dashboard with watch-history tracking, KPIs, year-over-year comparisons, filters and visualisations across six analytics pages.",
+                "applicationCategory": "DataVisualizationApplication",
+                "operatingSystem": "Web",
+                "url": "https://contenttrackerdashboard.pages.dev/",
+                "image": "https://parth-portfolio-wb.pages.dev/project-content-dashboard.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-ucd-policybot",
+                "name": "UCD PolicyBot",
+                "description": "A locally run retrieval-augmented chatbot for UCD academic and administrative policy questions, with answers grounded in retrieved documents and source citations.",
+                "applicationCategory": "EducationalApplication",
+                "operatingSystem": "Local computer",
+                "url": "https://github.com/shridharjoshi034-ai/LocalHost-Legends",
+                "image": "https://parth-portfolio-wb.pages.dev/project-policybot.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-irish-visa-tracker",
+                "name": "Irish Visa Decision Tracker",
+                "description": "A dashboard that organises visa decisions published by the Embassy of Ireland in New Delhi, with searchable history, daily summaries and trends.",
+                "applicationCategory": "ReferenceApplication",
+                "operatingSystem": "Web",
+                "url": "https://irishvisaupdatetracker.pages.dev/",
+                "image": "https://parth-portfolio-wb.pages.dev/project-visa-tracker.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "CreativeWork",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-f1-telemetry",
+                "name": "Formula 1 Telemetry Analysis",
+                "description": "A Python telemetry analytics pipeline using FastF1, pandas and NumPy to examine race performance and publish data visualisations and reports.",
+                "url": "https://f1-practice-session-analysis.pages.dev/",
+                "sameAs": "https://medium.com/@soni.soni.parth",
+                "image": "https://parth-portfolio-wb.pages.dev/project-f1-telemetry.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                "@type": "CreativeWork",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-excel-python-eda",
+                "name": "Excel & Python EDA",
+                "description": "Exploratory analysis of seven real-world datasets using Excel, Python and pandas, with supporting workbooks, notebooks and Tableau charts.",
+                "url": "https://github.com/parth-soni-10/Excel_EDA",
+                "image": "https://parth-portfolio-wb.pages.dev/project-eda.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "item": {
+                "@type": "CreativeWork",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-tableau-dashboards",
+                "name": "Interactive Tableau Dashboards",
+                "description": "Two Tableau Public dashboards covering customer analysis and CO2 emissions, with interactive filters, parameters and calculated fields.",
+                "url": "https://public.tableau.com/app/profile/parth.soni7469",
+                "image": "https://parth-portfolio-wb.pages.dev/project-tableau.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-pink-eye-detection",
+                "name": "Pink Eye Detection: CNN",
+                "description": "A convolutional neural network image classifier for healthy and conjunctivitis-affected eyes, integrated with a Flask application for camera input.",
+                "applicationCategory": "HealthApplication",
+                "operatingSystem": "Web",
+                "url": "https://github.com/parth-soni-10/Flask_webapp",
+                "image": "https://parth-portfolio-wb.pages.dev/project-pinkeye.webp",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-cents-expense-tracker",
+                "name": "cents.: Personal Expense Tracker",
+                "description": "A privacy-first expense tracker with natural-language transaction entry, local device storage, optional cloud sync and profile protection.",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Web",
+                "url": "https://cents-app.pages.dev/",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-rbi-weekly-dashboard",
+                "name": "RBI Weekly Dashboard",
+                "description": "A weekly dashboard for Reserve Bank of India data, with historical trends, period comparisons, policy annotations and offline support.",
+                "applicationCategory": "DataVisualizationApplication",
+                "operatingSystem": "Web",
+                "url": "https://rbiweeklydashboard.pages.dev/",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 10,
+              "item": {
+                "@type": "SoftwareApplication",
+                "@id": "https://parth-portfolio-wb.pages.dev/#project-csnl-module-picker",
+                "name": "CSNL Module Picker",
+                "description": "An unofficial UCD Computer Science Negotiated Learning planner for browsing modules, checking timetable clashes and building weekly plans from published timetable data.",
+                "applicationCategory": "EducationalApplication",
+                "operatingSystem": "Web",
+                "url": "https://ucdcsnlmodulepicker.pages.dev/",
+                "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <title>Parth Soni | Data Analyst in Dublin</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f0f0f'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='32' font-weight='bold' fill='%23ff7a1a' text-anchor='middle'%3EPS%3C/text%3E%3C/svg%3E" />
   <!-- The same "PS" monogram as the inline favicon above, as a raster. iOS
        ignores SVG favicons, so it would otherwise use a screenshot of the page
        as the home-screen icon. -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preload" href="fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://api.github.com" crossorigin />
+  <link rel="preconnect" href="https://contenttrackerdashboard.pages.dev" crossorigin />
   <link rel="preload" href="fonts/dmsans-italic.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://api.github.com" crossorigin />
-  <link rel="preconnect" href="https://github-contributions-api.jogruber.de" crossorigin />
-  <link rel="preconnect" href="https://contenttrackerdashboard.pages.dev" crossorigin />
-  <script type="application/ld+json" id="featured-projects-schema">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "@id": "https://parth-portfolio-wb.pages.dev/#featured-projects",
-      "name": "Selected analytics and software projects",
-      "description": "A selection of data analytics, dashboard and software projects featured in Parth Soni's portfolio.",
-      "numberOfItems": 10,
-      "itemListOrder": "https://schema.org/ItemListOrderAscending",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-content-dashboard",
-            "name": "Content Tracking Dashboard",
-            "description": "A personal media analytics dashboard with watch-history tracking, KPIs, year-over-year comparisons, filters and visualisations across six analytics pages.",
-            "applicationCategory": "DataVisualizationApplication",
-            "operatingSystem": "Web",
-            "url": "https://contenttrackerdashboard.pages.dev/",
-            "image": "https://parth-portfolio-wb.pages.dev/project-content-dashboard.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-ucd-policybot",
-            "name": "UCD PolicyBot",
-            "description": "A locally run retrieval-augmented chatbot for UCD academic and administrative policy questions, with answers grounded in retrieved documents and source citations.",
-            "applicationCategory": "EducationalApplication",
-            "operatingSystem": "Local computer",
-            "url": "https://github.com/shridharjoshi034-ai/LocalHost-Legends",
-            "image": "https://parth-portfolio-wb.pages.dev/project-policybot.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-irish-visa-tracker",
-            "name": "Irish Visa Decision Tracker",
-            "description": "A dashboard that organises visa decisions published by the Embassy of Ireland in New Delhi, with searchable history, daily summaries and trends.",
-            "applicationCategory": "ReferenceApplication",
-            "operatingSystem": "Web",
-            "url": "https://irishvisaupdatetracker.pages.dev/",
-            "image": "https://parth-portfolio-wb.pages.dev/project-visa-tracker.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "item": {
-            "@type": "CreativeWork",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-f1-telemetry",
-            "name": "Formula 1 Telemetry Analysis",
-            "description": "A Python telemetry analytics pipeline using FastF1, pandas and NumPy to examine race performance and publish data visualisations and reports.",
-            "url": "https://f1-practice-session-analysis.pages.dev/",
-            "sameAs": "https://medium.com/@soni.soni.parth",
-            "image": "https://parth-portfolio-wb.pages.dev/project-f1-telemetry.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 5,
-          "item": {
-            "@type": "CreativeWork",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-excel-python-eda",
-            "name": "Excel & Python EDA",
-            "description": "Exploratory analysis of seven real-world datasets using Excel, Python and pandas, with supporting workbooks, notebooks and Tableau charts.",
-            "url": "https://github.com/parth-soni-10/Excel_EDA",
-            "image": "https://parth-portfolio-wb.pages.dev/project-eda.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 6,
-          "item": {
-            "@type": "CreativeWork",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-tableau-dashboards",
-            "name": "Interactive Tableau Dashboards",
-            "description": "Two Tableau Public dashboards covering customer analysis and CO2 emissions, with interactive filters, parameters and calculated fields.",
-            "url": "https://public.tableau.com/app/profile/parth.soni7469",
-            "image": "https://parth-portfolio-wb.pages.dev/project-tableau.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 7,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-pink-eye-detection",
-            "name": "Pink Eye Detection: CNN",
-            "description": "A convolutional neural network image classifier for healthy and conjunctivitis-affected eyes, integrated with a Flask application for camera input.",
-            "applicationCategory": "HealthApplication",
-            "operatingSystem": "Web",
-            "url": "https://github.com/parth-soni-10/Flask_webapp",
-            "image": "https://parth-portfolio-wb.pages.dev/project-pinkeye.jpeg",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 8,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-cents-expense-tracker",
-            "name": "cents.: Personal Expense Tracker",
-            "description": "A privacy-first expense tracker with natural-language transaction entry, local device storage, optional cloud sync and profile protection.",
-            "applicationCategory": "FinanceApplication",
-            "operatingSystem": "Web",
-            "url": "https://cents-app.pages.dev/",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 9,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-rbi-weekly-dashboard",
-            "name": "RBI Weekly Dashboard",
-            "description": "A weekly dashboard for Reserve Bank of India data, with historical trends, period comparisons, policy annotations and offline support.",
-            "applicationCategory": "DataVisualizationApplication",
-            "operatingSystem": "Web",
-            "url": "https://rbiweeklydashboard.pages.dev/",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 10,
-          "item": {
-            "@type": "SoftwareApplication",
-            "@id": "https://parth-portfolio-wb.pages.dev/#project-csnl-module-picker",
-            "name": "CSNL Module Picker",
-            "description": "An unofficial UCD Computer Science Negotiated Learning planner for browsing modules, checking timetable clashes and building weekly plans from published timetable data.",
-            "applicationCategory": "EducationalApplication",
-            "operatingSystem": "Web",
-            "url": "https://ucdcsnlmodulepicker.pages.dev/",
-            "isPartOf": {
-              "@id": "https://parth-portfolio-wb.pages.dev/#website"
-            }
-          }
-        }
-      ]
-    }
-  </script>
 </head>
 <body>
 
@@ -454,7 +486,7 @@
     <!-- About Main -->
     <div class="about-main">
       <p class="section-kicker"><b>01</b>About</p>
-      <h2 class="big-heading">Driven<br>by Data.</h2>
+      <h2 class="big-heading">Driven<br> by Data.</h2>
 
       <div class="about-body">
         <p>
@@ -485,10 +517,21 @@
         <div class="medium-callout-left">
           <p class="medium-callout-label">Writing on Medium</p>
           <p class="medium-callout-desc">I publish F1 race weekend breakdowns and sharp, data-driven insights for fellow fans. Every qualifying, every race, every Monday debrief.</p>
+          <!-- The newest articles as of the last snapshot, so the callout is never
+               empty when the feed read fails. Generated by
+               tools/snapshot-medium-fallback.mjs from the live feed — do not
+               hand-edit, re-run it after publishing. script.js refreshes this list
+               on every load, and shows the note below only when it could not. -->
+          <!-- MEDIUM:START -->
           <ul class="medium-recent">
-            <li><a href="https://medium.com/@soni.soni.parth/azerbaijan-grand-prix-2026-race-report-d8ff6f29cad0" target="_blank" rel="noopener">Azerbaijan Grand Prix 2026 &mdash; Race Report</a><span>Sep 2026</span></li>
-            <li><a href="https://medium.com/@soni.soni.parth/azerbaijan-grand-prix-2026-qualifying-report-bb40f68537e7" target="_blank" rel="noopener">Azerbaijan Grand Prix 2026 &mdash; Qualifying Report</a><span>Sep 2026</span></li>
+            <li><a href="https://medium.com/@soni.soni.parth/singapore-grand-prix-2026-race-report-0f8718e092bd" target="_blank" rel="noopener">Singapore Grand Prix 2026 &mdash; Race Report</a><span>Oct 2026</span></li>
+            <li><a href="https://medium.com/@soni.soni.parth/singapore-grand-prix-2026-saturday-report-0d0941ad57b0" target="_blank" rel="noopener">Singapore Grand Prix 2026 &mdash; Saturday Report</a><span>Oct 2026</span></li>
+            <li><a href="https://medium.com/@soni.soni.parth/bahrain-grand-prix-2026-race-report-6cf2a8f0702a" target="_blank" rel="noopener">Bahrain Grand Prix 2026 &mdash; Race Report</a><span>Oct 2026</span></li>
           </ul>
+          <!-- Shown by script.js only when the live read fails: a snapshot that
+               reads as live is what this list used to be. -->
+          <p class="medium-snapshot-note" id="mediumSnapshotNote" role="status" hidden data-taken="2026-10-15"></p>
+          <!-- MEDIUM:END -->
         </div>
         <a href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener" class="btn-medium">Read Articles &rarr;</a>
       </div>
@@ -520,7 +563,7 @@
       <p class="section-kicker"><b>02</b>Experience</p>
       <div class="exp-header-row">
         <div>
-          <h2 class="section-h-light">Professional<br><em>Experience</em></h2>
+          <h2 class="section-h-light">Professional<br> <em>Experience</em></h2>
         </div>
         <p class="exp-count">02 roles</p>
       </div>
@@ -638,20 +681,24 @@
               <span class="proj-featured-badge">Live &bull; 2024-Current</span>
             </div>
             <div class="sc-media">
-              <img src="project-content-dashboard.jpeg" alt="Content Tracking Dashboard live site" width="800" height="450" loading="lazy" decoding="async" />
+              <picture>
+                <source srcset="project-content-dashboard.webp" type="image/webp" />
+                <img src="project-content-dashboard.jpeg" alt="Content Tracking Dashboard live site" width="800" height="450" loading="lazy" decoding="async" />
+              </picture>
             </div>
             <p class="sc-desc">
-              Built an end-to-end personal media analytics dashboard using HTML, CSS, JavaScript,
-              Google Sheets API, and Apps Script to analyse 375+ titles, transforming raw viewing
-              logs into interactive dashboards with calculated KPIs, derived metrics, YoY comparisons,
-              dynamic filtering, and interactive visualisations across six analytics pages, without a
-              traditional backend or external frameworks.
+              Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and
+              JavaScript over a Cloudflare Worker reading a D1 database, turning 375+ logged titles
+              into calculated KPIs, derived metrics, year-over-year comparisons, dynamic filtering
+              and interactive visualisations across six analytics pages — no framework and no build
+              step.
             </p>
             <div class="sc-tags">
-              <span class="ptag">JavaScript</span><span class="ptag">Google Sheets API</span><span class="ptag">Apps Script</span><span class="ptag">Data Pipeline</span><span class="ptag">Looker Studio</span>
+              <span class="ptag">JavaScript</span><span class="ptag">Cloudflare Workers</span><span class="ptag">D1</span><span class="ptag">Data Pipeline</span><span class="ptag">Chart.js</span>
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://contenttrackerdashboard.pages.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
+              <a class="spot-link" href="/projects/content-tracking-dashboard/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -662,7 +709,7 @@
               <span class="proj-featured-badge">May-Aug 2026</span>
             </div>
             <div class="sc-media">
-              <img src="project-policybot.jpeg" alt="UCD PolicyBot repository on GitHub" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-policybot.webp" type="image/webp" /><img src="project-policybot.jpeg" alt="UCD PolicyBot repository on GitHub" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant
@@ -680,6 +727,7 @@
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/ucd-policybot/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -690,7 +738,7 @@
               <span class="proj-featured-badge">Live &bull; Personal Project</span>
             </div>
             <div class="sc-media">
-              <img src="project-visa-tracker.jpeg" alt="Irish Visa Decision Tracker live site" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-visa-tracker.webp" type="image/webp" /><img src="project-visa-tracker.jpeg" alt="Irish Visa Decision Tracker live site" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a
@@ -707,6 +755,7 @@
             <div class="spot-links">
               <a class="spot-link" href="https://irishvisaupdatetracker.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
               <a class="spot-link" href="https://github.com/parth-soni-10/Irish-Visa-Tracker" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/irish-visa-decision-tracker/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -717,7 +766,7 @@
               <span class="proj-featured-badge">Live &bull; Jan 2026-Present</span>
             </div>
             <div class="sc-media">
-              <img src="project-f1-telemetry.jpeg" alt="Azerbaijan Grand Prix race report on Medium" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-f1-telemetry.webp" type="image/webp" /><img src="project-f1-telemetry.jpeg" alt="Azerbaijan Grand Prix race report on Medium" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy
@@ -733,6 +782,7 @@
             <div class="spot-links">
               <a class="spot-link" href="https://f1-practice-session-analysis.pages.dev/" target="_blank" rel="noopener">Session Analyzer &rarr;</a>
               <a class="spot-link" href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener">Read on Medium &rarr;</a>
+              <a class="spot-link" href="/projects/formula-1-telemetry-analysis/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -742,7 +792,7 @@
               <h3 class="sc-title">Excel &amp; Python EDA</h3>
             </div>
             <div class="sc-media">
-              <img src="project-eda.jpeg" alt="Excel and Python EDA repository on GitHub" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-eda.webp" type="image/webp" /><img src="project-eda.jpeg" alt="Excel and Python EDA repository on GitHub" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               Cleaned and analysed seven real-world datasets &mdash; bank churn, US airline on-time
@@ -756,6 +806,7 @@
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/parth-soni-10/Excel_EDA" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/excel-python-eda/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -765,7 +816,7 @@
               <h3 class="sc-title">Interactive Tableau Dashboards</h3>
             </div>
             <div class="sc-media">
-              <img src="project-tableau.jpeg" alt="Tableau Public profile with published dashboards" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-tableau.webp" type="image/webp" /><img src="project-tableau.jpeg" alt="Tableau Public profile with published dashboards" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               Two dashboards published on Tableau Public: a customer analysis dashboard and a CO2
@@ -778,6 +829,7 @@
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://public.tableau.com/app/profile/parth.soni7469" target="_blank" rel="noopener">Tableau Public &rarr;</a>
+              <a class="spot-link" href="/projects/interactive-tableau-dashboards/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -787,7 +839,7 @@
               <h3 class="sc-title">Pink Eye Detection: CNN</h3>
             </div>
             <div class="sc-media">
-              <img src="project-pinkeye.jpeg" alt="Pink Eye Detection Flask web app repository on GitHub" width="800" height="450" loading="lazy" decoding="async" />
+              <picture><source srcset="project-pinkeye.webp" type="image/webp" /><img src="project-pinkeye.jpeg" alt="Pink Eye Detection Flask web app repository on GitHub" width="800" height="450" loading="lazy" decoding="async" /></picture>
             </div>
             <p class="sc-desc">
               Developed a Convolutional Neural Network to classify eye images as healthy or infected
@@ -800,6 +852,7 @@
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://github.com/parth-soni-10/Flask_webapp" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/pink-eye-cnn/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -823,6 +876,7 @@
             </div>
             <div class="spot-links">
               <a class="spot-link" href="https://cents-app.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
+              <a class="spot-link" href="/projects/cents-expense-tracker/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -849,6 +903,7 @@
             <div class="spot-links">
               <a class="spot-link" href="https://rbiweeklydashboard.pages.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
               <a class="spot-link" href="https://github.com/parth-soni-10/RBI-Weekly-Data-Dashboard" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/rbi-weekly-dashboard/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -874,6 +929,7 @@
             <div class="spot-links">
               <a class="spot-link" href="https://ucdcsnlmodulepicker.pages.dev/" target="_blank" rel="noopener">Live Site &rarr;</a>
               <a class="spot-link" href="https://github.com/parth-soni-10/UCD-CSNL-Module_Picker" target="_blank" rel="noopener">GitHub &rarr;</a>
+              <a class="spot-link" href="/projects/csnl-module-picker/">Project page &rarr;</a>
             </div>
           </div>
 
@@ -889,7 +945,7 @@
     <div class="dash-inner">
       <p class="section-kicker"><b>04</b>Live Dashboard</p>
       <div class="dash-header">
-        <h2 class="big-heading">Analytics<br>Dashboard.</h2>
+        <h2 class="big-heading">Analytics<br> Dashboard.</h2>
         <div class="dash-header-side">
           <p class="dash-intro">
             A live slice of my Content Tracking Dashboard: <span id="dashTotalTitles">&hellip;</span>
@@ -965,7 +1021,7 @@
   <section id="skills" class="skills-full-section">
     <div class="skills-full-inner">
       <p class="section-kicker"><b>05</b>Skills</p>
-      <h2 class="big-heading">What I<br>Bring.</h2>
+      <h2 class="big-heading">What I<br> Bring.</h2>
 
       <div class="skills-two-col">
         <div>
@@ -1011,14 +1067,14 @@
   <section id="certificates" class="certs-section">
     <div class="certs-inner">
       <p class="section-kicker"><b>06</b>Certifications</p>
-      <h2 class="section-h-light">Credentials &amp;<br><em>Achievements</em></h2>
+      <h2 class="section-h-light">Credentials &amp;<br> <em>Achievements</em></h2>
 
       <div class="cert-grid">
 
         <a href="https://www.coursera.org/account/accomplishments/specialization/QBHFUA673MO6"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-microsoft-powerbi-coursera.jpeg" alt="Microsoft Power BI Data Analyst Certificate" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-microsoft-powerbi-coursera.webp" type="image/webp" /><img src="certificate-microsoft-powerbi-coursera.jpeg" alt="Microsoft Power BI Data Analyst Certificate" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Microsoft &bull; Coursera</p>
@@ -1029,7 +1085,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/JLDAR2MZXMWX"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-google-data-analytics-coursera.jpeg" alt="Google Data Analytics Certificate" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-google-data-analytics-coursera.webp" type="image/webp" /><img src="certificate-google-data-analytics-coursera.jpeg" alt="Google Data Analytics Certificate" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Google &bull; Coursera</p>
@@ -1040,7 +1096,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/KSFA0JZ0YG2S"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-meta-data-analyst-coursera.jpeg" alt="Meta Data Analyst Certificate" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-meta-data-analyst-coursera.webp" type="image/webp" /><img src="certificate-meta-data-analyst-coursera.jpeg" alt="Meta Data Analyst Certificate" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">Meta &bull; Coursera</p>
@@ -1051,7 +1107,7 @@
         <a href="https://www.coursera.org/account/accomplishments/specialization/27AVBDNU4DC5"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-ibm-data-analyst-coursera.jpeg" alt="IBM Data Analyst Certificate" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-ibm-data-analyst-coursera.webp" type="image/webp" /><img src="certificate-ibm-data-analyst-coursera.jpeg" alt="IBM Data Analyst Certificate" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">IBM &bull; Coursera</p>
@@ -1062,7 +1118,7 @@
         <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/tMjbs76F526fF5v3G/NjynCWzGSaWXQCxSX_tMjbs76F526fF5v3G_kNjmYzfrRDT2cS5c7_1735733964804_completion_certificate.pdf"
            target="_blank" rel="noopener" class="cert-card">
           <div class="cert-img-wrap">
-            <img src="certificate-BA-datascience-simulation-forage.jpeg" alt="Data Science Job Simulation Certificate" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-BA-datascience-simulation-forage.webp" type="image/webp" /><img src="certificate-BA-datascience-simulation-forage.jpeg" alt="Data Science Job Simulation Certificate" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">British Airways &bull; Forage</p>
@@ -1073,7 +1129,7 @@
         <a href="https://github.com/parth-soni-10/Certificates"
            target="_blank" rel="noopener" class="cert-card cert-more-card">
           <div class="cert-img-wrap">
-            <img src="certificate-other-certificates.jpeg" alt="More Certificates on GitHub" width="640" height="360" loading="lazy" />
+            <picture><source srcset="certificate-other-certificates.webp" type="image/webp" /><img src="certificate-other-certificates.jpeg" alt="More Certificates on GitHub" width="640" height="360" loading="lazy" decoding="async" /></picture>
           </div>
           <div class="cert-info">
             <p class="cert-issuer">GitHub</p>
@@ -1141,6 +1197,11 @@
        snapshot can never be counted two different ways. Must load before
        script.js. -->
   <script src="dash-aggregate.js"></script>
+  <!-- The Medium callout's feed rules, in their own file for the same reason:
+       tools/snapshot-medium-fallback.mjs runs the same latestPosts() under Node
+       when it regenerates that list's snapshot, so the three on screen and the
+       three baked into the page are chosen one way. Must load before script.js. -->
+  <script src="medium-feed.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
