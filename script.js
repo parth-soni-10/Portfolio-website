@@ -363,7 +363,11 @@
     })
     .catch(() => {});
 
-  /* Live GitHub contribution heatmap (github-contributions-api, CORS-enabled) */
+  /* Live GitHub contribution heatmap, read from this site's own /api/contributions:
+     a Pages Function that asks github-contributions-api server-side and caches the
+     answer for 12 hours, so the third-party host is not in every visitor's path and
+     not in connect-src. See functions/api/contributions.js for what that does and
+     does not fix. */
   const ghGraph = document.getElementById('ghGraph');
   const ghWrap  = document.getElementById('ghGraphWrap');
   const ghTotal = document.getElementById('ghTotal');
@@ -387,7 +391,7 @@
     if (!ghGraph || !ghWrap) return;
     const pad = n => String(n).padStart(2, '0');
 
-    fetch('https://github-contributions-api.jogruber.de/v4/parth-soni-10')
+    fetch('/api/contributions')
       .then(r => (r.ok ? r.json() : Promise.reject(new Error('ghc'))))
       .then(data => {
         const dayMap = {};
@@ -595,16 +599,16 @@
      the SNAPSHOT:START/END block below. */
   /* SNAPSHOT:START */
   const FALLBACK = {
-    "taken": "2026-10-13",
+    "taken": "2026-10-16",
     "periods": {
       "2024": {
         "name": "2024",
-        "months": [84,41,82,31,106,95,63,139,74,165,59,73],
-        "titles": 121,
-        "hours": 1011,
-        "shows": 97,
+        "months": [143,45,82,31,106,95,63,139,74,165,59,73],
+        "titles": 130,
+        "hours": 1073,
+        "shows": 106,
         "movies": 24,
-        "sub": ["active in period","Jan-Dec 2024","80% of titles","20% of titles"],
+        "sub": ["active in period","Jan-Dec 2024","82% of titles","18% of titles"],
         "monthsLabel": "Jan-Dec 2024"
       },
       "2025": {
@@ -630,8 +634,8 @@
       "all": {
         "name": "All Time",
         "months": [
-          84,
-          41,
+          143,
+          45,
           82,
           31,
           106,
@@ -665,19 +669,19 @@
           46,
           38
         ],
-        "titles": 377,
-        "hours": 2985,
-        "shows": 282,
+        "titles": 386,
+        "hours": 3048,
+        "shows": 291,
         "movies": 95,
-        "sub": ["series + movies","since Jan 2024","74.8% of titles","25.2% of titles"],
+        "sub": ["series + movies","since Jan 2024","75.4% of titles","24.6% of titles"],
         "monthsLabel": "Jan 2024-Oct 2026"
       }
     },
     "genres": [
       "Drama",
       "Thriller",
-      "Crime",
       "Comedy",
+      "Crime",
       "Action",
       "Sci-Fi",
       "Romance",
@@ -693,10 +697,10 @@
       "Horror"
     ],
     "genreYears": {
-      "2024": [428,88,138,123,55,90,47,35,0,0,0,7,0,0,0,0,0],
-      "2025": [349,234,204,251,111,49,38,34,31,23,0,3,0,2,0,0,2],
-      "2026": [129,179,120,54,85,3,22,19,6,0,14,0,9,0,2,2,0],
-      "all": [905,501,462,428,252,141,108,88,37,23,14,10,9,2,2,2,2]
+      "2024": [428,88,179,144,55,90,47,35,0,0,0,7,0,0,0,0,0],
+      "2025": [349,234,251,204,111,49,38,34,31,23,0,3,0,2,0,0,2],
+      "2026": [129,179,54,120,85,3,22,19,6,0,14,0,9,0,2,2,0],
+      "all": [905,501,484,468,252,141,108,88,37,23,14,10,9,2,2,2,2]
     },
     "startYear": 2024,
     "startC": 0,
@@ -1131,57 +1135,70 @@
   }
 })();
 
-/* ── WRITING ON MEDIUM: 2 LATEST POSTS ────────────────── */
-/* The cell in the Education section shows the two newest articles, refreshed
-   on every page load. Medium answers browser requests to its own feeds with
-   a Cloudflare challenge (HTTP 403), so the feed is read through rss2json's
-   CORS API instead — its edge cache can lag the feed by up to 30 minutes.
-   Any failure (offline, rate limit, response shape change) leaves the two
-   articles hard-coded in index.html untouched, so the cell is never empty. */
+/* ── WRITING ON MEDIUM: THE 3 LATEST POSTS ────────────────── */
+/* The callout in the Education section shows the three newest articles, refreshed
+   on every page load. The feed is read from this site's own endpoint,
+   /api/medium — a Pages Function (functions/api/medium.js) that asks Medium for
+   the feed server-side and caches it. It used to read a third-party JSON proxy
+   (api.rss2json.com), which is what broke the section on 15 Oct 2026: the proxy
+   answered 500 while the feed itself was fine, and the list went empty for every
+   visitor. Nothing third-party is in this path now.
+
+   The rules that pick the three live in medium-feed.js: the same parseFeed() and
+   latestPosts() run in the Function, in this file, and under Node in
+   tools/snapshot-medium-fallback.mjs — which regenerates the snapshot this list is
+   served with — so the three on screen and the three baked into the page are chosen
+   one way rather than two.
+
+   That snapshot is what the note below is for. It used to be two hand-typed articles
+   from September, and any failure left them on screen looking current: the section
+   disagreed with Medium for weeks and said nothing. The list still stays (the card is
+   never empty, and the tool keeps the snapshot honest), but a failed read now says it
+   is a snapshot instead of passing three old titles off as the latest. */
 (function () {
   'use strict';
 
   const list = document.querySelector('.medium-recent');
-  if (!list) return;
+  if (!list || !window.MediumFeed) return;
+  const { FEED_URL, latestPosts } = window.MediumFeed;
+  const note = document.getElementById('mediumSnapshotNote');
 
-  const FEED = 'https://api.rss2json.com/v1/api.json?rss_url=' +
-               encodeURIComponent('https://medium.com/feed/@soni.soni.parth');
-  const MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  /* Hidden in the markup, shown only when the live read fails. During a load the
+     list briefly shows the committed snapshot, which is current as of the last deploy,
+     and calling that a failure would be wrong. */
+  function noteSnapshot(on) {
+    if (!note) return;
+    note.hidden = !on;
+    note.textContent = on
+      ? 'Snapshot — the Medium feed could not be read from this page, so these are '
+        + 'the newest articles as of ' + (note.dataset.taken || 'the last update') + '.'
+      : '';
+  }
 
-  fetch(FEED, { cache: 'no-store' })
+  fetch(FEED_URL, { cache: 'no-store' })
     .then(res => { if (!res.ok) throw new Error('feed HTTP ' + res.status); return res.json(); })
     .then(data => {
-      if (!data || data.status !== 'ok' || !Array.isArray(data.items)) throw new Error('bad feed payload');
-      const latest = data.items
-        .filter(it => it && typeof it.title === 'string' && it.title.trim() && typeof it.link === 'string')
-        .map(it => ({ title: it.title.trim(), url: it.link.split('?')[0], pub: String(it.pubDate || '') }))
-        .filter(it => { /* only plain https Medium links survive */
-          try {
-            const u = new URL(it.url);
-            return u.protocol === 'https:' && /(^|\.)medium\.com$/.test(u.hostname);
-          } catch (e) { return false; }
-        })
-        .sort((a, b) => b.pub.localeCompare(a.pub))
-        .slice(0, 2);
-      if (!latest.length) return; /* keep the hard-coded pair */
+      if (!data || !Array.isArray(data.items)) throw new Error('bad feed payload');
+      const latest = latestPosts(data.items);
+      if (!latest.length) { noteSnapshot(true); return; } /* keep it, and say so */
 
       list.textContent = '';
       latest.forEach(it => {
         const li   = document.createElement('li');
         const a    = document.createElement('a');
         const span = document.createElement('span');
-        const m    = /^(\d{4})-(\d{2})/.exec(it.pub); /* pubDate is 'YYYY-MM-DD HH:MM:SS' */
         a.href = it.url;
         a.target = '_blank';
         a.rel = 'noopener';
         a.textContent = it.title;
-        span.textContent = m ? MON[Number(m[2]) - 1] + ' ' + m[1] : '';
+        span.textContent = it.label;
         li.appendChild(a);
         li.appendChild(span);
         list.appendChild(li);
       });
+      noteSnapshot(false);
     })
-    .catch(() => { /* silent fallback: the hard-coded articles stay */ });
+    .catch(() => noteSnapshot(true));    /* the list stays, and the note says why */
 })();
 
 /* ── PROJECTS SPOTLIGHT INDEX ─────────────────────── */

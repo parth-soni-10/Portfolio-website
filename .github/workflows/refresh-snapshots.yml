@@ -1,0 +1,87 @@
+name: Refresh the snapshots
+
+# The two lists this site bakes into its own pages — the dashboard section's
+# figures (script.js) and the Writing-on-Medium list (index.html) — are
+# snapshots: frozen copies a page falls back to when its live read fails. A
+# snapshot is exactly how a page ends up quietly disagreeing with the thing it
+# describes, which is why both tools carry a `--check` that says so.
+#
+# Measured, 16 Oct 2026: the dashboard snapshot was committed on 13 Oct and the
+# store had already moved on — 386 titles / 3,048 hours against the figures the
+# snapshot recorded — and nobody noticed, because the only thing that would have
+# said so was a check no workflow called. That is what this file is for. The
+# tools existed; nothing ran them.
+#
+# Weekly, because the store moves when a title is logged rather than on a clock,
+# and a run that changes nothing commits nothing. `workflow_dispatch` is the
+# button for the other case: a Medium list goes stale the moment an article is
+# published, not on a schedule.
+#
+# No secrets: both tools read the same public endpoints the pages themselves
+# read (the Content Tracker's watchlist endpoint and Medium's feed).
+
+on:
+  schedule:
+    # Mondays, 06:00 UTC — the start of the working week, and clear of the
+    # family's own data jobs (RBI Fridays at 22:00, UCD on the 1st and 15th at
+    # 03:00), so two refreshes are never scraping the same host at once.
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# One refresh at a time: two runs would fetch the same store twice and race to
+# commit the same two files.
+concurrency:
+  group: refresh-snapshots
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Each tool runs the page's own shaping function over a live read, so what
+      # it writes and what the page would render cannot drift in method — only in
+      # time, which is what the block's `taken` field records.
+      - name: Refresh the dashboard snapshot from the store
+        run: node tools/snapshot-dashboard-fallback.mjs
+
+      - name: Refresh the Medium list from the feed
+        run: node tools/snapshot-medium-fallback.mjs
+
+      # Not decoration: this is the step that would have caught the 13 Oct drift.
+      # If a tool wrote something its own check rejects, the run fails and the
+      # bad snapshot is never committed.
+      - name: Check both snapshots are current
+        run: |
+          node tools/snapshot-dashboard-fallback.mjs --check
+          node tools/snapshot-medium-fallback.mjs --check
+
+      - name: Commit the refreshed snapshots (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # -u, not -A: the two tracked files these tools rewrite, and nothing
+          # else. A file a run created that the repository does not track is not
+          # this job's to add.
+          git add -u
+          if git diff --cached --quiet; then
+            echo "Snapshots already current — nothing to commit."
+          else
+            git commit -m "chore(snapshots): refresh from the store and the feed"
+            # A manual push can land on main while this run is fetching, which
+            # would reject the push as non-fast-forward. Rebase our single commit
+            # onto origin/main first; retry once on a fresh race.
+            git pull --rebase origin main && git push || \
+              { sleep 20; git pull --rebase origin main && git push; }
+            echo "Pushed refreshed snapshots."
+          fi

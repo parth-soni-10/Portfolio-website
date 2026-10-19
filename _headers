@@ -8,9 +8,12 @@
 # intersection of the two policies and the site breaks in confusing ways.
 #
 # index.html explains what each origin is for. All assets are self-hosted
-# (including the icon-subset webfonts); the connect-src origins are the live
-# GitHub graph, the contributions API and the Content Tracking Dashboard's own
-# watchlist endpoint.
+# (including the icon-subset webfonts), and the two runtime reads that used to be
+# third-party hosts — the Medium feed and the contributions calendar — now go to
+# this site's own Functions (/api/medium, /api/contributions) instead, so they need
+# no origin here. What is left in connect-src is what the browser itself must
+# reach: the GitHub profile API and the Content Tracking Dashboard's own watchlist
+# endpoint.
 #
 # contenttrackerdashboard.pages.dev is the dashboard section's one
 # data source. It replaced docs.google.com and *.googleusercontent.com, which
@@ -21,13 +24,18 @@
 # out of connect-src and the section quietly falls back to its embedded
 # snapshot instead of failing loudly.
 #
-# api.rss2json.com serves the Medium feed for the Writing-on-Medium cell:
-# Medium's own feed endpoint answers browsers with a Cloudflare challenge
-# (403), while rss2json exposes it as CORS JSON (and may cache it up to
-# 30 minutes behind Medium itself).
+# There is no medium.com origin in connect-src, and that is the point. The
+# Writing-on-Medium cell reads /api/medium — this site's own Pages Function
+# (functions/api/medium.js), which fetches Medium's feed server-side, where
+# neither CORS nor the browser challenge applies, parses it and caches it for ten
+# minutes. It used to read api.rss2json.com, a third-party JSON proxy: on 15 Oct
+# 2026 that proxy answered HTTP 500 while Medium's own feed was returning 200
+# with 10 items, so the cell was empty for every visitor and the page could do
+# nothing about it. Same origin means no new origin here, and one fewer service
+# that can take the section down.
 
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://contenttrackerdashboard.pages.dev https://api.rss2json.com; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'
   # frame-ancestors is the one directive a <meta> tag cannot carry - it is what
   # actually stops the site being framed, so it is paired with the legacy
   # header below for engines that predate it.
