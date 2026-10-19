@@ -1220,6 +1220,18 @@
   let active = tabs.findIndex(t => t.classList.contains('active'));
   if (active < 0) active = 0;
 
+  /* The component layer can filter the index (see components.js), which hides
+     rows with `hidden`. Rotation and the arrow keys must step over those, or
+     the spotlight lands on a panel nobody can see. */
+  const visible = () => tabs.map((t, i) => (t.hidden ? -1 : i)).filter(i => i >= 0);
+  function step(from, dir) {
+    const list = visible();
+    if (!list.length) return from;
+    const at = list.indexOf(from);
+    if (at < 0) return list[0];
+    return list[(at + dir + list.length) % list.length];
+  }
+
   function setSpot(i) {
     if (i < 0 || i >= tabs.length) return;
     active = i;
@@ -1241,20 +1253,22 @@
     const n = tabs.length;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      setSpot((active + 1) % n);
+      setSpot(step(active, 1));
       tabs[active].focus();
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
-      setSpot((active - 1 + n) % n);
+      setSpot(step(active, -1));
       tabs[active].focus();
     } else if (e.key === 'Home') {
       e.preventDefault();
-      setSpot(0);
-      tabs[0].focus();
+      const list = visible();
+      setSpot(list.length ? list[0] : 0);
+      tabs[active].focus();
     } else if (e.key === 'End') {
       e.preventDefault();
-      setSpot(n - 1);
-      tabs[n - 1].focus();
+      const list = visible();
+      setSpot(list.length ? list[list.length - 1] : n - 1);
+      tabs[active].focus();
     }
   });
 
@@ -1276,7 +1290,7 @@
 
   function startRotation() {
     if (reduceMotion || interacted || rotTimer || !projectsSec) return;
-    rotTimer = window.setInterval(() => setSpot((active + 1) % tabs.length), 7000);
+    rotTimer = window.setInterval(() => setSpot(step(active, 1)), 7000);
     wrap.classList.add('rotating');
     if (autoNote) autoNote.hidden = false;
   }
