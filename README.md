@@ -1,8 +1,8 @@
 # Parth Soni — Portfolio
 
-A small personal website that shows who I am and what I like to build: a data analyst and MSc Computer Science student who loves turning messy numbers into clear stories.
+A single-page site about me and the tools I like to build: a data analyst and MSc Computer Science student who turns messy numbers into clear stories.
 
-It's a single-page site — quick to load, easy to browse, and built by hand.
+**Live:** https://parth-portfolio-wb.pages.dev
 
 > *"Data is only as powerful as the story it tells."*
 
@@ -10,33 +10,17 @@ It's a single-page site — quick to load, easy to browse, and built by hand.
 
 - **About** — a short intro, my education, and a few non-work facts
 - **Experience** — internships and what I worked on
-- **Projects** — tools and dashboards I've built, with links to each
-- **Dashboard demo** — a working analytics dashboard with charts you can filter by year
-- **Skills** — the tools and ways of working I use
-- **Certificates** — professional certifications and courses
-- **Contact** — ways to reach me
+- **Projects** — the tools and dashboards I've built, each with its own page and a link to the live site
+- **Dashboard demo** — a working analytics dashboard whose charts you can filter by year
+- **Skills**, **Certificates** and **Contact**
 
-## Things you may notice
+## What is live
 
-- **Live GitHub activity** — the site pulls my contribution graph in real time
-- **Live dashboard preview** — a working slice of my content-tracking dashboard, updated straight from its data
-- **Clean share previews** — links to the site show a branded card when shared
-- **Easy to browse** — smooth scrolling, a mobile menu, and calm, readable styling
-
-## Run it locally
-
-No setup needed. Either open `index.html` directly in your browser, or run a tiny local server from this folder:
-
-```
-python -m http.server
-```
-
-Then visit `http://localhost:8000`. The "live" sections need an internet connection.
+- The **GitHub contribution graph** is read at runtime rather than pasted in
+- The **dashboard preview** reads the Content Tracker's own store, so the two agree by construction
+- **Share previews** carry a branded card when the link is posted anywhere
+- **Self-hosted webfonts**, smooth scrolling, a mobile menu and calm, readable styling
 
 ## Built with
 
-Plain **HTML, CSS, and JavaScript** — no frameworks, no build tools. That keeps it fast, simple, and dependable.
-
----
-
-Made with a lot of coffee by **Parth Soni**.
+Plain **HTML, CSS and JavaScript** — no frameworks, no build tools — plus two small **Cloudflare Pages Functions** that stand in for the third-party hosts the live sections would otherwise call.
