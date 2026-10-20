@@ -42,7 +42,7 @@
   --paper-raise:  #fcfbf8;
   --ink:          #16130e;
   --ink-soft:     #4a453c;
-  --ink-mute:     #756e62;
+  --ink-mute:     #6f685c;   /* 4.85:1 on --accent-soft, 5.51:1 on paper - AA at 11px */
   --line:         #ddd8cc;
   --line-strong:  #b9b2a2;
   --accent:       #e85d04;
@@ -843,6 +843,36 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-chart-figure { position: relative; min-height: 200px; }
 .dash-chart-figure svg { display: block; width: 100%; height: auto; }
 
+/* Month detail — the analytics chart's one step below the period tabs. */
+.dash-drill {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 8px; margin-bottom: 10px;
+}
+.dash-drill-label {
+  font-family: var(--data); font-size: 12px; line-height: 16px;
+  font-weight: 500; color: #6f6f6f;
+}
+.dash-drill-select {
+  font-family: var(--data); font-size: 12px; line-height: 16px;
+  font-weight: 500; color: #333333;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 6px; padding: 3px 6px; max-width: 100%;
+}
+.dash-drill-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Phone width: the label keeps naming the control for screen readers, but the
+   chip needs the row to itself. */
+@media (max-width: 480px) {
+  .dash-drill-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+}
+.dash-focus-dot { fill: var(--accent); stroke: #ffffff; stroke-width: 2; }
+.dash-focus-label {
+  font-family: var(--data); font-size: 11px; font-weight: 600;
+  fill: var(--accent-deep);
+}
+
 /* Line chart — explicit SVG styles (the analyst-report CSS rewrite dropped
    these, leaving unstyled black fills and 16px labels). Axis ticks at 11px:
    intentional density exception to the 12/16 label token. */
@@ -1368,7 +1398,7 @@ body.is-splashing { overflow: hidden; }
 .skill-ticker-seq span::after {
   content: "✦";
   margin-left: 30px;
-  color: var(--accent);
+    color: var(--accent-deep);
   font-size: 10px;
 }
 @keyframes ticker-scroll { to { transform: translateX(-50%); } }
