@@ -686,6 +686,11 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 }
 .spot-item:hover { background: rgba(22,19,14,.04); }
 .spot-item.active { background: var(--accent-soft); }
+/* The project rail is adopted by Rubber Segment on its vertical axis: the
+   thumb is the accent wash, so the chosen item drops its own fill and the wash
+   can be seen travelling down the rail between two projects. */
+#spotIndex[data-rubber-segment] { --rs-thumb: var(--accent-soft); }
+#spotIndex[data-rubber-segment] .spot-item.active { background: transparent; }
 .si-num {
   font-size: 12px; font-weight: 700; color: var(--ink-mute);
   min-width: 22px;

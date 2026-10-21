@@ -301,6 +301,7 @@
   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="glide-select.css" />
   <link rel="stylesheet" href="jelly-radio.css" />
+  <link rel="stylesheet" href="rubber-segment.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -665,7 +666,15 @@
 
       <div class="spot-wrap" id="spotWrap">
 
-        <div class="spot-index" id="spotIndex" role="tablist" aria-label="Project list">
+        <!-- The project rail is a vertical tablist, so it takes the vertical axis
+             of Rubber Segment: the wash travels down the rail and stretches over
+             the gap before it lands on the chosen project. The connect tabs
+             above keep Jelly Radio. script.js already owns the arrow keys, so
+             the component leaves them alone. -->
+        <div class="spot-index" id="spotIndex" role="tablist" aria-label="Project list"
+             data-rubber-segment data-rs-axis="y" data-rs-key="spot-index" data-rs-size="sm"
+             data-rs-inset="0" data-rs-radius="8" data-rs-stretch="100" data-rs-squash="2"
+             data-rs-keys="page">
 
           <button class="spot-item active" id="spotTab-01" role="tab" aria-selected="true" aria-controls="spotPanel-01">
             <span class="si-num">01</span><span class="si-title">Content Tracking Dashboard</span>
@@ -1241,6 +1250,7 @@
   <script src="medium-feed.js"></script>
   <script src="glide-select.js"></script>
   <script src="jelly-radio.js" defer></script>
+  <script src="rubber-segment.js" defer></script>
   <script src="script.js"></script>
 </body>
 </html>
