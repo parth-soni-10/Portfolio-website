@@ -724,26 +724,29 @@
     return dataPromise;
   }
 
-  /* Build the filter tabs from the data's years ('all' first, then each year
-     newest-first), so there are never dead buttons for a year with no rows. */
+  /* Build the period picker from the data's years ('all' first, then each year
+     newest-first), so there are never dead options for a year with no rows.
+     It is a <select> enhanced by GlideSelect: one chip opening a gliding list,
+     which keeps the same filter and the same ?period= URL contract. */
   function buildFilters(active) {
     const host = document.getElementById('dashFilters');
     if (!host) return;
     host.textContent = '';
-    const list = [];
+    const select = document.createElement('select');
+    select.id = 'dashPeriod';
+    select.setAttribute('aria-label', 'Time period');
+    select.setAttribute('data-glide', '');
+    select.setAttribute('data-glide-menu-width', '170');
     ['all'].concat(YEAR_ORDER).forEach(p => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'dash-filter';
-      b.dataset.period = p;
-      b.setAttribute('aria-pressed', String(p === active));
-      if (p === active) b.classList.add('active');
-      b.textContent = p === 'all' ? 'All Time' : p;
-      b.addEventListener('click', () => setFilter(b.dataset.period));
-      list.push(b);
+      const o = document.createElement('option');
+      o.value = p;
+      o.textContent = p === 'all' ? 'All Time' : p;
+      select.appendChild(o);
     });
-    els.filters = list;
-    list.forEach(b => host.appendChild(b));
+    select.value = active;
+    select.addEventListener('change', () => setFilter(select.value));
+    host.appendChild(select);
+    els.filters = [select];
   }
 
   /* ── KPI count-up animation ── */
@@ -1076,6 +1079,7 @@
     if (!PERIODS || !PERIODS[period] || period === current) return;
     current = period;
     els.filters.forEach(f => {
+      if (f.tagName === 'SELECT') { if (f.value !== period) f.value = period; return; }
       const on = f.dataset.period === period;
       f.classList.toggle('active', on);
       f.setAttribute('aria-pressed', String(on));

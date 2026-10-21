@@ -1467,3 +1467,50 @@ svg.icon {
   .cert-card::after, .dash-card::after { display: none; }
   .skill-ticker-track { animation: none; }
 }
+
+/* --- GlideSelect ---------------------------------------------------------- */
+/* The live-dashboard period filter is a chip opening a gliding list now. The
+   <select> behind it still drives the same filter and ?period= URL. --------- */
+.glide-select {
+  --gs-surface: var(--paper);
+  --gs-highlight: var(--accent-soft);
+  --gs-text: var(--ink);
+  --gs-accent: var(--accent);
+  --gs-radius: 10px;
+  --gs-inner-radius: 8px;
+  --gs-menu-w: 170px;
+}
+
+.dash-filters > .glide-select {
+  display: inline-block;
+}
+
+.glide-select .glide-select__trigger {
+  height: 36px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--data);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 12px;
+}
+
+.glide-select__menu {
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+}
+
+.glide-select__option {
+  font-family: var(--data);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* The filter row animates in with a transform, which makes it a stacking
+   context of its own — and a menu opened inside it would then paint under the
+   metrics that follow it in the document. Lift the row while it is on screen. */
+.dash-filters {
+  position: relative;
+  z-index: 5;
+}
