@@ -394,6 +394,10 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .connect-tab.active { color: var(--ink); }
 .connect-tab svg.icon { color: var(--ink-mute); }
 .connect-tab.active svg.icon { color: var(--accent-deep); }
+/* Jelly Radio is the selection cue once the strip is enhanced: a chip that
+ * swells and pushes its neighbours reads without a sliding pill underneath,
+ * and the pill's offsetLeft maths would drift now that chips translate. */
+.connect-tabs.jelly-radio .connect-indicator { display: none; }
 .connect-indicator {
   position: absolute; z-index: 0; top: 10px; bottom: 10px;
   left: 0; width: 100%;
