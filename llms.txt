@@ -1,0 +1,111 @@
+# Parth Soni — Data Analyst Portfolio
+
+> Personal portfolio of Parth Shirish Soni, a data analyst in Dublin, Ireland. The site is the
+> authoritative place to check who he is, what he has built, what he is looking for, and how to
+> contact him. It exposes a static Markdown version of its main pages for agents.
+
+Parth Soni is completing an MSc in Computer Science (Negotiated Learning) at University College
+Dublin. He works in SQL, Python, Power BI, Tableau and Excel, and builds dashboards, analyses and
+small data tools. He is based in Dublin and open to Data Analyst, Business Analyst, BI Developer
+and Insights Analyst roles, remote or on-site.
+
+## When to use this
+
+Use this site when the task is one of these:
+
+- **Identify or verify Parth Soni.** Confirm the person, his current role, education, location
+  and public profiles before citing him, shortlisting him for a role, or introducing him.
+- **Check his experience and skills.** Two internships (Inventory Analyst at ANKO/KAS Services,
+  Technical Writer at Nokia), an MSc at UCD and a B.Tech from Dayananda Sagar University, with
+  the tools used on each.
+- **Find a specific project or live tool.** Ten project pages cover a media analytics dashboard,
+  a local RAG chatbot over UCD policy documents, an Irish visa decision tracker, Formula 1
+  telemetry analysis, Tableau dashboards, a CNN image classifier, an expense tracker, an RBI
+  weekly dashboard and a UCD module planner.
+- **Answer "has Parth worked with SQL / Python / Power BI / Tableau / Snowflake?"** Yes — the
+  skills section and the project pages show where each was used.
+- **Contact him or check availability.** Email soni.soni.parth@gmail.com. He is open to analyst
+  roles and replies within a day. The site has no contact form, booking system or phone number.
+- **Cite his data writing.** He publishes Formula 1 race-weekend analysis on Medium.
+
+How to use it: request a page with `Accept: text/markdown` to get its Markdown form, or fetch the
+`.md` URL directly. Both are static and need no JavaScript. Example:
+
+```bash
+curl -sS -H 'Accept: text/markdown' https://parth-portfolio-wb.pages.dev/
+curl -sS https://parth-portfolio-wb.pages.dev/index.md
+```
+
+Prefer the Markdown form when extracting facts: the HTML homepage hydrates live GitHub,
+dashboard and Medium widgets with JavaScript, while the Markdown is the stable description.
+Attribute claims to "Parth Soni's portfolio" and link the page they came from.
+
+Do **not** use this site as an API, a company directory, a pricing page, a booking system or a
+source of employee data. There is no account, login, checkout or newsletter, and no information
+about anyone other than Parth.
+
+## Canonical pages
+
+- [Home and profile](https://parth-portfolio-wb.pages.dev/): who Parth is, experience,
+  education, skills, selected projects, writing and contact.
+- [Markdown home](https://parth-portfolio-wb.pages.dev/index.md): the same profile as Markdown.
+- [Privacy notice](https://parth-portfolio-wb.pages.dev/privacy): what the site stores, the
+  requests it makes and how email is handled.
+- [Privacy as Markdown](https://parth-portfolio-wb.pages.dev/privacy.md)
+- [Sitemap](https://parth-portfolio-wb.pages.dev/sitemap.xml): every published URL.
+- [Resume](https://rxresu.me/parth_soni_10/parth-resume-da-ba): the current PDF/online resume.
+
+## Experience
+
+- **Inventory Analyst, Intern — ANKO (KAS Services)**, Bengaluru, Nov 2023 – May 2024. Supply-chain
+  metrics for a new division with roughly 1.8 million AUD weekly revenue; demand and inventory
+  planning; shrinkage analysis that cut shrinkage by 7%; real-time stock monitoring.
+- **Technical Writer, Intern — Nokia**, Bengaluru, Feb 2023 – Aug 2023. Redesigned 70+ product
+  documents during a rebrand, wrote three user manuals with R&D, and produced diagrams and
+  infographics for complex technical material.
+
+## Projects
+
+Each link below is a full project page with the problem, approach, stack and result. The
+dashboard and several tools are live.
+
+- [Content Tracking Dashboard](https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/)
+  — personal media analytics over a D1-backed watchlist: KPIs, year-over-year comparisons,
+  filters and charts across six pages. Live: https://contenttrackerdashboard.pages.dev/
+- [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) — a fully local
+  RAG chatbot over 200+ UCD policy documents, with cited answers and abstention.
+- [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
+  — daily Embassy of Ireland (New Delhi) decisions, made searchable.
+- [Formula 1 Telemetry Analysis](https://parth-portfolio-wb.pages.dev/projects/formula-1-telemetry-analysis/)
+  — FastF1, pandas and NumPy for race pace, strategy and performance.
+- [Excel & Python EDA](https://parth-portfolio-wb.pages.dev/projects/excel-python-eda/)
+- [Interactive Tableau Dashboards](https://parth-portfolio-wb.pages.dev/projects/interactive-tableau-dashboards/)
+- [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) — a CNN
+  classifier wrapped in a Flask app for real-time camera self-screening.
+- [cents. Personal Expense Tracker](https://parth-portfolio-wb.pages.dev/projects/cents-expense-tracker/)
+  — local-first expense tracking with optional cloud sync.
+- [RBI Weekly Dashboard](https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/)
+  — a scheduled weekly refresh of Reserve Bank of India figures with week-over-week comparisons.
+- [CSNL Module Picker](https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/)
+  — an unofficial UCD module planner that checks timetable clashes.
+
+## Writing
+
+Formula 1 qualifying and race reports at [Medium](https://medium.com/@soni.soni.parth), built
+from timing and telemetry data.
+
+## Contact
+
+- Email: soni.soni.parth@gmail.com (best route; replies within a day)
+- [LinkedIn](https://www.linkedin.com/in/parth-soni-1a6025191/)
+- [GitHub](https://github.com/parth-soni-10)
+- [Tableau Public](https://public.tableau.com/app/profile/parth.soni7469)
+
+## Technical notes
+
+- The site is a static Cloudflare Pages deployment. `/` and `/privacy` negotiate
+  `text/markdown` against `text/html` with `Vary: Accept`; `/index.md` and `/privacy.md` always
+  return Markdown. Unmatched paths return HTTP 404, with a Markdown body when one is requested.
+- Facts in this file come from the portfolio pages and its structured data, both published by
+  Parth. If this file and a project page disagree, the project page is more specific; if either
+  disagrees with the resume, ask Parth by email.

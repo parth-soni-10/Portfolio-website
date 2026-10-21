@@ -1,5 +1,5 @@
-# The whole site is one page and everything published is meant to be crawled;
-# the only job here is to point at the sitemap.
+# Everything published - the home page, the privacy notice and the project
+# pages - is meant to be crawled; the only job here is to point at the sitemap.
 User-agent: *
 Allow: /
 

@@ -12,6 +12,10 @@ tools/
 functions/
 README.md
 CLAUDE.md
+# The Node test runner reads these; neither is part of the published site.
+package.json
+package-lock.json
+tests/
 LICENSE
 .gitignore
 _headers

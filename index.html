@@ -38,12 +38,14 @@
   <!-- Browser default made explicit, and pinned for older engines: full URL
        same-origin, origin only across sites, nothing at all on a downgrade. -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="Parth Shirish Soni is a Data Analyst in Dublin, Ireland, turning complex data into clear decisions with SQL, Python, Power BI and Tableau. Explore analytics projects, experience and writing." />
-  <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/" />
+  <meta name="description" content="Parth Shirish Soni is a Data Analyst in Dublin, Ireland, turning complex data into clear decisions with SQL, Python, Power BI and Tableau. Explore the data analytics portfolio, experience and writing." />
+  <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/">
+  <link rel="alternate" type="text/markdown" href="/index.md" title="Markdown version">
+  <link rel="describedby" href="/llms.txt" type="text/plain">
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="profile" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
-  <meta property="og:title" content="Parth Soni | Data Analyst in Dublin" />
+  <meta property="og:title" content="Parth Soni | Data Analyst Portfolio in Dublin" />
   <meta property="og:description" content="Parth Shirish Soni is a Data Analyst in Dublin, Ireland. Explore analytics projects, experience, skills and data-led writing." />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
@@ -56,7 +58,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
   <meta name="twitter:image:alt" content="Parth Soni, Data Analyst in Dublin — portfolio and selected analytics projects" />
-  <meta name="twitter:title" content="Parth Soni | Data Analyst in Dublin" />
+  <meta name="twitter:title" content="Parth Soni | Data Analyst Portfolio in Dublin" />
   <meta name="twitter:description" content="Explore the analytics work, experience and writing of Parth Shirish Soni, Data Analyst in Dublin, Ireland." />
   <script type="application/ld+json">
     {
@@ -70,6 +72,7 @@
           "additionalName": "Shirish",
           "familyName": "Soni",
           "jobTitle": "Data Analyst",
+          "worksFor": { "@id": "https://parth-portfolio-wb.pages.dev/#organization" },
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Dublin",
@@ -85,10 +88,39 @@
           "knowsAbout": ["Data analysis", "SQL", "Python", "Power BI", "Tableau", "Data visualization", "Machine learning"]
         },
         {
+          "@type": "Organization",
+          "@id": "https://parth-portfolio-wb.pages.dev/#organization",
+          "name": "Parth Soni — Data Analyst",
+          "alternateName": "Parth Soni Portfolio",
+          "url": "https://parth-portfolio-wb.pages.dev/",
+          "description": "Parth Soni is a data analyst in Dublin, Ireland, building dashboards, analyses and data tools with SQL, Python, Power BI and Tableau.",
+          "email": "soni.soni.parth@gmail.com",
+          "founder": { "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni" },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dublin",
+            "addressRegion": "Dublin",
+            "addressCountry": "IE"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "professional services",
+            "email": "soni.soni.parth@gmail.com",
+            "url": "https://parth-portfolio-wb.pages.dev/#contact",
+            "availableLanguage": ["en"]
+          },
+          "sameAs": [
+            "https://github.com/parth-soni-10",
+            "https://www.linkedin.com/in/parth-soni-1a6025191/",
+            "https://public.tableau.com/app/profile/parth.soni7469",
+            "https://medium.com/@soni.soni.parth"
+          ]
+        },
+        {
           "@type": "WebSite",
           "@id": "https://parth-portfolio-wb.pages.dev/#website",
           "url": "https://parth-portfolio-wb.pages.dev/",
-          "name": "Parth Soni | Data Analyst in Dublin",
+          "name": "Parth Soni | Data Analyst Portfolio in Dublin",
           "inLanguage": "en-IE",
           "publisher": { "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni" }
         },
@@ -96,7 +128,7 @@
           "@type": "ProfilePage",
           "@id": "https://parth-portfolio-wb.pages.dev/#profile",
           "url": "https://parth-portfolio-wb.pages.dev/",
-          "name": "Parth Soni | Data Analyst in Dublin",
+          "name": "Parth Soni | Data Analyst Portfolio in Dublin",
           "mainEntity": { "@id": "https://parth-portfolio-wb.pages.dev/#parth-soni" },
           "isPartOf": { "@id": "https://parth-portfolio-wb.pages.dev/#website" },
           "inLanguage": "en-IE"
@@ -256,7 +288,7 @@
       ]
     }
   </script>
-  <title>Parth Soni | Data Analyst in Dublin</title>
+  <title>Parth Soni | Data Analyst Portfolio in Dublin</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f0f0f'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='32' font-weight='bold' fill='%23ff7a1a' text-anchor='middle'%3EPS%3C/text%3E%3C/svg%3E" />
   <!-- The same "PS" monogram as the inline favicon above, as a raster. iOS
        ignores SVG favicons, so it would otherwise use a screenshot of the page
@@ -329,6 +361,7 @@
     <div class="hero-left">
       <p class="issue-tag">Data Analyst &bull; Dublin, Ireland</p>
       <h1 class="hero-h1">
+        <span class="sr-only">Parth Soni, Data Analyst portfolio. </span>
         <span class="hero-line"><span class="hero-line-in">Making <em>data</em></span></span>
         <span class="hero-line"><span class="hero-line-in">speak <em>clearly.</em></span></span>
       </h1>
@@ -1168,7 +1201,7 @@
         <p class="footer-resume-note">RxResu &bull; Updated 2026</p>
       </div>
 
-      <p class="footer-copy">&copy; 2026 Parth Soni &bull; Dublin, Ireland</p>
+      <p class="footer-copy">&copy; 2026 Parth Soni &bull; Dublin, Ireland &bull; <a href="/privacy">Privacy</a></p>
     </div>
 
     <div class="footer-grey">

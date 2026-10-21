@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/style.css",
+    "/glide-select.css",
+    "/404.css",
+    "/privacy.css",
+    "/script.js",
+    "/dash-aggregate.js",
+    "/medium-feed.js",
+    "/glide-select.js",
+    "/*.jpeg",
+    "/*.png",
+    "/*.webp",
+    "/*.svg",
+    "/*.ico",
+    "/*.xml",
+    "/*.txt",
+    "/fonts/*",
+    "/apple-touch-icon.png",
+    "/og-card.png"
+  ]
+}

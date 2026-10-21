@@ -17,13 +17,16 @@ jobs:
         with:
           node-version: '20'
 
-      # No build step, no package.json: the staged directory is the whole site, so
-      # "does it still parse" is what a static check can say. The two shared shaping
-      # modules (dash-aggregate.js, medium-feed.js) load before script.js, the two
-      # Pages Functions are bundled by Pages at deploy time (not here, so a parse
-      # error would otherwise only surface in production), and each snapshot tool
-      # runs its module under Node. The tools are the only files here that need the
-      # network, and CI does not reach for it (see CLAUDE.md on refreshing a snapshot).
+      # No build step and no dependencies: the staged directory is the whole site,
+      # so "does it still parse" is what a static check can say. The two shared
+      # shaping modules (dash-aggregate.js, medium-feed.js) load before script.js,
+      # the Pages Functions are bundled by Pages at deploy time (not here, so a
+      # parse error would otherwise only surface in production), and each snapshot
+      # tool runs its module under Node. package.json holds the test script;
+      # functions/package.json marks the Functions as ES modules for Node without
+      # changing the module type of those browser scripts. The tools are the only
+      # files here that need the network, and CI does not reach for it (see
+      # CLAUDE.md on refreshing a snapshot).
       - name: Syntax-check the scripts
         run: |
           node --check dash-aggregate.js
@@ -31,6 +34,8 @@ jobs:
           node --check script.js
           node --check functions/api/medium.js
           node --check functions/api/contributions.js
+          node --check functions/_middleware.js
+          node --check functions/_agent-docs.js
           node --check tools/snapshot-dashboard-fallback.mjs
           node --check tools/snapshot-medium-fallback.mjs
           node --check tools/build-projects.mjs
@@ -50,3 +55,9 @@ jobs:
       # the sitemap entry each one needs.
       - name: Check the project pages match their panels
         run: node tools/build-projects.mjs --check
+
+      # The agent surfaces are behaviour, not copy: Accept negotiation, the 404
+      # and 406 bodies, the aliases, Vary/Link, the Organization node, llms.txt
+      # and the privacy page. The tests import the same middleware Pages runs.
+      - name: Test the agent surfaces
+        run: node --test tests/*.test.mjs
