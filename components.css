@@ -25,6 +25,7 @@
   .pc-menu-button,
   .pc-island a,
   .pc-island button,
+  .pc-drill-year,
   .touch-target {
     min-height: 44px;
     min-width: 44px;
@@ -93,6 +94,30 @@
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--accent-deep); background: var(--paper);
   padding: 4px 8px; border-radius: 6px;
+}
+/* The year stamp is the drill control. */
+.pc-drill-year { border: 0; cursor: pointer; }
+.pc-drill-year:hover { background: var(--line); }
+.pc-drill-year:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pc-drill-year[aria-pressed="true"] { background: var(--accent-deep); color: var(--paper); }
+/* A drilled timeline folds the evidence under the other roles, not the roles. */
+.exp-bullets[hidden], .exp-tags[hidden] { display: none; }
+.exp-block.is-collapsed .exp-role { color: var(--ink-soft); }
+.exp-header-actions { display: flex; align-items: center; gap: 14px; }
+.exp-show-all {
+  font-family: var(--data); font-size: 12px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent-deep); background: none;
+  border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 10px; cursor: pointer;
+}
+.exp-show-all:hover { border-color: var(--line-strong); }
+.exp-show-all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.exp-show-all[hidden] { display: none; }
+/* The drill's status line needs its own row before it can squeeze the heading. */
+@media (max-width: 640px) {
+  .exp-header-row { flex-wrap: wrap; row-gap: 14px; }
+  .exp-header-actions { width: 100%; justify-content: space-between; }
 }
 
 /* ---- 8. Project row menu (inline disclosure) ---- */
@@ -298,7 +323,7 @@
   touch-action: pan-y;
 }
 .pc-swipe-actions { position: absolute; inset: 0 0 0 auto; display: flex; }
-.pc-swipe-actions button { border: 0; background: var(--accent); color: #fff; padding: 0 14px; font-weight: 700; }
+.pc-swipe-actions button { border: 0; background: var(--accent-deep); color: #fff; padding: 0 14px; font-weight: 700; }
 .pc-swipe-actions button[data-danger] { background: #a0231a; }
 
 /* inline table control */
@@ -394,7 +419,10 @@ html.pc-contrast {
 .hairline-figure > svg :where(.dot.m) { fill: var(--hairline-edge); }
 .hairline-figure > svg :where(.dot.off) { fill: var(--hairline-lo); }
 .hairline-card { display: grid; gap: 8px; }
-.workbench-card { margin-top: 28px; }
+/* Centre the 400px figure and its read-out in the section-wide card. */
+.hairline-card .hairline-figure { margin-inline: auto; }
+.hairline-card .hairline-read { justify-self: center; }
+.workbench-card { margin-top: 28px; max-width: 620px; }
 .hairline-read {
   margin: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

@@ -228,24 +228,95 @@
     mark($('#lineFigure'), 'analytics-chart');
   }
 
-  /* ── 7. Skiper74 — sticky year on each experience block ──────── */
+  /* ── 7. Skiper74 — sticky year, and the timeline drill ──────── */
+  /* The year stamp doubles as the control: choosing a role's year narrows the
+     timeline to that role — the other blocks keep their dates and role title
+     and fold their detail — and the header offers the way back. One control,
+     pointer and keyboard alike, so the figure is operable rather than only
+     readable. */
   function installTimeline() {
     var section = $('#experience');
     if (!section) return;
     mark(section, 'skiper74');
-    $$('.exp-block', section).forEach(function (block) {
+
+    var entries = [];
+    $$('.exp-block', section).forEach(function (block, index) {
       var date = $('.exp-date', block);
       var meta = $('.exp-meta', block);
-      if (!date || !meta) return;
+      var content = $('.exp-content', block);
+      if (!date || !meta || !content) return;
       var years = text(date).match(/\d{4}/g);
       if (!years) return;
+      /* The parts a drill folds away: the evidence under the role title. */
+      var parts = [$('.exp-bullets', block), $('.exp-tags', block)].filter(Boolean);
+      if (!parts.length) return;
+      parts.forEach(function (part, i) {
+        if (!part.id) part.id = 'exp-detail-' + index + '-' + i;
+      });
+
       var label = document.createElement('span');
       label.className = 'pc-year';
-      var head = document.createElement('span');
-      head.className = 'pc-timeline-head';
+      var head = document.createElement('button');
+      head.type = 'button';
+      head.className = 'pc-timeline-head pc-drill-year';
       head.textContent = years[years.length - 1];
+      /* A pressed toggle, not a disclosure: every role's detail is open until
+         the reader drills into one, which folds the others away. */
+      head.setAttribute('aria-pressed', 'false');
+      head.setAttribute('aria-controls', parts.map(function (part) { return part.id; }).join(' '));
+      head.setAttribute('aria-label', 'Focus the ' + (text($('.exp-role', block)) || 'role')
+        + ' (' + head.textContent + ')');
       label.appendChild(head);
       meta.appendChild(label);
+
+      var entry = { block: block, button: head, parts: parts };
+      entries.push(entry);
+      head.addEventListener('click', function () { activate(entry); });
+    });
+    if (!entries.length) return;
+
+    /* The count becomes the drill's status line, and its way out sits beside it. */
+    var count = $('.exp-count', section);
+    var countText = count ? text(count) : '';
+    if (count) count.setAttribute('aria-live', 'polite');
+    var reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'exp-show-all touch-target';
+    reset.textContent = 'Show all roles';
+    reset.hidden = true;
+    if (count && count.parentNode) {
+      var actions = document.createElement('div');
+      actions.className = 'exp-header-actions';
+      count.parentNode.insertBefore(actions, count);
+      actions.appendChild(count);
+      actions.appendChild(reset);
+    }
+
+    var focused = null;
+    function apply(next) {
+      focused = next;
+      entries.forEach(function (entry) {
+        var on = entry === next;
+        entry.block.classList.toggle('is-focused', on);
+        entry.block.classList.toggle('is-collapsed', !!next && !on);
+        entry.parts.forEach(function (part) { part.hidden = !!next && !on; });
+        entry.button.setAttribute('aria-pressed', String(on));
+      });
+      reset.hidden = !next;
+      if (count) {
+        count.textContent = next
+          ? '01 of ' + String(entries.length).padStart(2, '0') + ' roles'
+          : countText;
+      }
+    }
+    function activate(entry) { apply(focused === entry ? null : entry); }
+    reset.addEventListener('click', function () { apply(null); });
+    section.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || !focused) return;
+      event.preventDefault();
+      var back = focused.button;
+      apply(null);
+      back.focus();
     });
   }
 

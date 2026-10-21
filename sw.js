@@ -13,7 +13,7 @@
    ===================================================== */
 'use strict';
 
-const VERSION = 'portfolio-v5';
+const VERSION = 'portfolio-v7';
 const SHELL = [
   '/',
   '/style.css',
