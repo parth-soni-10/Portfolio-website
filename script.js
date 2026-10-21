@@ -540,17 +540,9 @@
   let YEAR_ORDER  = []; /* years present in the data, newest first (drives the tabs) */
   let current     = 'all';
   let inited      = false;
-  /* Index into the current period's months; -1 is the whole series. Set by the
-     month-detail control below the filter tabs — the one level of drill-down
-     this chart owns, so a reader can read a single month's figure instead of
-     hovering for it. */
-  let drill       = -1;
-  const DRILL_SPAN = 5;
 
   /* ── Element refs ── */
   const els = {
-    lineFigure: document.getElementById('lineFigure'),
-    lineDrill:  null, /* the month select, built below */
     lineSvg:    document.getElementById('lineSvg'),
     lineTip:    document.getElementById('lineTip'),
     barFigure:  document.getElementById('barFigure'),
@@ -570,97 +562,6 @@
       document.getElementById('sMovies')
     ]
   };
-
-  /* ── Month drill-down ── */
-  /* The filter tabs choose a period; this control goes one level deeper, into
-     a single month of it. A native <select> carries the whole interaction, so
-     the drill is keyboard-operable without a custom widget, and the chart
-     narrows to a five-month window around the chosen month: the y-axis then
-     rescales to that detail instead of the period's peak. */
-  const drillBase = period =>
-    (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12);
-  const drillLabel = (period, i) => {
-    const abs = drillBase(period) + i;
-    return MONTH_NAMES[abs % 12] + ' ' + (START_YEAR + Math.floor(abs / 12));
-  };
-  const drillText = period => {
-    const months = PERIODS[period].months;
-    const v = months[drill];
-    const abs = drillBase(period) + drill;
-    /* The month before, read from the continuous all-time series so January of
-       a year page still compares with the December before it. */
-    const all = PERIODS.all.months;
-    const prevIdx = abs - 1 - START_C;
-    const prev = prevIdx >= 0 && prevIdx < all.length
-      ? all[prevIdx]
-      : (drill > 0 ? months[drill - 1] : null);
-    let delta = '';
-    if (prev !== null) {
-      /* The year only appears when the comparison crosses one. */
-      const prevAbs = abs - 1;
-      const prevLabel = MONTH_NAMES[prevAbs % 12]
-        + (prevAbs < drillBase(period) ? ' ' + (START_YEAR + Math.floor(prevAbs / 12)) : '');
-      delta = v === prev
-        ? ' · level with ' + prevLabel
-        : ' · ' + (v > prev ? '+' : '\u2212') + Math.abs(v - prev) + ' vs ' + prevLabel;
-    }
-    return drillLabel(period, drill) + ' · ' + v + ' hrs' + delta;
-  };
-
-  /* Built eagerly: the control is part of the component, so it exists — and can
-     take focus — even while the store is still loading. */
-  function buildDrill() {
-    const fig = els.lineFigure;
-    if (!fig || els.lineDrill) return;
-    const row = document.createElement('div');
-    row.className = 'dash-drill';
-    const label = document.createElement('label');
-    label.className = 'dash-drill-label';
-    label.setAttribute('for', 'lineDrillMonth');
-    label.textContent = 'Month detail';
-    const select = document.createElement('select');
-    select.id = 'lineDrillMonth';
-    select.className = 'dash-drill-select';
-    /* Usable from the first paint: the chart's own months replace this option
-       as soon as the store has been read, and until then choosing it is a
-       no-op rather than a dead control. */
-    const placeholder = document.createElement('option');
-    placeholder.value = '-1';
-    placeholder.textContent = 'All months';
-    select.appendChild(placeholder);
-    select.addEventListener('change', () => {
-      if (!PERIODS || !PERIODS[current]) return;
-      const index = Number(select.value);
-      drill = Number.isInteger(index) && index >= 0 ? index : -1;
-      renderLine(current, true);
-      updateSubs(current);
-    });
-    row.appendChild(label);
-    row.appendChild(select);
-    fig.insertBefore(row, fig.firstChild);
-    els.lineDrill = select;
-  }
-
-  /* One option per month of the period, plus the whole period. Rebuilt whenever
-     the period changes, because the month list does. */
-  function fillDrill(period) {
-    const select = els.lineDrill;
-    if (!select || !PERIODS?.[period]) return;
-    const months = PERIODS[period].months;
-    select.textContent = '';
-    const all = document.createElement('option');
-    all.value = '-1';
-    all.textContent = 'All months · ' + PERIODS[period].monthsLabel;
-    select.appendChild(all);
-    months.forEach((_, i) => {
-      const option = document.createElement('option');
-      option.value = String(i);
-      option.textContent = drillLabel(period, i);
-      select.appendChild(option);
-    });
-    drill = -1;
-    select.value = '-1';
-  }
 
   /* ── Store fetch ── */
   /* ── Snapshot ───────────────────────────────────────── */
@@ -939,12 +840,7 @@
     if (!svg) return;
     svg.textContent = '';
 
-    const series = PERIODS[period].months;
-    /* The drilled window, centred on the chosen month and clamped to the data. */
-    const span = Math.min(DRILL_SPAN, series.length);
-    let from = 0;
-    if (drill >= 0) from = Math.min(Math.max(0, drill - Math.floor(span / 2)), series.length - span);
-    const months = drill >= 0 ? series.slice(from, from + span) : series;
+    const months = PERIODS[period].months;
     const W = chartW();
     const H = W >= 700 ? 300 : 250;
     const PL = 40, PR = 16, PT = 14, PB = 30;
@@ -961,7 +857,7 @@
        series starts at the first month that actually has data (not
        necessarily January — labels used to say Jan for a March start), while
        a year period's months always start at January of its year. */
-    const absIdx  = i => drillBase(period) + from + i;
+    const absIdx  = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + i;
     const monthOf = i => MONTH_NAMES[absIdx(i) % 12];
     const yearOf  = i => START_YEAR + Math.floor(absIdx(i) / 12);
 
@@ -1034,17 +930,6 @@
     curve.forEach(p => dots.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: dotR, class: 'dash-dot' })));
     svg.appendChild(dots);
 
-    /* In a drilled window the chosen month is called out, so the value the
-       control names is the one the eye lands on. */
-    const focus = drill >= 0 ? drill - from : -1;
-    if (focus >= 0 && focus < curve.length) {
-      const p = curve[focus];
-      svg.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: dotR + 3, class: 'dash-focus-dot' }));
-      const tag = svgEl('text', { x: p.x, y: p.y - 12, 'text-anchor': 'middle', class: 'dash-focus-label' });
-      tag.textContent = months[focus] + ' hrs';
-      svg.appendChild(tag);
-    }
-
     /* draw-on animation */
     const total = line.getTotalLength();
     line.style.strokeDasharray  = String(total);
@@ -1096,18 +981,16 @@
          it replaces only worked when the svg filled the figure's width. */
       const figEl   = els.lineTip.parentElement;
       const figW    = figEl.clientWidth;
+      const figH    = figEl.clientHeight;
       const svgW    = svg.getBoundingClientRect().width || W;
-      const svgH    = svg.getBoundingClientRect().height || H;
-      const svgTop  = svg.offsetTop || 0;
       const tipW    = els.lineTip.offsetWidth;
       const tipH    = els.lineTip.offsetHeight;
       const scrollL = figEl.scrollLeft || 0;
       let visCx     = (vx / W) * svgW - scrollL;
       visCx = Math.min(figW - tipW / 2 - 8, Math.max(tipW / 2 + 8, visCx));
-      const tipY    = svgTop + (vy / H) * svgH;
       els.lineTip.style.left = (visCx + scrollL) + 'px';
-      els.lineTip.style.top  = tipY + 'px';
-      els.lineTip.style.transform = tipY < tipH + 12
+      els.lineTip.style.top  = ((vy / H) * 100) + '%';
+      els.lineTip.style.transform = (vy / H) * figH < tipH + 12
         ? 'translate(-50%, 12px)'
         : 'translate(-50%, calc(-100% - 10px))';
     }
@@ -1124,8 +1007,7 @@
     });
 
     svg.setAttribute('aria-label',
-      'Line chart: hours watched per month, ' + months.length + ' points, '
-      + (drill >= 0 ? drillText(period) : PERIODS[period].monthsLabel));
+      'Line chart: hours watched per month, ' + months.length + ' points, ' + PERIODS[period].monthsLabel);
   }
 
   /* ── Bar chart (orange accent) ── */
@@ -1200,16 +1082,13 @@
     });
     history.replaceState(null, '', '?period=' + period + location.hash);
     updateMetrics(period, true);
-    fillDrill(period);
     renderLine(period, true);
     renderBars(period, true);
     updateSubs(period);
   }
 
   function updateSubs(period) {
-    if (els.lineSub) els.lineSub.textContent = drill >= 0
-      ? drillText(period)
-      : 'per month · ' + PERIODS[period].monthsLabel;
+    if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel;
     if (els.barSub)  els.barSub.textContent  = GENRES.length + ' genres · ' + PERIODS[period].name;
   }
 
@@ -1225,13 +1104,11 @@
     buildFilters(current);
 
     updateMetrics(current, animate);
-    fillDrill(current);
     renderLine(current, animate);
     renderBars(current, animate);
     updateSubs(current);
   }
 
-  buildDrill(); /* the control is part of the chart, not of the data */
   ensureData(); /* start the store fetch immediately, not on first scroll */
 
   /* The chart renders in real pixels, so re-render it when the container's
@@ -1343,18 +1220,6 @@
   let active = tabs.findIndex(t => t.classList.contains('active'));
   if (active < 0) active = 0;
 
-  /* The component layer can filter the index (see components.js), which hides
-     rows with `hidden`. Rotation and the arrow keys must step over those, or
-     the spotlight lands on a panel nobody can see. */
-  const visible = () => tabs.map((t, i) => (t.hidden ? -1 : i)).filter(i => i >= 0);
-  function step(from, dir) {
-    const list = visible();
-    if (!list.length) return from;
-    const at = list.indexOf(from);
-    if (at < 0) return list[0];
-    return list[(at + dir + list.length) % list.length];
-  }
-
   function setSpot(i) {
     if (i < 0 || i >= tabs.length) return;
     active = i;
@@ -1376,22 +1241,20 @@
     const n = tabs.length;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      setSpot(step(active, 1));
+      setSpot((active + 1) % n);
       tabs[active].focus();
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
-      setSpot(step(active, -1));
+      setSpot((active - 1 + n) % n);
       tabs[active].focus();
     } else if (e.key === 'Home') {
       e.preventDefault();
-      const list = visible();
-      setSpot(list.length ? list[0] : 0);
-      tabs[active].focus();
+      setSpot(0);
+      tabs[0].focus();
     } else if (e.key === 'End') {
       e.preventDefault();
-      const list = visible();
-      setSpot(list.length ? list[list.length - 1] : n - 1);
-      tabs[active].focus();
+      setSpot(n - 1);
+      tabs[n - 1].focus();
     }
   });
 
@@ -1413,7 +1276,7 @@
 
   function startRotation() {
     if (reduceMotion || interacted || rotTimer || !projectsSec) return;
-    rotTimer = window.setInterval(() => setSpot(step(active, 1)), 7000);
+    rotTimer = window.setInterval(() => setSpot((active + 1) % tabs.length), 7000);
     wrap.classList.add('rotating');
     if (autoNote) autoNote.hidden = false;
   }

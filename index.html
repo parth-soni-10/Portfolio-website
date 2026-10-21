@@ -268,10 +268,6 @@
   <link rel="preload" href="fonts/dmsans-italic.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
-  <!-- The component layer: the 26 design-system components adopted onto this
-       page, plus the settings surface at /?admin=1. Class-only, so it stays
-       inside style-src 'self'. -->
-  <link rel="stylesheet" href="components.css" />
 </head>
 <body>
 
@@ -941,11 +937,6 @@
         </div>
 
       </div>
-      <div class="hairline-card workbench-card" aria-labelledby="project-workbench-title">
-        <h3 id="project-workbench-title">Project workbench</h3>
-        <div class="hairline-figure" id="project-workbench"></div>
-        <p class="hairline-read" data-hairline-read aria-live="polite">rest</p>
-      </div>
     </div>
   </section>
 
@@ -1212,14 +1203,5 @@
        three baked into the page are chosen one way. Must load before script.js. -->
   <script src="medium-feed.js"></script>
   <script src="script.js"></script>
-  <!-- Hairline: the engine, its mount adapter and the projects figure. Same-origin
-       scripts, no inline style: the page's CSP (meta and _headers) stays intact. -->
-  <script src="hairline/kernel.js" defer></script>
-  <script src="hairline/mount.js" defer></script>
-  <script src="hairline/workbench.js" defer></script>
-  <!-- Enhancements only: every component is installed onto markup script.js has
-       already rendered, so a failure here leaves the page working and simply
-       un-upgraded. Deferred so it never blocks the page. -->
-  <script src="components.js" defer></script>
 </body>
 </html>

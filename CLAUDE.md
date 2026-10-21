@@ -14,9 +14,6 @@ Single-page personal portfolio for Parth Soni (Data Analyst). Fully hand-coded: 
 index.html  → the entire page markup + content (about, experience, projects, skills, certs, contact)
 style.css   → design system — dark theme, orange (#ff7a1a) accent
 script.js   → interactivity (connect tabs, GitHub graph render, live dashboard fetch, the embedded snapshot)
-components.js → the 26-component adoption layer (see "Component layer" below); enhancements only
-components.css → class-only styles for that layer and the shared 44px utility
-sw.js       → versioned shell cache + the update path the layer's bar asks for
 dash-aggregate.js → the dashboard section's row→figure shaping, loaded before script.js and require()d by tools/snapshot-dashboard-fallback.mjs
 medium-feed.js → the Medium callout's feed rules (URL, how many posts, which three), loaded before script.js, imported by functions/api/medium.js and require()d by tools/snapshot-medium-fallback.mjs
 functions/  → the two Pages Functions the browser reads instead of third-party hosts: api/medium.js (the Medium feed) and api/contributions.js (the GitHub contribution calendar). Pages compiles this directory from the repository at deploy time; .assetsignore keeps it out of the upload
@@ -40,14 +37,6 @@ tools/      → check-headers.mjs (the two CSP copies must stay in step), build-
 - Semantic class names; keep inline `style=""` out of new markup and add classes to `style.css`
 - Icons: add `<svg class="icon" aria-hidden="true" focusable="false" viewBox="…"><path d="…"/></svg>` (copy `<path>` from Font Awesome 6 free SVGs). Icon spacing/size CSS lives at the bottom of `style.css` under "Inline icon SVGs" — `svg.icon`, `.footer-link svg.icon`, `.connect-tab svg.icon`, etc.
 - CTA buttons get a leading/trailing arrow icon; social/connect links use brand icons (GitHub, LinkedIn, Medium, X, and `fa-chart-simple` for Tableau)
-
-## Component layer (`components.js`, `components.css`)
-- The 26 design-system components are an **adoption layer**, not a rewrite: `components.js` loads after `script.js` (deferred), installs onto markup that already exists, and a failure there leaves the site working and simply un-upgraded. Ten have a home on the page — header nav (gooey), footer/connect tooltips, connect tabs (fluid), dashboard counters, the GitHub graph, the line chart, the experience timeline, the project rows' `⋮` menus, the scroll island and the copy button.
-- The other sixteen are hosted on the **sanctioned `/?admin=1` surface** (`buildSettings()`): project filter, limit, gallery speed, reduced motion, contrast, tooltip presets and exact delay, section jumper, certificate gallery, profile dialog, activity list, KPI carousel, quick-links table + swipe rows, reset with undo, and the mailto feedback box. They write one store, `localStorage['portfolio-settings:v1']`, which the page reads on load; nothing on that surface is a demo value.
-- **CSP:** every rule is a class and no script writes a `style` attribute. Runtime geometry (nav blob, swipe offset) goes through `style.setProperty` custom properties, which the policy allows. If you add a component, keep it class-only.
-- The `feedback` component posts nowhere. Portfolio has no feedback route by decision; the box composes the existing `mailto:`.
-- `sw.js` is versioned by `VERSION` (`portfolio-v4` now). Bump it in the same commit as any shell change; activate deletes every other `portfolio-*` cache. `/api/*` is never cached. The update bar is built by `components.js` and posts `SKIP_WAITING`.
-- Focus moves to the target section's heading on `hashchange` (the heading gets `tabindex="-1"`). The project pages are full navigations, so they need none.
 
 ## The dashboard section (`#dashboard`)
 - It reads **the Content Tracking Dashboard's own store**: `https://contenttrackerdashboard.pages.dev/.netlify/functions/watchlist`, the rows that dashboard's SPA renders off its D1 watchlist. It deliberately does **not** read the dashboard's Google Sheet, which is what it used to do — the Sheet stopped being that store when the dashboard moved to D1, so the two were copies free to drift, and they did (a title saved without a year was counted here and not there). Reading the store is what makes them agree by construction.
