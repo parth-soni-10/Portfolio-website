@@ -18,6 +18,10 @@
  * that still fits all 53 columns, then follows the box with a ResizeObserver.
  * A host sets a width, not a cell size — pass { fit: false } (or
  * data-ga-fit="false") only if the cell size really is fixed by design.
+ *
+ * Dates outside the drawn window are ignored everywhere — squares, shades, the
+ * ranking and the total — so a feed that carries several years still reads as
+ * one year.
  */
 (function (global) {
   'use strict';
@@ -181,14 +185,28 @@
       weeks.push(col);
     }
 
+    /* Only the drawn window counts. An endpoint may hand over much more than a
+       year (the portfolio's own calendar carries several), and a total, a shade
+       scale or a ranking that adds days no square on screen shows is a number
+       the picture cannot explain. */
+    var counts = {};
+    var total = 0;
     var max = 0;
-    Object.keys(data.counts).forEach(function (k) {
-      if (data.counts[k] > max) max = data.counts[k];
+    weeks.forEach(function (col) {
+      col.forEach(function (day) {
+        if (day > today) return;
+        var key = iso(day);
+        var n = data.counts[key] || 0;
+        if (!n) return;
+        counts[key] = n;
+        total += n;
+        if (n > max) max = n;
+      });
     });
-    var cuts = thresholds(data.counts);
 
-    var ranked = rankWeeks(weeks, data.counts, today);
-    var summary = data.total.toLocaleString('en-US') + ' ' + label + ' over ' +
+    var cuts = thresholds(counts);
+    var ranked = rankWeeks(weeks, counts, today);
+    var summary = total.toLocaleString('en-US') + ' ' + label + ' over ' +
       weeks.length + ' weeks' +
       (ranked.length ? ', busiest ' + ranked[0].label : '');
 
@@ -234,7 +252,7 @@
       column.className = 'ga-col';
       col.forEach(function (day) {
         var key = iso(day);
-        var count = data.counts[key] || 0;
+        var count = counts[key] || 0;
         var future = day > today;
         var cell = doc.createElement('span');
 
@@ -277,7 +295,7 @@
 
     var head = doc.createElement('p');
     head.className = 'ga-total';
-    head.innerHTML = '<b>' + data.total.toLocaleString('en-US') + '</b> ' + esc(label) +
+    head.innerHTML = '<b>' + total.toLocaleString('en-US') + '</b> ' + esc(label) +
       ' across ' + weeks.length + ' weeks' +
       (ranked.length ? ' &middot; busiest ' + esc(ranked[0].label) : '');
     foot.appendChild(head);
@@ -316,7 +334,7 @@
     else { fit(el); watch(el); }
 
     var result = {
-      total: data.total,
+      total: total,
       max: max,
       weeks: weeks.length,
       busiest: ranked.length ? ranked[0].label : null,
