@@ -31,6 +31,7 @@ jobs:
         run: |
           node --check dash-aggregate.js
           node --check medium-feed.js
+          node --check motion-init.js
           node --check script.js
           node --check functions/api/medium.js
           node --check functions/api/contributions.js

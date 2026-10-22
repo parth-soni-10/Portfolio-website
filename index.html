@@ -294,6 +294,11 @@
        ignores SVG favicons, so it would otherwise use a screenshot of the page
        as the home-screen icon. -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <!-- The motion preference is decided before first paint: a stored choice, or
+       the OS setting when there is none, lands on <html data-motion> here so a
+       calm page never flashes an entrance. Same-origin, not inline, so the CSP
+       above keeps holding. -->
+  <script src="motion-init.js"></script>
   <link rel="preload" href="fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preconnect" href="https://api.github.com" crossorigin />
   <link rel="preconnect" href="https://contenttrackerdashboard.pages.dev" crossorigin />
@@ -302,6 +307,7 @@
   <link rel="stylesheet" href="glide-select.css" />
   <link rel="stylesheet" href="jelly-radio.css" />
   <link rel="stylesheet" href="rubber-segment.css" />
+  <link rel="stylesheet" href="squish-switch.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -1213,6 +1219,25 @@
         <p class="footer-resume-note">RxResu &bull; Updated 2026</p>
       </div>
 
+      <!-- The second control of the page: the menu is the first, and this is
+           the one preference a visitor might actually want. The label sits
+           outside the track so the reading order is "Reduce motion, switch,
+           off" rather than a switch that names itself after it has spoken;
+           aria-labelledby is what names it for a screen reader. -->
+      <p class="footer-motion">
+        <span id="motionLabel">Reduce motion</span>
+        <button
+          id="motionSwitch"
+          type="button"
+          role="switch"
+          aria-checked="false"
+          aria-labelledby="motionLabel"
+          data-squish-switch
+          data-ss-bare
+          data-ss-size="sm"
+        ></button>
+      </p>
+
       <p class="footer-copy">&copy; 2026 Parth Soni &bull; Dublin, Ireland &bull; <a href="/privacy">Privacy</a></p>
     </div>
 
@@ -1251,6 +1276,7 @@
   <script src="glide-select.js"></script>
   <script src="jelly-radio.js" defer></script>
   <script src="rubber-segment.js" defer></script>
+  <script src="squish-switch.js" defer></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1073,6 +1073,22 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .footer-link svg.icon { color: var(--accent-deep); width: 18px; height: 14px; }
 .footer-link-accent { color: var(--accent-deep); font-weight: 700; }
 .footer-resume-note { font-size: 12.5px; color: var(--ink-mute); }
+/* The motion switch: a label and a 44x24 track, set like the rest of the
+   footer's metadata. The track is the whole control (data-ss-bare), so the
+   label is a sibling that names it through aria-labelledby. */
+.footer-motion {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--data); font-size: 11px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute);
+}
+.footer-motion .squish-switch {
+  --ss-track: var(--line-strong);
+  --ss-track-on: var(--accent);
+  --ss-thumb-color: #fff;
+  --ss-focus: var(--accent-deep);
+  padding: 6px 0;   /* 36px target around the 24px track */
+}
+
 .footer-copy {
   font-family: var(--data); font-size: 12.5px; color: var(--ink-mute);
   margin-top: auto; padding-top: 16px;
@@ -1338,6 +1354,36 @@ body.is-splashing { overflow: hidden; }
   }
   .hero-line-in { animation: none !important; }
 }
+
+/* The same rules for the footer switch. A visitor can ask for the calm page on
+   a device whose OS has no opinion; motion-init.js writes the attribute before
+   first paint, so nothing animates first. Kept beside the media query above so
+   the two can never drift apart, and after it so these win on specificity. */
+html[data-motion="reduce"] { scroll-behavior: auto; }
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important;
+}
+html[data-motion="reduce"] .fade-up,
+html[data-motion="reduce"] .fade-up.visible {
+  opacity: 1; transform: none; transition: none; will-change: auto;
+}
+html[data-motion="reduce"] .hero-line-in { animation: none !important; }
+/* The continuous loops are stopped outright rather than run 100,000x a second. */
+html[data-motion="reduce"] .skill-ticker-track { animation: none; }
+html[data-motion="reduce"] #splash { display: none; }
+/* Hover depth and the cursor tilt are movement too, not just decoration. */
+html[data-motion="reduce"] .dash-card:hover,
+html[data-motion="reduce"] .dash-chart-card:hover,
+html[data-motion="reduce"] .cert-card:hover,
+html[data-motion="reduce"] .connect-card:hover { transform: none; }
+html[data-motion="reduce"] .cert-card,
+html[data-motion="reduce"] .cert-card:hover { transform: none; }
+html[data-motion="reduce"] .cert-card::after,
+html[data-motion="reduce"] .dash-card::after { display: none; }
 
 /* ===================== ANTIGRAVITY DEPTH ===================== */
 /* Floating, weightless surfaces with spatial hover. GPU-only (transform/shadow). */

@@ -12,7 +12,9 @@
 
     let seen = false;
     try { seen = sessionStorage.getItem('ps-splash-seen') === '1'; } catch (e) {}
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // motion-init.js has already answered this for the page — a stored choice
+    // or the OS setting, on <html> before first paint.
+    const reduce = document.documentElement.dataset.motion === 'reduce';
     if (seen || reduce) { splash.remove(); return; }
     try { sessionStorage.setItem('ps-splash-seen', '1'); } catch (e) {}
 
@@ -174,7 +176,9 @@
   const body      = document.getElementById('connectBody');
   const indicator = card.querySelector('.connect-indicator');
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Read live, not once: the footer's switch can be flipped while this page is
+  // open, and the next tab change should already honour it.
+  const reduceMotion = () => document.documentElement.dataset.motion === 'reduce';
   const FLY_PX       = 200;   // matches Svelte fly x:200
   const DURATION_MS  = 300;   // matches Svelte fly duration:300
   const ROTATE_MS    = 4200;  // auto-rotate interval
@@ -228,7 +232,7 @@
 
     activeIndex = next;
 
-    if (reduceMotion) {
+    if (reduceMotion()) {
       positionIndicator(false);
       return;
     }
@@ -270,7 +274,7 @@
   /* Auto-rotate */
   function startTimer() {
     stopTimer();
-    if (reduceMotion) return;
+    if (reduceMotion()) return;
     timer = window.setInterval(() => {
       if (visible && !switching && !card.matches(':hover') && !card.matches(':focus-within')) {
         switchTo(activeIndex + 1);
@@ -515,7 +519,9 @@
   const sec = document.getElementById('dashboard');
   if (!sec) return;
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Live, so the footer's switch takes effect on the next filter click rather
+  // than on the next reload.
+  const reduceMotion = () => document.documentElement.dataset.motion === 'reduce';
 
   const AGG = window.DashAggregate;
   const MONTH_NAMES = AGG.MONTH_NAMES;
@@ -760,7 +766,7 @@
     const from = values[key];
     values[key] = target;
     if (animIds[key]) { cancelAnimationFrame(animIds[key]); animIds[key] = 0; }
-    if (!animate || reduceMotion || from === target) { el.textContent = fmtCount(target); return; }
+    if (!animate || reduceMotion() || from === target) { el.textContent = fmtCount(target); return; }
     const dur = 550;
     const t0  = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
@@ -939,7 +945,7 @@
     line.style.strokeDashoffset = String(total);
     area.style.opacity = '0';
     dots.style.opacity = '0';
-    if (animate && !reduceMotion) {
+    if (animate && !reduceMotion()) {
       const t0 = performance.now();
       const dur = 800;
       const ease = t => 1 - Math.pow(1 - t, 3);
@@ -1066,7 +1072,7 @@
         if (val) val.style.bottom = 'calc(' + (s * 100).toFixed(2) + '% + 6px)';
       });
     };
-    if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(grow));
+    if (animate && !reduceMotion()) requestAnimationFrame(() => requestAnimationFrame(grow));
     else grow();
 
     fig.setAttribute('aria-label', 'Bar chart: hours watched by genre, ' + PERIODS[period].name);
@@ -1127,7 +1133,7 @@
     }, 160);
   });
 
-  if (reduceMotion) {
+  if (reduceMotion()) {
     init(false);
   } else if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries, obs) => {
@@ -1266,7 +1272,7 @@
      Starts when the section scrolls into view, cycles every 7s, pauses
      while the pointer is over the section, and stops permanently on the
      first click or key press. Never runs under prefers-reduced-motion. */
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = () => document.documentElement.dataset.motion === 'reduce';
   const projectsSec  = document.getElementById('projects');
   const autoNote     = wrap.querySelector('.spot-autoplay-note');
   let interacted = false;
@@ -1279,7 +1285,7 @@
   }
 
   function startRotation() {
-    if (reduceMotion || interacted || rotTimer || !projectsSec) return;
+    if (reduceMotion() || interacted || rotTimer || !projectsSec) return;
     rotTimer = window.setInterval(() => setSpot((active + 1) % tabs.length), 7000);
     wrap.classList.add('rotating');
     if (autoNote) autoNote.hidden = false;
@@ -1304,6 +1310,14 @@
 
   wrap.addEventListener('pointerenter', stopRotation, { passive: true });
   wrap.addEventListener('pointerleave', () => { if (!interacted) startRotation(); }, { passive: true });
+
+  /* Rotation is the one loop that would keep moving after the footer switch is
+     turned on, so the switch's event stops it — and turning motion back on
+     resumes it without a reload. */
+  document.addEventListener('motionchange', (e) => {
+    if (e.detail && e.detail.reduce) stopRotation();
+    else startRotation();
+  });
 })();
 
 /* ── MICRO-INTERACTIONS (tilt + glare) ──────────────── */
@@ -1315,9 +1329,8 @@
 (function () {
   'use strict';
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (reduceMotion || !finePointer) return;
+  if (!finePointer) return;
 
   function trackVars(el, onMove, resetOnLeave) {
     let raf = null;
@@ -1325,6 +1338,9 @@
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = null;
+        // Checked per frame rather than once at load: the footer switch can turn
+        // the tilt off (and back on) while this page is open.
+        if (document.documentElement.dataset.motion === 'reduce') return;
         const r  = el.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;
         const py = (e.clientY - r.top) / r.height;
@@ -1357,4 +1373,41 @@
       el.style.setProperty('--glare-y', (py * 100).toFixed(1) + '%');
     }, false);
   });
+})();
+
+/* ── MOTION SWITCH ─────────────────────────────────── */
+/* The footer's control, and the only preference on the page. The OS setting is
+   the default (motion-init.js copies it before first paint); this switch lets a
+   visitor ask for the calm page on a device whose OS has no opinion, and the
+   answer survives a reload.
+
+   The page owns the state, as the component expects: this writes
+   <html data-motion> and aria-checked, style.css and every motion block above
+   read the attribute, and squish-switch.js only paints the track. The custom
+   event is what stops a loop that is already running. */
+(function () {
+  'use strict';
+
+  const btn = document.getElementById('motionSwitch');
+  if (!btn) return;
+  const KEY = 'ps-motion';
+  const reduce = () => document.documentElement.dataset.motion === 'reduce';
+
+  function apply(on, persist) {
+    document.documentElement.dataset.motion = on ? 'reduce' : 'auto';
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    // The component's thumb is script-driven, so the global CSS above cannot
+    // stop its spring; data-ss-motion is its documented opt-out, read on every
+    // interaction. Set here so the switch itself is calm under its own answer.
+    if (on) btn.setAttribute('data-ss-motion', 'off');
+    else btn.removeAttribute('data-ss-motion');
+    if (!persist) return;
+    try { localStorage.setItem(KEY, on ? 'reduce' : 'auto'); } catch (e) { /* private mode */ }
+    document.dispatchEvent(new CustomEvent('motionchange', { detail: { reduce: on } }));
+  }
+
+  // The markup ships off so a script-less visitor still gets the page; the
+  // stored or OS answer is written here, before the component reads it.
+  apply(reduce(), false);
+  btn.addEventListener('click', () => apply(!reduce(), true));
 })();
