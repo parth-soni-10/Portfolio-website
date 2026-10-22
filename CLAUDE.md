@@ -1,7 +1,7 @@
 # Portfolio Website — Project Instructions
 
 ## Overview
-Single-page personal portfolio for Parth Soni (Data Analyst). Fully hand-coded: pure HTML/CSS/JS, no framework, no build step. Live metrics (GitHub contribution graph, content-dashboard stats) are fetched at runtime; webfonts are self-hosted.
+Single-page personal portfolio for Parth Soni (Data Analyst). Fully hand-coded: pure HTML/CSS/JS, no framework, no build step. Live metrics (GitHub contribution graph, content-dashboard stats) are fetched at runtime; the graph is drawn by the vendored `github-activity.js` kit; webfonts are self-hosted.
 
 ## Tech Stack
 - Vanilla HTML + CSS + JS — no framework, no build, no dependencies. `package.json` exists only to hold `node --test`; `functions/package.json` marks the Pages Functions as ES modules for Node without changing the module type of the browser scripts
@@ -13,7 +13,8 @@ Single-page personal portfolio for Parth Soni (Data Analyst). Fully hand-coded: 
 ```
 index.html  → the entire page markup + content (about, experience, projects, skills, certs, contact)
 style.css   → design system — warm paper/ink palette, one orange (#e85d04) accent
-script.js   → interactivity (connect tabs, GitHub graph render, live dashboard fetch, the embedded snapshot)
+script.js   → interactivity (connect tabs, the GitHub read and its fit, live dashboard fetch, the embedded snapshot)
+github-activity.js / .css → the design system's ActivityHeatmap: the contribution grid, its shade scale and the ranked footer. Vendored unchanged, loaded before script.js
 dash-aggregate.js → the dashboard section's row→figure shaping, loaded before script.js and imported by tools/snapshot-dashboard-fallback.mjs
 medium-feed.js → the Medium callout's feed rules (URL, how many posts, which three), loaded before script.js, imported by functions/api/medium.js and by tools/snapshot-medium-fallback.mjs
 functions/  → the Pages Functions: api/medium.js (the Medium feed), api/contributions.js (the GitHub contribution calendar), _middleware.js (Markdown negotiation at / and /privacy, plus the 404/406 bodies) and _agent-docs.js (the Markdown documents and Accept parser). Pages compiles this directory from the repository at deploy time; .assetsignore keeps it out of the upload
@@ -51,6 +52,13 @@ tools/      → check-headers.mjs (the two CSP copies must stay in step), build-
 - Semantic class names; keep inline `style=""` out of new markup and add classes to `style.css`
 - Icons: add `<svg class="icon" aria-hidden="true" focusable="false" viewBox="…"><path d="…"/></svg>` (copy `<path>` from Font Awesome 6 free SVGs). Icon spacing/size CSS lives at the bottom of `style.css` under "Inline icon SVGs" — `svg.icon`, `.footer-link svg.icon`, `.connect-tab svg.icon`, etc.
 - CTA buttons get a leading/trailing arrow icon; social/connect links use brand icons (GitHub, LinkedIn, Medium, X, and `fa-chart-simple` for Tableau)
+
+## The GitHub contribution grid
+- It reads **this site's own `/api/contributions`** (the cache, the upstream and what it cannot fix are described above), and the picture is **the design system's `ActivityHeatmap`** (`github-activity.js` + `github-activity.css`), not markup written here. The same kit draws the grid on the other sites, so a second hand-rolled "year of squares" would be a copy free to drift — the one this replaced carried its own month-label arithmetic, its own five shades and its own total, none of which the portfolio owns.
+- `script.js` keeps what is the portfolio's: the read and the failure line (`Contribution graph unavailable right now…`, never an empty box). Sizing is not its business — the kit measures whatever card it is given, picks the largest square that still fits 53 columns, and follows the card with a `ResizeObserver`. The kit's month row is a grid of the same cell size, so the labels follow that measurement instead of being positioned by hand, and a hidden connect tab waits for its first real width rather than needing a 0-width guard in this repo.
+- Shading is by **quartile of the non-zero days**, not a fraction of the busiest one: a single release week would otherwise wash the other 364 days into one shade. The endpoint's own `level` is dropped for that reason — one grid, one scale.
+- The grid is one `role="img"` carrying the year in its label, and the footer (total + five busiest weeks) is a real `<ol>` outside it, so nobody has to walk 365 squares. Each square keeps a `title` with its date and count.
+- `github-activity.js` loads **before** `script.js` and is **not** deferred, like `glide-select.js`: the parser reaches `script.js` first, so the kit has to be defined by then. The CSS is mapped, not restyled — `style.css` sets the five `--ga-*` shades to the card's orange ladder.
 
 ## The dashboard section (`#dashboard`)
 - It reads **the Content Tracking Dashboard's own store**: `https://contenttrackerdashboard.pages.dev/.netlify/functions/watchlist`, the rows that dashboard's SPA renders off its D1 watchlist. It deliberately does **not** read the dashboard's Google Sheet, which is what it used to do — the Sheet stopped being that store when the dashboard moved to D1, so the two were copies free to drift, and they did (a title saved without a year was counted here and not there). Reading the store is what makes them agree by construction.

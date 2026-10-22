@@ -1,0 +1,189 @@
+/* GitHub Activity — the year grid, its shade scale and the ranked footer.
+ *
+ * Colour and shape hooks, all optional:
+ *   --ga-cell (square size), --ga-gap, --ga-radius, --ga-gutter (day-label gutter),
+ *   --ga-0 … --ga-4 (empty to busiest), --ga-line, --ga-ink, --ga-ink-soft,
+ *   --ga-accent, --ga-font
+ *
+ * One scroller holds the month row and the squares, so a year wider than its
+ * card scrolls sideways with its labels still on the right columns. Nothing here
+ * animates on its own: cells fade in on the per-column delay the kit writes, and
+ * a reduced-motion visitor gets them all at once.
+ */
+
+.ga {
+  --ga-cell: 11px;
+  --ga-gap: 3px;
+  --ga-gutter: 20px;
+  font-family: var(--ga-font, inherit);
+  color: var(--ga-ink, inherit);
+}
+
+.ga-scroll {
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+/* The month row and the squares are both 53 one-cell columns, so a label sits
+   over the week it names at any cell size. */
+.ga-months {
+  display: grid;
+  gap: var(--ga-gap);
+  margin-left: calc(var(--ga-gutter) + 6px);
+  height: 14px;
+}
+
+.ga-month {
+  grid-row: 1;
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--ga-ink-soft, rgba(20, 18, 14, 0.55));
+}
+
+.ga-body {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.ga-days {
+  flex: 0 0 var(--ga-gutter);
+  display: grid;
+  grid-template-rows: repeat(7, var(--ga-cell));
+  gap: var(--ga-gap);
+  font-size: 9.5px;
+  line-height: var(--ga-cell);
+  color: var(--ga-ink-soft, rgba(20, 18, 14, 0.55));
+  text-align: right;
+}
+
+.ga-cells {
+  display: flex;
+  gap: var(--ga-gap);
+}
+
+.ga-col {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-rows: repeat(7, var(--ga-cell));
+  gap: var(--ga-gap);
+}
+
+.ga-cell {
+  display: block;
+  width: var(--ga-cell);
+  height: var(--ga-cell);
+  border-radius: var(--ga-radius, 2.5px);
+  background: var(--ga-0, rgba(24, 21, 16, 0.07));
+  animation: ga-in 420ms ease both;
+  animation-delay: var(--ga-delay, 0ms);
+}
+
+.ga-cell[data-ga-level="1"] { background: var(--ga-1, #cddfd1); }
+.ga-cell[data-ga-level="2"] { background: var(--ga-2, #9ec4a8); }
+.ga-cell[data-ga-level="3"] { background: var(--ga-3, #5f9a72); }
+.ga-cell[data-ga-level="4"] { background: var(--ga-4, var(--ga-accent, #2f6b46)); }
+
+/* Days after today are in the grid to keep the columns square, not to be read.
+   `animation: none` is the half that matters: the fade-in's fill mode would
+   otherwise paint them back in, since an animation outranks a plain opacity. */
+.ga-cell.is-future {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes ga-in {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: none; }
+}
+
+/* A hovered square is ringed; its count is in the title, and the busiest weeks
+   are named under the grid, so the picture does not need a floating tip. */
+.ga-cell.is-on:hover {
+  outline: 1px solid var(--ga-ink, rgba(20, 18, 14, 0.55));
+  outline-offset: 1px;
+}
+
+/* Total, then the ranking underneath: side by side, a one-line total sat in a
+   column as tall as five ranked weeks and left a block of nothing under it. */
+.ga-foot {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.ga-total {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ga-ink-soft, rgba(20, 18, 14, 0.7));
+}
+
+.ga-total b { color: var(--ga-ink, inherit); font-weight: 650; }
+
+.ga-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.ga-rank li {
+  display: grid;
+  grid-template-columns: 92px 1fr 42px;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ga-ink-soft, rgba(20, 18, 14, 0.7));
+}
+
+.ga-rank-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.ga-rank-bar {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ga-0, rgba(24, 21, 16, 0.07));
+  overflow: hidden;
+}
+
+.ga-bar {
+  display: block;
+  height: 100%;
+  width: var(--ga-w, 0%);
+  border-radius: inherit;
+  background: var(--ga-4, var(--ga-accent, #2f6b46));
+}
+
+.ga-rank-n {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ga-ink, inherit);
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .ga { --ga-cell: 9px; --ga-gap: 2px; --ga-gutter: 16px; }
+  .ga-days { font-size: 8.5px; }
+  /* A phone cannot give the date, the bar and the count one line without
+     ellipsising the date, which is the one thing the row is for — so the bar
+     drops below its label and the count keeps the top right. */
+  .ga-rank li {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "label n" "bar bar";
+    gap: 3px 10px;
+  }
+  .ga-rank-label { grid-area: label; }
+  .ga-rank-bar { grid-area: bar; }
+  .ga-rank-n { grid-area: n; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ga-cell { animation: none; }
+}

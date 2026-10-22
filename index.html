@@ -309,6 +309,7 @@
   <link rel="stylesheet" href="rubber-segment.css" />
   <link rel="stylesheet" href="squish-switch.css" />
   <link rel="stylesheet" href="accordion-gallery.css" />
+  <link rel="stylesheet" href="github-activity.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -452,13 +453,16 @@
           <div class="connect-pane active" role="tabpanel" aria-labelledby="tab-github" id="pane-github">
             <p class="connect-pane-label" translate="no">GitHub: @parth-soni-10</p>
             <h3 class="connect-pane-title">Building data tools in public</h3>
-            <div class="connect-gh-graph-wrap" id="ghGraphWrap">
-              <div class="connect-gh-graph" id="ghGraph" role="img"
-                   aria-label="GitHub contribution graph for the last year">
+            <!-- The grid, its shading and the ranked footer are drawn by the
+                 design system's ActivityHeatmap (github-activity.js), which
+                 labels the picture for a screen reader, lists the busiest weeks
+                 underneath it and sizes itself to this card. script.js keeps
+                 only the read and the failure line. -->
+            <div class="connect-gh-graph-wrap">
+              <div class="connect-gh-graph" id="ghGraph">
                 <div class="gh-loading">Loading contribution graph&hellip;</div>
               </div>
             </div>
-            <p class="connect-gh-total" aria-live="polite"><span id="ghTotal">&hellip;</span> contributions in the last year</p>
             <p class="connect-pane-desc">
               Python, SQL &amp; dashboard projects, from F1 telemetry pipelines to
               live-scraping trackers. <span class="connect-gh-stats" aria-live="polite"><span id="ghRepos">&hellip;</span> repos &bull; <span id="ghFollowers">&hellip;</span> followers</span>
@@ -1282,6 +1286,10 @@
   <script src="rubber-segment.js" defer></script>
   <script src="squish-switch.js" defer></script>
   <script src="accordion-gallery.js" defer></script>
+  <!-- Not deferred: script.js reads the contribution feed before the deferred
+       kits run (the parser reaches script.js first), so the heatmap that draws
+       it has to be defined by then. Same reason glide-select.js is not deferred. -->
+  <script src="github-activity.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
