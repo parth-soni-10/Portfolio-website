@@ -1,0 +1,284 @@
+/* Accordion Gallery — a row of images where one opens and the rest step back.
+ *
+ * Colour and shape hooks, all optional:
+ *   --ag-h (row height), --ag-gap, --ag-radius, --ag-open (grow factor),
+ *   --ag-ink (caption), --ag-ink-soft, --ag-scrim, --ag-badge-bg,
+ *   --ag-accent, --ag-mono, --ag-ease
+ *
+ * The host keeps its own card, picture and caption; this file only turns the
+ * container into a flex row and the cards into panels. Everything that moves is
+ * flex-grow, transform and opacity, so a gallery costs no animation frame of
+ * its own and one hover cannot force a layout of the whole page.
+ *
+ * A panel opens on :hover and on :focus-within as well as on the kit's class,
+ * which means the gallery still opens when the script has not run yet — the
+ * class is what keeps the last panel open after the pointer leaves the row.
+ */
+
+/* The container carries the host's own class — `cert-grid`, in the site this
+   was built for — and that class is a grid. The attribute keeps this rule above
+   it whatever order the two stylesheets are loaded in, so a host never has to
+   know that adopting the gallery means dropping its grid. */
+.ag-gallery[data-accordion-gallery] {
+  display: flex;
+  gap: var(--ag-gap, 10px);
+  height: var(--ag-h, 340px);
+  margin-top: 40px;
+  overflow: hidden;
+}
+
+.ag-gallery .ag-panel {
+  position: relative;
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--ag-radius, 14px);
+  background: var(--ag-panel-bg, rgba(22, 19, 14, 0.06));
+  transition:
+    flex-grow 460ms var(--ag-ease, cubic-bezier(0.2, 0.85, 0.22, 1)),
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    transform 260ms ease;
+}
+
+/* The host's own hover lift (a card meant to sit in a grid) would fight the
+   accordion, which moves sideways instead. */
+.ag-gallery[data-accordion-gallery] .ag-panel:hover,
+.ag-gallery[data-accordion-gallery] .ag-panel.is-open {
+  transform: none;
+}
+
+.ag-gallery .ag-panel.is-open,
+.ag-gallery .ag-panel:hover,
+.ag-gallery .ag-panel:focus-within {
+  flex-grow: var(--ag-open, 3.4);
+}
+
+.ag-gallery .ag-panel:focus-visible {
+  outline: 2px solid var(--ag-accent, #e85d04);
+  outline-offset: 3px;
+}
+
+/* The image is the panel. Whatever wrapper the host shipped becomes the frame,
+   and the caption floats over the picture instead of sitting under it. */
+.ag-gallery .ag-panel > picture,
+.ag-gallery .ag-panel .ag-media,
+.ag-gallery .ag-panel [class*="img-wrap"] {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.ag-gallery .ag-panel > picture img,
+.ag-gallery .ag-panel .ag-media img,
+.ag-gallery .ag-panel [class*="img-wrap"] img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Collapsed panels are a narrow slice of a wide picture, so they are pushed
+     in slightly: opening one is what pulls the frame back to its full width. */
+  transform: scale(1.12);
+  transition: transform 620ms var(--ag-ease, cubic-bezier(0.2, 0.85, 0.22, 1));
+}
+
+.ag-gallery .ag-panel.is-open [class*="img-wrap"] img,
+.ag-gallery .ag-panel:hover [class*="img-wrap"] img,
+.ag-gallery .ag-panel:focus-within [class*="img-wrap"] img {
+  transform: scale(1);
+}
+
+/* A collapsed panel is a slice of a picture, and most pictures are busy: the
+   veil is what makes the sideways title readable over any of them, and it lifts
+   as the panel opens so the image is seen at its own brightness. */
+.ag-gallery .ag-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--ag-veil, rgba(16, 13, 9, 0.5));
+  opacity: 1;
+  transition: opacity 340ms ease;
+}
+
+.ag-gallery .ag-panel.is-open::before,
+.ag-gallery .ag-panel:hover::before,
+.ag-gallery .ag-panel:focus-within::before {
+  opacity: 0.16;
+}
+
+.ag-gallery .ag-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Opacity is declared here on purpose. A host that already draws a glare on
+     this same pseudo-element leaves it at `opacity: 0` until hover, and a
+     property this rule does not set would be inherited from that rule — the
+     caption would float on the bare picture with no scrim behind it. */
+  opacity: 1;
+  background:
+    linear-gradient(to top, var(--ag-scrim, rgba(18, 15, 11, 0.82)) 0%, rgba(18, 15, 11, 0.28) 38%, rgba(18, 15, 11, 0) 62%),
+    linear-gradient(to bottom, rgba(18, 15, 11, 0.24), rgba(18, 15, 11, 0) 34%);
+}
+
+/* The caption the host already has, floated over the bottom of the picture. */
+.ag-gallery .ag-panel [class*="cert-info"],
+.ag-gallery .ag-panel .ag-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  padding: 16px 18px 18px;
+  color: var(--ag-ink, #fffaf1);
+  background: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 220ms ease, transform 380ms var(--ag-ease, cubic-bezier(0.2, 0.85, 0.22, 1));
+}
+
+.ag-gallery .ag-panel.is-open [class*="cert-info"],
+.ag-gallery .ag-panel.is-open .ag-caption,
+.ag-gallery .ag-panel:hover [class*="cert-info"],
+.ag-gallery .ag-panel:hover .ag-caption,
+.ag-gallery .ag-panel:focus-within [class*="cert-info"],
+.ag-gallery .ag-panel:focus-within .ag-caption {
+  opacity: 1;
+  transform: none;
+}
+
+.ag-gallery .ag-panel [class*="cert-info"] p {
+  color: var(--ag-ink, #fffaf1);
+}
+
+.ag-gallery .ag-panel [class*="cert-info"] p:first-child,
+.ag-gallery .ag-panel .ag-caption p:first-child {
+  color: var(--ag-ink-soft, rgba(255, 250, 241, 0.72));
+}
+
+/* The index badge: one per panel, always on, so the row reads as a set. */
+.ag-num {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 4;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: var(--ag-badge-bg, rgba(18, 15, 11, 0.52));
+  color: var(--ag-ink, #fffaf1);
+  font: 600 10.5px/1 var(--ag-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+/* The spine: the title turned on its side, which is the only thing that fits a
+   collapsed 60px panel and still says which one it is. */
+.ag-spine {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  max-height: calc(100% - 88px);
+  overflow: hidden;
+  writing-mode: vertical-rl;
+  transform: translate(-50%, -50%) rotate(180deg);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: 600 11.5px/1 var(--ag-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ag-ink, #fffaf1);
+  text-shadow: 0 1px 3px rgba(10, 8, 5, 0.65);
+  opacity: 0.92;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+
+.ag-gallery .ag-panel.is-open .ag-spine,
+.ag-gallery .ag-panel:hover .ag-spine,
+.ag-gallery .ag-panel:focus-within .ag-spine {
+  opacity: 0;
+}
+
+/* No hover to give: every caption is shown and the spine is redundant. */
+@media (hover: none) {
+  .ag-gallery .ag-panel [class*="cert-info"],
+  .ag-gallery .ag-panel .ag-caption { opacity: 1; transform: none; }
+  .ag-spine { display: none; }
+}
+
+/* A phone cannot show ten columns: the row becomes a snap scroller, one card
+   per screen, and the height comes back to the picture's own ratio. */
+@media (max-width: 760px) {
+  .ag-gallery[data-accordion-gallery] {
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    margin-right: calc(-1 * var(--ag-bleed, 0px));
+  }
+  .ag-gallery::-webkit-scrollbar { display: none; }
+  .ag-gallery .ag-panel {
+    flex: 0 0 78%;
+    height: auto;
+    scroll-snap-align: center;
+    flex-grow: 0;
+  }
+  .ag-gallery .ag-panel.is-open,
+  .ag-gallery .ag-panel:hover,
+  .ag-gallery .ag-panel:focus-within { flex-grow: 0; }
+  .ag-gallery .ag-panel > picture,
+  .ag-gallery .ag-panel .ag-media,
+  .ag-gallery .ag-panel [class*="img-wrap"] {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .ag-gallery .ag-panel::after { display: none; }
+  .ag-gallery .ag-panel [class*="cert-info"],
+  .ag-gallery .ag-panel .ag-caption {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    padding: 14px 16px 16px;
+    background: var(--ag-panel-bg-strong, #fffdf8);
+    color: var(--ag-ink-solid, #17140f);
+  }
+  .ag-gallery .ag-panel [class*="cert-info"] p,
+  .ag-gallery .ag-panel [class*="cert-info"] p:first-child { color: var(--ag-ink-solid, #17140f); }
+  .ag-gallery .ag-panel [class*="cert-info"] p:first-child { color: var(--ag-ink-solid-soft, #6b6459); }
+  .ag-gallery .ag-panel:hover [class*="img-wrap"] img,
+  .ag-gallery .ag-panel [class*="img-wrap"] img { transform: none; }
+  .ag-num { top: 10px; left: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-gallery .ag-panel,
+  .ag-gallery .ag-panel [class*="img-wrap"] img,
+  .ag-gallery .ag-panel [class*="cert-info"],
+  .ag-gallery .ag-panel .ag-caption,
+  .ag-spine { transition: none; }
+}
+
+/* Portfolio's own motion switch, honoured here too: it is the site's word on
+   the subject, and a visitor who set it did not mean "except this row". */
+html[data-motion="reduce"] .ag-gallery .ag-panel,
+html[data-motion="reduce"] .ag-gallery .ag-panel [class*="img-wrap"] img,
+html[data-motion="reduce"] .ag-gallery .ag-panel [class*="cert-info"],
+html[data-motion="reduce"] .ag-gallery .ag-panel .ag-caption,
+html[data-motion="reduce"] .ag-spine { transition: none; }

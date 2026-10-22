@@ -55,6 +55,22 @@
   --data:         'Inter', system-ui, -apple-system, sans-serif;
   --maxw:         1180px;
   --pad:          24px;
+
+  /* Accordion Gallery — the credential row. The veil is this site's ink rather
+     than a neutral black, so a collapsed panel darkens towards the page instead
+     of towards grey. */
+  --ag-h:         330px;
+  --ag-gap:       12px;
+  --ag-radius:    14px;
+  --ag-open:      3.6;
+  --ag-ink:       #fffaf1;
+  --ag-ink-soft:  rgba(255, 250, 241, .74);
+  --ag-veil:      rgba(20, 16, 11, .52);
+  --ag-scrim:     rgba(20, 16, 11, .84);
+  --ag-badge-bg:  rgba(20, 16, 11, .55);
+  --ag-accent:    var(--accent);
+  --ag-mono:      var(--data);
+  --ag-panel-bg:  var(--paper);
 }
 
 html { scroll-behavior: smooth; color-scheme: light; }

@@ -308,6 +308,7 @@
   <link rel="stylesheet" href="jelly-radio.css" />
   <link rel="stylesheet" href="rubber-segment.css" />
   <link rel="stylesheet" href="squish-switch.css" />
+  <link rel="stylesheet" href="accordion-gallery.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -1121,7 +1122,10 @@
       <p class="section-kicker"><b>06</b>Certifications</p>
       <h2 class="section-h-light">Credentials &amp;<br> <em>Achievements</em></h2>
 
-      <div class="cert-grid">
+      <!-- The credential grid is the gallery: the cards keep their links, their
+           pictures and their captions, and the kit only turns the row into an
+           accordion where the one under the pointer opens. -->
+      <div class="cert-grid" data-accordion-gallery>
 
         <a href="https://www.coursera.org/account/accomplishments/specialization/QBHFUA673MO6"
            target="_blank" rel="noopener" class="cert-card">
@@ -1277,6 +1281,7 @@
   <script src="jelly-radio.js" defer></script>
   <script src="rubber-segment.js" defer></script>
   <script src="squish-switch.js" defer></script>
+  <script src="accordion-gallery.js" defer></script>
   <script src="script.js"></script>
 </body>
 </html>
