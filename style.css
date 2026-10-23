@@ -189,7 +189,16 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   color: var(--accent-deep);
   margin-left: 6px;
 }
-#site-header nav { display: flex; align-items: center; gap: 4px; }
+#site-header nav {
+  display: flex; align-items: center; gap: 4px;
+  /* gooey-nav.js slides this behind the section that is on screen; the accent
+     is the same one the scrollspy already painted the link's text with. Opaque
+     on purpose: the kit's goo filter thresholds alpha, so a translucent tint
+     would be erased, while a pastel mixed with the header's own paper keeps
+     the same soft look and still draws. */
+  --gn-fill: color-mix(in srgb, #e85d04 12%, var(--paper));
+  --gn-radius: 8px;
+}
 #site-header nav a {
   font-size: 13.5px; font-weight: 500; color: var(--ink-soft);
   text-decoration: none; padding: 8px 12px; border-radius: 8px;

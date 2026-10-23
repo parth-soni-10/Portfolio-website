@@ -118,12 +118,22 @@
   const navLinks = document.querySelectorAll('nav a');
   const navByHref = new Map(Array.from(navLinks).map(l => [l.getAttribute('href'), l]));
 
+  /* The class is the same active state the colour below has always expressed —
+     gooey-nav.js reads it to know which link the pill belongs under, so the
+     highlight can slide between sections instead of jumping. */
   const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      navLinks.forEach(l => { l.style.color = ''; });
-      const link = navByHref.get('#' + entry.target.id);
-      if (link) link.style.color = '#e85d04';
+      /* Nested divs are observed too, so a child without a nav link would
+         clear the highlight and never restore it — the last entry to report
+         decided the colour, and most of them had no link to give it to. Only
+         a target that names a nav link may move it. */
+      const href = '#' + entry.target.id;
+      if (!navByHref.has(href)) return;
+      navLinks.forEach(l => { l.style.color = ''; l.classList.remove('active'); });
+      const link = navByHref.get(href);
+      link.style.color = '#e85d04';
+      link.classList.add('active');
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
 
