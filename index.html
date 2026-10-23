@@ -310,6 +310,7 @@
   <link rel="stylesheet" href="squish-switch.css" />
   <link rel="stylesheet" href="accordion-gallery.css" />
   <link rel="stylesheet" href="github-activity.css" />
+  <link rel="stylesheet" href="analytics-chart.css" />
   <link rel="stylesheet" href="gooey-nav.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -1060,8 +1061,7 @@
             <p class="dash-chart-sub" id="lineSub">per month &middot; All Time</p>
           </div>
           <div class="dash-chart-figure" id="lineFigure">
-            <svg id="lineSvg" viewBox="0 0 1200 300" role="img" aria-label="Line chart of hours watched per month"></svg>
-            <div class="dash-tooltip" id="lineTip" aria-hidden="true" hidden></div>
+            <div class="dash-line-host" id="lineChart" data-ac-label="hours watched"></div>
           </div>
         </div>
         <div class="dash-card dash-chart-card">
@@ -1291,6 +1291,7 @@
        kits run (the parser reaches script.js first), so the heatmap that draws
        it has to be defined by then. Same reason glide-select.js is not deferred. -->
   <script src="github-activity.js"></script>
+  <script src="analytics-chart.js"></script>
   <script src="gooey-nav.js"></script>
   <script src="script.js"></script>
 </body>

@@ -859,48 +859,20 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   font-weight: 500; color: #6f6f6f;
 }
 .dash-chart-figure { position: relative; min-height: 200px; }
-.dash-chart-figure svg { display: block; width: 100%; height: auto; }
 
-/* Line chart — explicit SVG styles (the analyst-report CSS rewrite dropped
-   these, leaving unstyled black fills and 16px labels). Axis ticks at 11px:
-   intentional density exception to the 12/16 label token. */
-.dash-grid-line { stroke: #e9e4db; stroke-width: 1; }
-.dash-y-label,
-.dash-x-label {
-  font-family: var(--data); font-size: 11px; font-weight: 500;
-  fill: #6f6f6f; font-variant-numeric: tabular-nums;
+/* The line is the analytics-chart kit, wearing this section's orange. The kit
+   owns the drawing, the grid and the tooltip; the card only names the colours,
+   because the dashboard is its own light surface inside a dark page. */
+.dash-line-host {
+  --ac-height: 220px;
+  --ac-accent: var(--accent);
+  --ac-area: rgba(232, 93, 4, .12);
+  --ac-grid: #e9e4db;
+  --ac-ink: #6f6f6f;
+  --ac-tip-bg: #333333;
+  --ac-tip-ink: #ffffff;
+  --ac-font: var(--data);
 }
-.dash-line-path {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.dash-area-path { fill: url(#dashLineGrad); }
-.dash-dot { fill: var(--accent); stroke: #ffffff; stroke-width: 1.5; }
-.dash-hover-line {
-  stroke: var(--accent); stroke-width: 1;
-  stroke-dasharray: 3 3;
-  opacity: 0; transition: opacity .15s ease;
-}
-.dash-hover-dot {
-  fill: #ffffff; stroke: var(--accent); stroke-width: 2;
-  opacity: 0; transition: opacity .15s ease;
-}
-
-.dash-tooltip {
-  position: absolute;
-  transform: translate(-50%, calc(-100% - 10px));
-  pointer-events: none;
-  background: #333333; color: #ffffff;
-  font-family: var(--data); font-size: 11px; line-height: 16px;
-  font-weight: 500; font-variant-numeric: tabular-nums;
-  padding: 4px 9px; border-radius: 6px;
-  white-space: nowrap; z-index: 5;
-  box-shadow: 0 4px 14px rgba(22,19,14,.22);
-}
-.dash-tooltip[hidden] { display: none; }
 
 /* Bar chart — vertical columns (JS grows scaleY from the bottom and floats
    each value above the bar tip via an inline bottom offset). */
@@ -1330,11 +1302,6 @@ body.is-splashing { overflow: hidden; }
   #hero { padding: 48px var(--pad) 48px; }
   .hero-h1 { font-size: clamp(38px, 11vw, 52px); }
   .dash-metrics { grid-template-columns: 1fr; }
-  .dash-chart-figure { overflow-x: auto; }
-  /* Keep the SVG legible on phones: the viewBox is pixel-space with a 540px
-     floor (script.js), and this min-width is that floor — below it the card
-     scrolls instead of crushing the chart. */
-  .dash-chart-figure svg { min-width: 540px; }
   /* Same idea for the bar chart: give each column enough room for its
      genre label and scroll the card instead of crushing them */
   .dash-bar-figure .dash-bar-col { min-width: 78px; }

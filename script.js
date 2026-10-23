@@ -466,8 +466,7 @@
 
   /* ── Element refs ── */
   const els = {
-    lineSvg:    document.getElementById('lineSvg'),
-    lineTip:    document.getElementById('lineTip'),
+    lineChart:  document.getElementById('lineChart'),
     barFigure:  document.getElementById('barFigure'),
     lineSub:    document.getElementById('lineSub'),
     barSub:     document.getElementById('barSub'),
@@ -705,235 +704,23 @@
   }
 
   /* ── Line chart (orange accent) ── */
-  const NS = 'http://www.w3.org/2000/svg';
-  const svgEl = (tag, attrs) => {
-    const n = document.createElementNS(NS, tag);
-    for (const k in attrs) n.setAttribute(k, attrs[k]);
-    return n;
-  };
-
-  /* Round axis step: the smallest of 1 / 2 / 2.5 / 5 × 10ⁿ ≥ target, so
-     gridlines land on 0h/50h/100h… instead of 0h/83h/167h… */
-  function niceStep(target) {
-    if (!isFinite(target) || target <= 0) return 1;
-    const pow  = Math.pow(10, Math.floor(Math.log10(target)));
-    const f    = target / pow;
-    const nice = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
-    return nice * pow;
-  }
-
-  /* Monotone cubic interpolation (Fritsch–Carlson): a smooth curve through
-     every point that never overshoots the data — a plain Catmull-Rom spline
-     would draw peaks above the real hours and dips below zero. */
-  function monoPath(pts) {
-    const n = pts.length;
-    if (n < 2) return n ? 'M' + pts[0].x + ',' + pts[0].y : '';
-    const dx = [], dy = [], m = [];
-    for (let i = 0; i < n - 1; i++) {
-      dx[i] = pts[i + 1].x - pts[i].x;
-      dy[i] = pts[i + 1].y - pts[i].y;
-      m[i]  = dy[i] / dx[i];
-    }
-    const t = [m[0]];
-    for (let i = 1; i < n - 1; i++) {
-      if (m[i - 1] * m[i] <= 0) {
-        t[i] = 0;
-      } else {
-        const w1 = 2 * dx[i] + dx[i - 1];
-        const w2 = dx[i] + 2 * dx[i - 1];
-        t[i] = (w1 + w2) / (w1 / m[i - 1] + w2 / m[i]);
-      }
-    }
-    t[n - 1] = m[n - 2];
-    let d = 'M' + pts[0].x + ',' + pts[0].y;
-    for (let i = 0; i < n - 1; i++) {
-      const h = dx[i] / 3;
-      d += 'C' + (pts[i].x + h) + ',' + (pts[i].y + t[i] * h) +
-           ' ' + (pts[i + 1].x - h) + ',' + (pts[i + 1].y - t[i + 1] * h) +
-           ' ' + pts[i + 1].x + ',' + pts[i + 1].y;
-    }
-    return d;
-  }
-
-  let lastLineW = 0; /* width the line chart last rendered at (resize sync) */
-
-  /* The chart renders in real pixels: a 540px floor matches the mobile scroll
-     canvas in style.css, so 1 unit = 1px and axis text never scales. */
-  const chartW = () => Math.max(540, els.lineSvg.parentElement.clientWidth);
-
-  function renderLine(period, animate) {
-    const svg = els.lineSvg;
-    if (!svg) return;
-    svg.textContent = '';
-
+  /* The line is the design system's analytics-chart: one series, one tooltip.
+     The months come from the store; the kit draws the path, sizes itself to the
+     card and moves the cursor, so there is no second plot to drift from the one
+     the other sites use. */
+  function renderLine(period) {
+    const host = els.lineChart;
+    if (!host || !window.AnalyticsChart) return;
     const months = PERIODS[period].months;
-    const W = chartW();
-    const H = W >= 700 ? 300 : 250;
-    const PL = 40, PR = 16, PT = 14, PB = 30;
-    const iw = W - PL - PR;
-    const ih = H - PT - PB;
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    lastLineW = W;
-    const max = Math.max.apply(null, months);
-    const step = niceStep(max / 3.5);
-    const niceMax = Math.max(step, Math.ceil((max || 1) / step) * step);
-    const x = i => PL + (months.length === 1 ? iw / 2 : (iw * i) / (months.length - 1));
-    const y = v => PT + ih - (ih * v) / niceMax;
-    /* Absolute month index into the store's continuous series: the all-time
-       series starts at the first month that actually has data (not
-       necessarily January — labels used to say Jan for a March start), while
-       a year period's months always start at January of its year. */
-    const absIdx  = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + i;
-    const monthOf = i => MONTH_NAMES[absIdx(i) % 12];
-    const yearOf  = i => START_YEAR + Math.floor(absIdx(i) / 12);
-
-    /* gradient fill under the line */
-    const grad = svgEl('linearGradient', { id: 'dashLineGrad', x1: '0', y1: '0', x2: '0', y2: '1' });
-    grad.appendChild(svgEl('stop', { offset: '0%',   'stop-color': '#e85d04', 'stop-opacity': '0.28' }));
-    grad.appendChild(svgEl('stop', { offset: '100%', 'stop-color': '#e85d04', 'stop-opacity': '0' }));
-    svg.appendChild(grad);
-
-    /* gridlines + y-axis labels at the round step */
-    for (let k = 0; k * step <= niceMax + 1e-9; k++) {
-      const v  = k * step;
-      const yy = y(v);
-      svg.appendChild(svgEl('line', { x1: PL, x2: W - PR, y1: yy, y2: yy, class: 'dash-grid-line' }));
-      const t = svgEl('text', { x: PL - 7, y: yy + 3.5, 'text-anchor': 'end', class: 'dash-y-label' });
-      t.textContent = (Math.round(v * 10) / 10) + 'h';
-      svg.appendChild(t);
-    }
-
-    /* x-axis labels. Cadence adapts to real pixel width: pick the densest
-       schedule (monthly → every-2 → quarterly → bi-monthly → yearly) whose
-       spacing still clears the widest label (~49px at 11px + 14px air), then
-       keep first + last and drop any label whose estimated boxes would touch.
-       The old fixed 46px center-to-center gap matched the labels' own width,
-       so "Jul 2026" and "Oct 2026" landed 1px apart at the right edge. */
-    const CADENCE   = [1, 2, 3, 6, 12];
-    const spacing   = months.length > 1 ? iw / (months.length - 1) : iw;
-    const every     = CADENCE.find(c => spacing * c >= 64) || 12;
-    const labText   = i => monthOf(i) + ' ' + yearOf(i);
-    const labW      = i => labText(i).length * 6.1;
-    const cand = [];
-    months.forEach((_, i) => { if (i % every === 0) cand.push(i); });
-    if (cand[cand.length - 1] !== months.length - 1) cand.push(months.length - 1);
-    const keep = [];
-    cand.forEach(i => {
-      if (keep.length === 0) { keep.push(i); return; }
-      const prev = keep[keep.length - 1];
-      const gap  = x(i) - x(prev);
-      const need = (labW(i) + labW(prev)) / 2 + 14;
-      if (i === months.length - 1) {
-        /* prefer the final month over its crowded neighbour: shed the
-           predecessor if needed, but always keep the end of the data */
-        if (gap < need) keep.pop();
-        keep.push(i);
-      } else if (gap >= need) {
-        keep.push(i);
-      }
+    const absIdx = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + i;
+    const points = months.map((hours, i) => ({
+      label: MONTH_NAMES[absIdx(i) % 12] + ' ' + (START_YEAR + Math.floor(absIdx(i) / 12)),
+      value: hours,
+    }));
+    AnalyticsChart.render(host, points, {
+      label: 'hours watched',
+      format: v => v.toLocaleString('en-US', { maximumFractionDigits: 1 }) + ' hrs',
     });
-    keep.forEach(i => {
-      const t = svgEl('text', { x: x(i), y: H - 9, 'text-anchor': 'middle', class: 'dash-x-label' });
-      t.textContent = labText(i);
-      svg.appendChild(t);
-    });
-
-    /* line + area paths — one monotone curve shared by both */
-    const curve = months.map((v, i) => ({ x: x(i), y: y(v) }));
-    const d = monoPath(curve);
-    const area = svgEl('path', {
-      d: d + ' L' + x(months.length - 1) + ',' + y(0) + ' L' + PL + ',' + y(0) + ' Z',
-      class: 'dash-area-path'
-    });
-    const line = svgEl('path', { d: d, class: 'dash-line-path' });
-    svg.appendChild(area);
-    svg.appendChild(line);
-
-    /* haloed data points so individual months stay readable where the line
-       is dense (smaller dots when all-time's 34 points share the width) */
-    const dotR = months.length > 18 ? 2 : 3;
-    const dots = svgEl('g', { class: 'dash-dots' });
-    curve.forEach(p => dots.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: dotR, class: 'dash-dot' })));
-    svg.appendChild(dots);
-
-    /* draw-on animation */
-    const total = line.getTotalLength();
-    line.style.strokeDasharray  = String(total);
-    line.style.strokeDashoffset = String(total);
-    area.style.opacity = '0';
-    dots.style.opacity = '0';
-    if (animate && !reduceMotion()) {
-      const t0 = performance.now();
-      const dur = 800;
-      const ease = t => 1 - Math.pow(1 - t, 3);
-      function frame(now) {
-        const p = Math.min(1, (now - t0) / dur);
-        line.style.strokeDashoffset = String(total * (1 - ease(p)));
-        area.style.opacity = String(0.06 + 0.94 * ease(p));
-        dots.style.opacity = String(0.06 + 0.94 * ease(p));
-        if (p < 1) requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    } else {
-      line.style.strokeDashoffset = '0';
-      area.style.opacity = '1';
-      dots.style.opacity = '1';
-    }
-
-    /* hover: crosshair + tooltip */
-    const overlay = svgEl('rect', { x: PL, y: PT, width: iw, height: ih, fill: 'transparent' });
-    const hLine   = svgEl('line', { class: 'dash-hover-line' });
-    const hDot    = svgEl('circle', { r: '4.5', class: 'dash-hover-dot' });
-    svg.appendChild(overlay);
-    svg.appendChild(hLine);
-    svg.appendChild(hDot);
-
-    function showTip(idx) {
-      const i = Math.max(0, Math.min(months.length - 1, Math.round(idx)));
-      const vx = x(i), vy = y(months[i]);
-      hLine.setAttribute('x1', vx); hLine.setAttribute('x2', vx);
-      hLine.setAttribute('y1', PT); hLine.setAttribute('y2', PT + ih);
-      hLine.setAttribute('opacity', '1');
-      hDot.setAttribute('cx', vx); hDot.setAttribute('cy', vy);
-      hDot.setAttribute('opacity', '1');
-      els.lineTip.textContent = monthOf(i) + ' ' + yearOf(i) + ' · ' + months[i] + ' hrs';
-      els.lineTip.hidden = false;
-      /* Keep the tooltip on the hovered point and fully inside the visible
-         figure. The chart scrolls horizontally on small screens (the svg
-         keeps a 540px min-width), and an absolutely positioned child of a
-         scroll container rides along with the content — so the element's
-         `left` must be (visible offset + scrollLeft), with the edge clamp
-         computed in visible-space coordinates. The percentage-based math
-         it replaces only worked when the svg filled the figure's width. */
-      const figEl   = els.lineTip.parentElement;
-      const figW    = figEl.clientWidth;
-      const figH    = figEl.clientHeight;
-      const svgW    = svg.getBoundingClientRect().width || W;
-      const tipW    = els.lineTip.offsetWidth;
-      const tipH    = els.lineTip.offsetHeight;
-      const scrollL = figEl.scrollLeft || 0;
-      let visCx     = (vx / W) * svgW - scrollL;
-      visCx = Math.min(figW - tipW / 2 - 8, Math.max(tipW / 2 + 8, visCx));
-      els.lineTip.style.left = (visCx + scrollL) + 'px';
-      els.lineTip.style.top  = ((vy / H) * 100) + '%';
-      els.lineTip.style.transform = (vy / H) * figH < tipH + 12
-        ? 'translate(-50%, 12px)'
-        : 'translate(-50%, calc(-100% - 10px))';
-    }
-
-    overlay.addEventListener('pointermove', (e) => {
-      const r = svg.getBoundingClientRect();
-      const vx = (e.clientX - r.left) * (W / r.width);
-      showTip(((vx - PL) / iw) * (months.length - 1));
-    });
-    overlay.addEventListener('pointerleave', () => {
-      hLine.setAttribute('opacity', '0');
-      hDot.setAttribute('opacity', '0');
-      els.lineTip.hidden = true;
-    });
-
-    svg.setAttribute('aria-label',
-      'Line chart: hours watched per month, ' + months.length + ' points, ' + PERIODS[period].monthsLabel);
   }
 
   /* ── Bar chart (orange accent) ── */
@@ -1037,18 +824,6 @@
   }
 
   ensureData(); /* start the store fetch immediately, not on first scroll */
-
-  /* The chart renders in real pixels, so re-render it when the container's
-     width actually changes (window resize, phone rotate). */
-  let rzTimer = 0;
-  window.addEventListener('resize', () => {
-    if (!inited || !PERIODS) return;
-    clearTimeout(rzTimer);
-    rzTimer = setTimeout(() => {
-      if (Math.abs(chartW() - lastLineW) < 8) return;
-      renderLine(current, false);
-    }, 160);
-  });
 
   if (reduceMotion()) {
     init(false);
