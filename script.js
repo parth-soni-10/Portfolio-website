@@ -719,11 +719,37 @@
      The months come from the store; the kit draws the path, sizes itself to the
      card and moves the cursor, so there is no second plot to drift from the one
      the other sites use. */
+  /* How many months the trend shows. 36 is every month this dashboard holds,
+     so the default is the whole period it always drew, and the reader can trim
+     it to 3 without changing the filter above. */
+  function storedLineMonths() {
+    try {
+      const n = parseInt(localStorage.getItem('portfolio-line-months'), 10);
+      return isFinite(n) ? Math.max(3, Math.min(36, n)) : 36;
+    } catch (e) { return 36; }
+  }
+
+  function mountLineLen() {
+    const host = document.getElementById('lineLen');
+    if (!host || !window.Stepper || Stepper.get(host) !== null) return;
+    Stepper.mount(host, {
+      value: storedLineMonths(), min: 3, max: 36, step: 1,
+      label: 'Months shown', unit: 'month', size: 'sm',
+      onChange(n) {
+        try { localStorage.setItem('portfolio-line-months', String(n)); } catch (e) { /* private mode */ }
+        renderLine(current, false);
+        updateSubs(current);
+      }
+    });
+  }
+
   function renderLine(period) {
     const host = els.lineChart;
     if (!host || !window.AnalyticsChart) return;
-    const months = PERIODS[period].months;
-    const absIdx = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + i;
+    const all = PERIODS[period].months;
+    const offset = Math.max(0, all.length - storedLineMonths());
+    const months = all.slice(offset);
+    const absIdx = i => (period === 'all' ? START_C : (Number(period) - START_YEAR) * 12) + offset + i;
     const points = months.map((hours, i) => ({
       label: MONTH_NAMES[absIdx(i) % 12] + ' ' + (START_YEAR + Math.floor(absIdx(i) / 12)),
       value: hours,
@@ -813,7 +839,11 @@
   }
 
   function updateSubs(period) {
-    if (els.lineSub) els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel;
+    const trimmed = PERIODS[period].months.length > storedLineMonths();
+    if (els.lineSub) {
+      els.lineSub.textContent = 'per month · ' + PERIODS[period].monthsLabel +
+        (trimmed ? ' · last ' + storedLineMonths() + ' months' : '');
+    }
     if (els.barSub)  els.barSub.textContent  = GENRES.length + ' genres · ' + PERIODS[period].name;
   }
 
@@ -827,6 +857,7 @@
     const urlPeriod = new URLSearchParams(location.search).get('period');
     if (urlPeriod && PERIODS[urlPeriod]) current = urlPeriod;
     buildFilters(current);
+    mountLineLen();
     if (resetView && window.TimeUndo) {
       let beforePeriod = null;
       TimeUndo.mount(resetView, {

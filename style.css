@@ -872,6 +872,13 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   font-family: var(--data); font-size: 12px; line-height: 16px;
   font-weight: 500; color: #6f6f6f;
 }
+/* The trend's length control sits with the sub-line, so the title keeps the
+   left edge. The dashboard is its own light surface, so the stepper takes
+   the card's ink and line rather than the page's. */
+.dash-chart-side { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+.dash-len .stp { --stp-line: #e3e0d8; --stp-bg: #fff; --stp-btn-bg: #f4f2ec;
+  --stp-btn-hover: #eae6dc; --stp-radius: 8px; color: #333; }
+.dash-len .stp-unit { --stp-unit-ink: #6f6f6f; }
 .dash-chart-figure { position: relative; min-height: 200px; }
 
 /* The line is the analytics-chart kit, wearing this section's orange. The kit
