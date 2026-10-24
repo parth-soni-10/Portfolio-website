@@ -811,6 +811,20 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   border-color: rgba(232,93,4,.4);
 }
 
+/* Comparison aside: time undo on the view, not on the data. */
+.dash-reset {
+  font-family: var(--data);
+  font-size: 12px; font-weight: 600;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px; padding: 8px 13px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.dash-reset:hover { border-color: var(--line-strong); color: var(--ink); }
+.dash-reset[data-tu-state="counting"] { color: var(--ink); }
+
 .dash-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

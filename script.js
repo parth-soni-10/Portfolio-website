@@ -462,6 +462,7 @@
                           from here, not from January */
   let YEAR_ORDER  = []; /* years present in the data, newest first (drives the tabs) */
   let current     = 'all';
+  let resetView  = null;
   let inited      = false;
 
   /* ── Element refs ── */
@@ -669,6 +670,16 @@
     select.addEventListener('change', () => setFilter(select.value));
     host.appendChild(select);
     els.filters = [select];
+
+    /* Reset view is the one destructive control in this section: it throws the
+       chosen period away and puts the dashboard back on All Time. The chart and
+       every figure re-compute on click; the button itself keeps the six-second
+       window in which the old period can be restored. */
+    resetView = document.createElement('button');
+    resetView.type = 'button';
+    resetView.className = 'dash-reset tu-btn';
+    resetView.textContent = 'Reset view';
+    host.appendChild(resetView);
   }
 
   /* ── KPI count-up animation ── */
@@ -816,6 +827,25 @@
     const urlPeriod = new URLSearchParams(location.search).get('period');
     if (urlPeriod && PERIODS[urlPeriod]) current = urlPeriod;
     buildFilters(current);
+    if (resetView && window.TimeUndo) {
+      let beforePeriod = null;
+      TimeUndo.mount(resetView, {
+        seconds: 6,
+        onStart: () => {
+          if (current === 'all') return false;
+          beforePeriod = current;
+          setFilter('all');
+          return true;
+        },
+        onCancel: () => {
+          if (!beforePeriod) return;
+          const restore = beforePeriod;
+          beforePeriod = null;
+          setFilter(restore);
+        },
+        onCommit: () => { beforePeriod = null; }
+      });
+    }
 
     updateMetrics(current, animate);
     renderLine(current, animate);
