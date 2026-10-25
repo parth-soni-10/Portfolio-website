@@ -48,6 +48,17 @@
   --accent:       #e85d04;
   --accent-deep:  #b44500;   /* text-on-light accent — WCAG AA on paper */
   --accent-soft:  #fdeee0;
+
+  /* Scroll Island — the section index pill. The kit's green becomes this
+     site's orange, and the ring rides the deeper accent so it reads on paper
+     rather than glowing over it. */
+  --si-surface:   var(--paper-raise);
+  --si-ink:       var(--ink);
+  --si-muted:     rgba(22, 19, 14, .18);
+  --si-line:      var(--line);
+  --si-accent:    var(--accent-deep);
+  --si-soft:      var(--accent-soft);
+  --si-shadow:    rgba(22, 19, 14, .22);
   --green:        #15803d;
   --amber:        #b45309;
   --shadow-card:  0 1px 2px rgba(22,19,14,.05), 0 10px 30px -14px rgba(22,19,14,.14);

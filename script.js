@@ -1164,3 +1164,20 @@
   apply(reduce(), false);
   btn.addEventListener('click', () => apply(!reduce(), true));
 })();
+
+/* ── SCROLL ISLAND ─────────────────────────────────── */
+/* The index of this one long page: seven sections, no URL and no history entry.
+   Each section carries data-si-label, because the headings here are set in
+   display type with <br> and <em> in them — "Professional<br><em>Experience</em>"
+   reads as one word to textContent, and an index of one-word labels is useless.
+   The 76px offset is the sticky header, so a chosen section lands below it. */
+(function () {
+  'use strict';
+  if (!window.ScrollIsland) return;
+  ScrollIsland.mount(document.body, {
+    label: 'Portfolio sections',
+    head: 'On this page',
+    sections: '#main > section[data-si-label]',
+    offset: 76
+  });
+})();
