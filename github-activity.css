@@ -1,4 +1,4 @@
-/* GitHub Activity — the year grid, its shade scale and the ranked footer.
+/* GitHub Activity - the year grid, its shade scale and the ranked footer.
  *
  * Colour and shape hooks, all optional:
  *   --ga-cell (square size), --ga-gap, --ga-radius, --ga-gutter (day-label gutter),
@@ -172,7 +172,7 @@
   .ga { --ga-cell: 9px; --ga-gap: 2px; --ga-gutter: 16px; }
   .ga-days { font-size: 8.5px; }
   /* A phone cannot give the date, the bar and the count one line without
-     ellipsising the date, which is the one thing the row is for — so the bar
+     ellipsising the date, which is the one thing the row is for - so the bar
      drops below its label and the count keeps the top right. */
   .ga-rank li {
     grid-template-columns: 1fr auto;

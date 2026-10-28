@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
- * GET /api/contributions — the GitHub contribution calendar, fetched and cached
+ * GET /api/contributions - the GitHub contribution calendar, fetched and cached
  * by this site.
  *
  * The heatmap used to be drawn from a request this page made straight to
@@ -8,8 +8,8 @@
  * visitor's heatmap depend on one third-party host answering, on every load, and
  * put a host with no commitment to this site in the browser's connect-src.
  *
- * GitHub's REST API — which this page already calls for the repo and follower
- * counts — does not expose the calendar at all, so "compute it ourselves from
+ * GitHub's REST API - which this page already calls for the repo and follower
+ * counts - does not expose the calendar at all, so "compute it ourselves from
  * api.github.com" is not available without a token this site should not hold.
  * The honest fix is the other half of the report's suggestion: fetch it once,
  * server-side, and cache it. Contributions are counted per day, so a day-old
@@ -17,7 +17,7 @@
  * visitors never touch the service at all.
  *
  * What this does not do, plainly: jogruber.de is still the source. If it is down
- * when the cache is cold, the graph is still unavailable — but the failure now
+ * when the cache is cold, the graph is still unavailable - but the failure now
  * reaches one request per colo per 12 hours rather than every visitor's browser,
  * and the page keeps its existing quiet fallback. Dropping the dependency
  * entirely would mean an authenticated GraphQL token on the server, which is a

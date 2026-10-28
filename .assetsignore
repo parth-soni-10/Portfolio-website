@@ -6,7 +6,7 @@
 # pointed at) was deleted with that deployment.
 tools/
 # The Pages Function that serves /api/medium. Pages compiles functions/ from the
-# repository at deploy time — the same directory — so its source is never part of
+# repository at deploy time - the same directory - so its source is never part of
 # the upload, and an ignored file cannot be served as a static file under
 # /functions/. Same rule the other sites in this collection use.
 functions/

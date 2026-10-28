@@ -1,4 +1,4 @@
-/* Accordion Gallery — a row of images where one opens and the rest step back.
+/* Accordion Gallery - a row of images where one opens and the rest step back.
  *
  *   <div class="cert-grid" data-accordion-gallery>
  *     <a class="cert-card" href="…">

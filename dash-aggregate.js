@@ -1,4 +1,4 @@
-/* dash-aggregate.js — the Content Tracker slice's data shaping, in one place.
+/* dash-aggregate.js - the Content Tracker slice's data shaping, in one place.
  *
  * The dashboard section reads the Content Tracking Dashboard's own store (its
  * `watchlist` read endpoint, D1 behind `lib/db.js`) and turns those rows into the
@@ -10,7 +10,7 @@
  * and the snapshot cannot disagree about how a row is counted.
  *
  * Loaded as a plain <script> (it attaches window.DashAggregate) and require()d by
- * that tool under Node — hence the small UMD wrapper at the bottom. No DOM, no
+ * that tool under Node - hence the small UMD wrapper at the bottom. No DOM, no
  * fetch, no globals beyond its own.
  */
 (function (root, factory) {
@@ -67,7 +67,7 @@
       /* Same row rule as the full Content Tracking Dashboard (its mapRows
          keeps only `name && year > 0`): a title without a year can't be
          bucketed into any period, and counting it in All Time only is what
-         made this section disagree with the live dashboard — and with the
+         made this section disagree with the live dashboard - and with the
          sum of its own year tabs. */
       const yv = parseInt(pick(row, 'Year'), 10);
       if (!(yv > 0)) continue;
@@ -92,7 +92,7 @@
     const sumMin = list => list.reduce((s, r) => s + r.min, 0);
     const H = m => Math.round(m / 60);
 
-    /* All genres (all-time hours) drive the bar chart order — no top-N cut:
+    /* All genres (all-time hours) drive the bar chart order - no top-N cut:
        with only six bars the full-width card sat mostly empty. */
     const gHours = {};
     records.forEach(r => { if (r.genre) gHours[r.genre] = (gHours[r.genre] || 0) + r.min; });
@@ -172,7 +172,7 @@
       genreYears,
       startYear: minYear,
       startC,
-      yearOrder: years.slice().reverse()   /* newest first — drives the filter tabs */
+      yearOrder: years.slice().reverse()   /* newest first - drives the filter tabs */
     };
   }
 

@@ -1,4 +1,4 @@
-/* GitHub Activity — a contribution-style heatmap for any dated metric.
+/* GitHub Activity - a contribution-style heatmap for any dated metric.
  *
  *   <div data-github-activity data-ga-dates="2025-01-04,2025-01-04,2025-02-11"
  *        data-ga-label="Visa decisions"></div>
@@ -6,7 +6,7 @@
  *   ActivityHeatmap.render(el, [{ date: '2025-01-04', value: 3 }], { label: '…' })
  *
  * A year of squares, one per day, shaded by how much happened. Any series of
- * dates will do — commits, decisions, watch entries, laps — which is why the
+ * dates will do - commits, decisions, watch entries, laps - which is why the
  * kit takes dates rather than a GitHub response: the same grid answers "when do
  * decisions land" as easily as "when do I commit".
  *
@@ -16,11 +16,11 @@
  *
  * Sizing is the kit's job: it measures its own box and picks the largest square
  * that still fits all 53 columns, then follows the box with a ResizeObserver.
- * A host sets a width, not a cell size — pass { fit: false } (or
+ * A host sets a width, not a cell size - pass { fit: false } (or
  * data-ga-fit="false") only if the cell size really is fixed by design.
  *
- * Dates outside the drawn window are ignored everywhere — squares, shades, the
- * ranking and the total — so a feed that carries several years still reads as
+ * Dates outside the drawn window are ignored everywhere - squares, shades, the
+ * ranking and the total - so a feed that carries several years still reads as
  * one year.
  */
 (function (global) {
@@ -77,7 +77,7 @@
   // Shading is by quartile of the non-zero days, not by a fraction of the
   // busiest one: a single release week would otherwise wash the other 364 days
   // into one flat shade. Ties collapse the quartiles, which is why the rule is
-  // "above" each threshold rather than "in a bucket" — a year of ones is one
+  // "above" each threshold rather than "in a bucket" - a year of ones is one
   // shade, not four.
   function thresholds(counts) {
     var values = Object.keys(counts).map(function (k) { return counts[k]; })
@@ -263,7 +263,7 @@
         cell.style.setProperty('--ga-delay', (reduced() ? 0 : Math.min(w * 6, 180)) + 'ms');
         if (!future) {
           cell.title = day.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) +
-            ' — ' + count + ' ' + label;
+            ' - ' + count + ' ' + label;
         }
         column.appendChild(cell);
       });

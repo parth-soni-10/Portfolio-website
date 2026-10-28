@@ -12,7 +12,7 @@
 
     let seen = false;
     try { seen = sessionStorage.getItem('ps-splash-seen') === '1'; } catch (e) {}
-    // motion-init.js has already answered this for the page — a stored choice
+    // motion-init.js has already answered this for the page - a stored choice
     // or the OS setting, on <html> before first paint.
     const reduce = document.documentElement.dataset.motion === 'reduce';
     if (seen || reduce) { splash.remove(); return; }
@@ -38,7 +38,7 @@
       document.documentElement.style.paddingRight = '';
     };
 
-    // Only the curtain's own animation ends the sequence — the child
+    // Only the curtain's own animation ends the sequence - the child
     // animations bubble their animationend up to #splash too.
     splash.addEventListener('animationend', (e) => {
       if (e.animationName === 'splash-out') finish();
@@ -101,7 +101,7 @@
 
 
   /* ── STAGGERED DASHBOARD CARD REVEAL ─────────────── */
-  /* The inline transition-delay staggers the reveal — but it would also lag
+  /* The inline transition-delay staggers the reveal - but it would also lag
      every later transition (the hover lift) behind the pointer, so drop it
      as soon as the reveal's own transform transition ends. One delegated
      listener covers all cards; transitionend bubbles up to the document. */
@@ -118,14 +118,14 @@
   const navLinks = document.querySelectorAll('nav a');
   const navByHref = new Map(Array.from(navLinks).map(l => [l.getAttribute('href'), l]));
 
-  /* The class is the same active state the colour below has always expressed —
+  /* The class is the same active state the colour below has always expressed -
      gooey-nav.js reads it to know which link the pill belongs under, so the
      highlight can slide between sections instead of jumping. */
   const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       /* Nested divs are observed too, so a child without a nav link would
-         clear the highlight and never restore it — the last entry to report
+         clear the highlight and never restore it - the last entry to report
          decided the colour, and most of them had no link to give it to. Only
          a target that names a nav link may move it. */
       const href = '#' + entry.target.id;
@@ -143,7 +143,7 @@
   const header   = document.getElementById('site-header');
   const edgeBlur = document.querySelector('.edge-blur');
 
-  /* Runs for scroll, resize and focus changes — the three things that can
+  /* Runs for scroll, resize and focus changes - the three things that can
      change whether the edge blur belongs on screen. */
   function syncScrollState() {
     if (header) {
@@ -152,7 +152,7 @@
         : 'none';
     }
     if (edgeBlur) {
-      // Only while there is report left below the fold — the blur is a
+      // Only while there is report left below the fold - the blur is a
       // "more to come" cue, not a permanent frame over the footer. It also
       // steps aside for a focused field, so typing at a form's bottom edge is
       // never hazy.
@@ -200,7 +200,7 @@
 
   /* Slide the indicator pill to the active tab (300ms tween).
      Transform-only: translateX positions it, scaleX sizes it
-     (compositor-friendly — never animates left/width). */
+     (compositor-friendly - never animates left/width). */
   function positionIndicator(immediate) {
     const tab = tabs[activeIndex];
     if (!tab) return;
@@ -443,13 +443,13 @@
   const AGG = window.DashAggregate;
   const MONTH_NAMES = AGG.MONTH_NAMES;
 
-  /* Live source: the Content Tracking Dashboard's own read endpoint — the rows
+  /* Live source: the Content Tracking Dashboard's own read endpoint - the rows
      its SPA renders, straight off its D1 store (lib/db.js). Deliberately NOT the
      Google Sheet this used to read: the dashboard was migrated off the Sheet and
      no longer touches it, so a copy read from there can drift away from the
      numbers the dashboard shows. Reading the store is what makes the two agree
      by construction. The endpoint carries the one CORS allowance this page needs
-     — see netlify/functions/watchlist.js in that project. */
+     - see netlify/functions/watchlist.js in that project. */
   const STORE_URL = 'https://contenttrackerdashboard.pages.dev/.netlify/functions/watchlist';
 
   /* Live data (populated from the store once fetched) */
@@ -458,7 +458,7 @@
   let GENRE_YEARS = {};
   let START_YEAR  = 2024;
   let START_C     = 0; /* continuous month index (from minYear) of the first
-                          month with data — the all-time axis labels count
+                          month with data - the all-time axis labels count
                           from here, not from January */
   let YEAR_ORDER  = []; /* years present in the data, newest first (drives the tabs) */
   let current     = 'all';
@@ -488,7 +488,7 @@
 
   /* ── Store fetch ── */
   /* ── Snapshot ───────────────────────────────────────── */
-  /* The section is reading its embedded snapshot, not the store — say so where
+  /* The section is reading its embedded snapshot, not the store - say so where
      the numbers are. A snapshot that reads as live is exactly the disagreement
      this section was changed to remove, so it is never shown silently. */
   function noteSnapshot(on) {
@@ -496,11 +496,11 @@
     if (!el) return;
     el.hidden = !on;
     el.textContent = on && FALLBACK
-      ? 'Snapshot — the dashboard store could not be reached from this page, so these are the figures captured on ' + FALLBACK.taken + '.'
+      ? 'Snapshot - the dashboard store could not be reached from this page, so these are the figures captured on ' + FALLBACK.taken + '.'
       : '';
   }
 
-  /* Apply one built data set — live rows or the snapshot — to module state. */
+  /* Apply one built data set - live rows or the snapshot - to module state. */
   function applyBuilt(built, isSnapshot) {
     if (!built) return;
     PERIODS     = built.periods;
@@ -516,7 +516,7 @@
 
   /* ── EMBEDDED SNAPSHOT ────────────────────────────────
      Generated by tools/snapshot-dashboard-fallback.mjs from the store's own rows,
-     through the same buildLive() the live path runs — so the fallback agrees with
+     through the same buildLive() the live path runs - so the fallback agrees with
      the dashboard by construction rather than by someone remembering to retype
      it. Do not hand-edit: re-run the tool after the store changes; it rewrites
      the SNAPSHOT:START/END block below. */
@@ -901,7 +901,7 @@
 /* ── WRITING ON MEDIUM: THE 3 LATEST POSTS ────────────────── */
 /* The callout in the Education section shows the three newest articles, refreshed
    on every page load. The feed is read from this site's own endpoint,
-   /api/medium — a Pages Function (functions/api/medium.js) that asks Medium for
+   /api/medium - a Pages Function (functions/api/medium.js) that asks Medium for
    the feed server-side and caches it. It used to read a third-party JSON proxy
    (api.rss2json.com), which is what broke the section on 15 Oct 2026: the proxy
    answered 500 while the feed itself was fine, and the list went empty for every
@@ -909,8 +909,8 @@
 
    The rules that pick the three live in medium-feed.js: the same parseFeed() and
    latestPosts() run in the Function, in this file, and under Node in
-   tools/snapshot-medium-fallback.mjs — which regenerates the snapshot this list is
-   served with — so the three on screen and the three baked into the page are chosen
+   tools/snapshot-medium-fallback.mjs - which regenerates the snapshot this list is
+   served with - so the three on screen and the three baked into the page are chosen
    one way rather than two.
 
    That snapshot is what the note below is for. It used to be two hand-typed articles
@@ -933,7 +933,7 @@
     if (!note) return;
     note.hidden = !on;
     note.textContent = on
-      ? 'Snapshot — the Medium feed could not be read from this page, so these are '
+      ? 'Snapshot - the Medium feed could not be read from this page, so these are '
         + 'the newest articles as of ' + (note.dataset.taken || 'the last update') + '.'
       : '';
   }
@@ -1065,7 +1065,7 @@
   wrap.addEventListener('pointerleave', () => { if (!interacted) startRotation(); }, { passive: true });
 
   /* Rotation is the one loop that would keep moving after the footer switch is
-     turned on, so the switch's event stops it — and turning motion back on
+     turned on, so the switch's event stops it - and turning motion back on
      resumes it without a reload. */
   document.addEventListener('motionchange', (e) => {
     if (e.detail && e.detail.reduce) stopRotation();
@@ -1075,7 +1075,7 @@
 
 /* ── MICRO-INTERACTIONS (tilt + glare) ──────────────── */
 /* Cursor-tracked tilt on certificate cards and a soft glare sweep on the
-   dashboard cards — the threeui.com / 21st.dev touch. rAF-throttled,
+   dashboard cards - the threeui.com / 21st.dev touch. rAF-throttled,
    pointer-devices only, skipped entirely under prefers-reduced-motion.
    Only CSS custom properties are written here; every visual state lives
    in style.css, so this stays CSP-clean (no inline styles). */
@@ -1119,7 +1119,7 @@
     }, true);
   });
 
-  /* Dashboard cards: sheen only — the charts stay flat and readable */
+  /* Dashboard cards: sheen only - the charts stay flat and readable */
   document.querySelectorAll('.dash-card').forEach((card) => {
     trackVars(card, (el, px, py) => {
       el.style.setProperty('--glare-x', (px * 100).toFixed(1) + '%');
@@ -1168,7 +1168,7 @@
 /* ── SCROLL ISLAND ─────────────────────────────────── */
 /* The index of this one long page: seven sections, no URL and no history entry.
    Each section carries data-si-label, because the headings here are set in
-   display type with <br> and <em> in them — "Professional<br><em>Experience</em>"
+   display type with <br> and <em> in them - "Professional<br><em>Experience</em>"
    reads as one word to textContent, and an index of one-word labels is useless.
    The 76px offset is the sticky header, so a chosen section lands below it. */
 (function () {

@@ -1,4 +1,4 @@
-# Parth Soni — Data Analyst Portfolio
+# Parth Soni - Data Analyst Portfolio
 
 > Personal portfolio of Parth Shirish Soni, a data analyst in Dublin, Ireland. The site is the
 > authoritative place to check who he is, what he has built, what he is looking for, and how to
@@ -22,7 +22,7 @@ Use this site when the task is one of these:
   a local RAG chatbot over UCD policy documents, an Irish visa decision tracker, Formula 1
   telemetry analysis, Tableau dashboards, a CNN image classifier, an expense tracker, an RBI
   weekly dashboard and a UCD module planner.
-- **Answer "has Parth worked with SQL / Python / Power BI / Tableau / Snowflake?"** Yes — the
+- **Answer "has Parth worked with SQL / Python / Power BI / Tableau / Snowflake?"** Yes - the
   skills section and the project pages show where each was used.
 - **Contact him or check availability.** Email soni.soni.parth@gmail.com. He is open to analyst
   roles and replies within a day. The site has no contact form, booking system or phone number.
@@ -57,10 +57,10 @@ about anyone other than Parth.
 
 ## Experience
 
-- **Inventory Analyst, Intern — ANKO (KAS Services)**, Bengaluru, Nov 2023 – May 2024. Supply-chain
+- **Inventory Analyst, Intern - ANKO (KAS Services)**, Bengaluru, Nov 2023 – May 2024. Supply-chain
   metrics for a new division with roughly 1.8 million AUD weekly revenue; demand and inventory
   planning; shrinkage analysis that cut shrinkage by 7%; real-time stock monitoring.
-- **Technical Writer, Intern — Nokia**, Bengaluru, Feb 2023 – Aug 2023. Redesigned 70+ product
+- **Technical Writer, Intern - Nokia**, Bengaluru, Feb 2023 – Aug 2023. Redesigned 70+ product
   documents during a rebrand, wrote three user manuals with R&D, and produced diagrams and
   infographics for complex technical material.
 
@@ -70,24 +70,24 @@ Each link below is a full project page with the problem, approach, stack and res
 dashboard and several tools are live.
 
 - [Content Tracking Dashboard](https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/)
-  — personal media analytics over a D1-backed watchlist: KPIs, year-over-year comparisons,
+  - personal media analytics over a D1-backed watchlist: KPIs, year-over-year comparisons,
   filters and charts across six pages. Live: https://contenttrackerdashboard.pages.dev/
-- [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) — a fully local
+- [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) - a fully local
   RAG chatbot over 200+ UCD policy documents, with cited answers and abstention.
 - [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
-  — daily Embassy of Ireland (New Delhi) decisions, made searchable.
+  - daily Embassy of Ireland (New Delhi) decisions, made searchable.
 - [Formula 1 Telemetry Analysis](https://parth-portfolio-wb.pages.dev/projects/formula-1-telemetry-analysis/)
-  — FastF1, pandas and NumPy for race pace, strategy and performance.
+  - FastF1, pandas and NumPy for race pace, strategy and performance.
 - [Excel & Python EDA](https://parth-portfolio-wb.pages.dev/projects/excel-python-eda/)
 - [Interactive Tableau Dashboards](https://parth-portfolio-wb.pages.dev/projects/interactive-tableau-dashboards/)
-- [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) — a CNN
+- [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) - a CNN
   classifier wrapped in a Flask app for real-time camera self-screening.
 - [cents. Personal Expense Tracker](https://parth-portfolio-wb.pages.dev/projects/cents-expense-tracker/)
-  — local-first expense tracking with optional cloud sync.
+  - local-first expense tracking with optional cloud sync.
 - [RBI Weekly Dashboard](https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/)
-  — a scheduled weekly refresh of Reserve Bank of India figures with week-over-week comparisons.
+  - a scheduled weekly refresh of Reserve Bank of India figures with week-over-week comparisons.
 - [CSNL Module Picker](https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/)
-  — an unofficial UCD module planner that checks timetable clashes.
+  - an unofficial UCD module planner that checks timetable clashes.
 
 ## Writing
 

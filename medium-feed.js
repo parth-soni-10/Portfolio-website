@@ -1,7 +1,7 @@
-/* medium-feed.js — the "Writing on Medium" list's feed rules, in one place.
+/* medium-feed.js - the "Writing on Medium" list's feed rules, in one place.
  *
  * The section shows the three newest Medium articles, refreshed on every load.
- * It used to read them through api.rss2json.com — a free JSON proxy in front of
+ * It used to read them through api.rss2json.com - a free JSON proxy in front of
  * Medium's RSS, because Medium answers a *browser* request to its own feed with
  * a Cloudflare challenge (HTTP 403) and without CORS headers. On 15 Oct 2026 the
  * proxy answered HTTP 500 `{"status":"error","message":"Internal error"}` while
@@ -11,12 +11,12 @@
  *
  * The fetch is now this site's own. `functions/api/medium.js` (a Pages Function,
  * compiled by the Pages build from `functions/` at the repository root) asks
- * Medium for the feed — server-side there is no CORS and no browser challenge —
+ * Medium for the feed - server-side there is no CORS and no browser challenge -
  * parses it here, and answers the page on the same origin at FEED_URL. Nothing
  * third-party is in the path any more, and the page needs no new CSP origin.
  *
  * Why this file exists rather than that logic living in the section's IIFE:
- * three callers need to agree on what "the newest three" means — the page, the
+ * three callers need to agree on what "the newest three" means - the page, the
  * Pages Function, and tools/snapshot-medium-fallback.mjs, which bakes the
  * fallback list into index.html. The tool reads Medium directly (Node has no
  * CORS either) and runs this exact `parseFeed()` + `latestPosts()`, so the three
@@ -24,7 +24,7 @@
  * snapshot cannot disagree with the feed it claims to summarise.
  *
  * Loaded as a plain <script> (attaches window.MediumFeed), imported by the Pages
- * Function, and require()d by that tool under Node — hence the small UMD wrapper
+ * Function, and require()d by that tool under Node - hence the small UMD wrapper
  * at the bottom. No DOM, no fetch, no state beyond its own.
  */
 (function (root, factory) {
@@ -35,7 +35,7 @@
 
   /* One handle. FEED_SOURCE is what a server-side caller fetches (Medium
      directly); FEED_URL is what the browser fetches, which is this site's own
-     Function — same origin, so `connect-src 'self'` covers it. */
+     Function - same origin, so `connect-src 'self'` covers it. */
   const HANDLE      = 'soni.soni.parth';
   const FEED_SOURCE = 'https://medium.com/feed/@' + HANDLE;
   const FEED_URL    = '/api/medium';
@@ -77,7 +77,7 @@
   /**
    * One tag's text out of an <item>: `<title><![CDATA[…]]></title>`.
    * Non-greedy, and anchored on the tag name so <atom:link> is not read as
-   * <link> — the `(?![\w:-])` is what keeps `link` from matching `atom:link`.
+   * <link> - the `(?![\w:-])` is what keeps `link` from matching `atom:link`.
    */
   function tag(item, name) {
     const m = new RegExp(`<${name}(?![\\w:-])[^>]*>([\\s\\S]*?)</${name}>`, 'i').exec(item);
@@ -110,7 +110,7 @@
   /**
    * The newest `want` articles, newest first, as `{ title, url, pub, label }`.
    * Anything that is not a titled, plain-https Medium link is dropped rather
-   * than rendered — the hrefs are written into the page, so a link that is not
+   * than rendered - the hrefs are written into the page, so a link that is not
    * one is not something to link.
    *
    * The order is decided here rather than trusted from upstream: items are

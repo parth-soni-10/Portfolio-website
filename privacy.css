@@ -1,10 +1,10 @@
-/* privacy.css — the styles for privacy.html, and nothing else uses it.
+/* privacy.css - the styles for privacy.html, and nothing else uses it.
  *
  * A sheet of its own rather than style.css because the legal page must stand
  * on its own: it does not load script.js, the splash, the dashboard layer or
  * glide-select, so carrying that whole system here would be dead weight. It
- * keeps the site's palette and type — warm paper, ink, one orange accent,
- * DM Sans for prose and Inter for labels — so it still reads as the same
+ * keeps the site's palette and type - warm paper, ink, one orange accent,
+ * DM Sans for prose and Inter for labels - so it still reads as the same
  * document. No inline style, because _headers sends `style-src 'self'`.
  */
 

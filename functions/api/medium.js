@@ -1,11 +1,11 @@
 /* ---------------------------------------------------------------------------
- * GET /api/medium — the "Writing on Medium" list's feed, fetched by this site.
+ * GET /api/medium - the "Writing on Medium" list's feed, fetched by this site.
  *
  * What this replaces: the page used to read the feed through
  * api.rss2json.com, a free JSON proxy, because Medium answers a *browser*
  * request to its own feed with a Cloudflare challenge (HTTP 403) and sends no
  * Access-Control-Allow-Origin. Renting that one data path broke the section for
- * every visitor on 15 Oct 2026 — the proxy answered HTTP 500
+ * every visitor on 15 Oct 2026 - the proxy answered HTTP 500
  * `{"status":"error","message":"Internal error"}` while the feed itself was
  * returning 200 with 10 items, and nothing in the page could do about it.
  *
@@ -22,7 +22,7 @@
  * could lag up to 30 minutes behind Medium, so this is both fresher than what it
  * replaced and no load on Medium's feed.
  *
- * Path: `functions/api/medium.js` is file-based routing — the route is exactly
+ * Path: `functions/api/medium.js` is file-based routing - the route is exactly
  * `/api/medium`. This directory is compiled by the Pages build from the
  * repository root (not from the staged output), and `functions/` is listed in
  * .assetsignore so the sources are never uploaded as static files.

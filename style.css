@@ -1,5 +1,5 @@
 /* =====================================================
-   PARTH SONI PORTFOLIO — "ANALYST REPORT" DESIGN
+   PARTH SONI PORTFOLIO - "ANALYST REPORT" DESIGN
    Fonts: DM Sans (display + body) + Inter (data/tabular)
    Palette: warm paper · ink · ONE orange accent
    Shape system (documented, one scale per tier):
@@ -9,7 +9,7 @@
    Motion: transform/opacity only; prefers-reduced-motion honored.
    ===================================================== */
 
-/* Self-hosted variable fonts (latin subset) — no third-party font requests */
+/* Self-hosted variable fonts (latin subset) - no third-party font requests */
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -46,10 +46,10 @@
   --line:         #ddd8cc;
   --line-strong:  #b9b2a2;
   --accent:       #e85d04;
-  --accent-deep:  #b44500;   /* text-on-light accent — WCAG AA on paper */
+  --accent-deep:  #b44500;   /* text-on-light accent - WCAG AA on paper */
   --accent-soft:  #fdeee0;
 
-  /* Scroll Island — the section index pill. The kit's green becomes this
+  /* Scroll Island - the section index pill. The kit's green becomes this
      site's orange, and the ring rides the deeper accent so it reads on paper
      rather than glowing over it. */
   --si-surface:   var(--paper-raise);
@@ -67,7 +67,7 @@
   --maxw:         1180px;
   --pad:          24px;
 
-  /* Accordion Gallery — the credential row. The veil is this site's ink rather
+  /* Accordion Gallery - the credential row. The veil is this site's ink rather
      than a neutral black, so a collapsed panel darkens towards the page instead
      of towards grey. */
   --ag-h:         330px;
@@ -134,7 +134,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 /* ===================== HEADER ===================== */
 /* Progressive blur. Instead of one uniform translucent bar, three stacked
    backdrop layers each carry their own mask, so the veil is strongest at the
-   viewport edge and dissolves to nothing at the bar's lower edge — content
+   viewport edge and dissolves to nothing at the bar's lower edge - content
    melts as it slides under rather than hitting a hard blurred brick. The
    paper tint rides the same layers, so it fades in step with the blur. */
 #site-header {
@@ -153,7 +153,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 /* The ramp is tuned so the bar itself is as opaque as the flat veil it
    replaces: the three tints stack to ~.90 across the 64px bar, and every mask
    holds full strength until past the hairline. Only the 40px bleed below the
-   hairline dissolves to nothing — that dissolve is the effect, so content
+   hairline dissolves to nothing - that dissolve is the effect, so content
    emerges from the bar instead of being cut off by it. */
 .header-blur span:nth-child(1) {
   backdrop-filter: blur(2px);
@@ -274,7 +274,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   font-weight: 800;
 }
 /* Kinetic hero headline: each line rises out of its own mask (the gsap
-   signature move, vanilla). Pure CSS animation — it starts the moment the
+   signature move, vanilla). Pure CSS animation - it starts the moment the
    stylesheet applies, with no JS dependency, so it plays identically for
    no-JS visitors and never delays the headline behind script.js. The
    prefers-reduced-motion blocks below and in the global reduce section
@@ -461,7 +461,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .connect-gh-graph-wrap { margin: 18px 0 14px; }
 /* The contribution grid is the design system's ActivityHeatmap. This maps the
    kit's colour and type hooks onto the card instead of restyling its parts, so
-   the only thing the portfolio owns is the ladder of five shades — the same
+   the only thing the portfolio owns is the ladder of five shades - the same
    ladder the hand-rolled grid used, so the picture does not change, only who
    draws it. Sideways scrolling belongs to the kit's own .ga-scroll. */
 .connect-gh-graph {
@@ -863,7 +863,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .dash-charts {
   display: grid;
   /* Stacked full-width: the monthly trend (34 points) needs every pixel of
-     the card — side by side it was crammed into ~600px of a 1440px screen. */
+     the card - side by side it was crammed into ~600px of a 1440px screen. */
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
@@ -906,7 +906,7 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   --ac-font: var(--data);
 }
 
-/* Bar chart — vertical columns (JS grows scaleY from the bottom and floats
+/* Bar chart - vertical columns (JS grows scaleY from the bottom and floats
    each value above the bar tip via an inline bottom offset). */
 .dash-bar-figure {
   height: 220px;
@@ -1187,7 +1187,7 @@ body.is-splashing { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { #splash { display: none; } }
 
 /* ===================== EDGE BLUR ===================== */
-/* Bottom-of-viewport progressive blur — the same layered, masked-blur trick as
+/* Bottom-of-viewport progressive blur - the same layered, masked-blur trick as
    the header, here hinting at the report below the fold. script.js owns the
    opacity: it stays off until scroll is confirmed, turns off again at the end
    of the page, and steps aside for a focused field, so it never sits over the
@@ -1225,7 +1225,7 @@ body.is-splashing { overflow: hidden; }
 /* /projects/<slug>/ pages, generated by tools/build-projects.mjs from the
    #projects panels. They reuse the panel's own classes (.sc-num, .ptag,
    .spot-link) so a project reads the same in both places; only the page
-   frame — back link, title tier, prev/next — is new. */
+   frame - back link, title tier, prev/next - is new. */
 .project-page {
   max-width: var(--maxw);
   margin: 0 auto;
@@ -1413,7 +1413,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
    All of it is transform/opacity only and switches off for touch devices
    and prefers-reduced-motion. */
 
-/* — Skills ticker (between hero and connect) — */
+/* - Skills ticker (between hero and connect) - */
 .skill-ticker {
   border-top: 1px solid var(--line);
   overflow: hidden;
@@ -1441,7 +1441,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
 }
 @keyframes ticker-scroll { to { transform: translateX(-50%); } }
 
-/* — Numbered section kickers — */
+/* - Numbered section kickers - */
 .section-kicker {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--data);
@@ -1456,7 +1456,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
 }
 .section-kicker b { color: var(--accent-deep); font-weight: 700; }
 
-/* — Hero dot-grid backdrop — */
+/* - Hero dot-grid backdrop - */
 #hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background-image: radial-gradient(rgba(22,19,14,.10) 1px, transparent 1.4px);
@@ -1465,7 +1465,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
   mask-image: radial-gradient(620px 420px at 76% 6%, #000, transparent 72%);
 }
 
-/* — Nav underline slide — */
+/* - Nav underline slide - */
 #site-header nav a { position: relative; }
 #site-header nav a::after {
   content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px;
@@ -1475,7 +1475,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
 }
 #site-header nav a:hover::after { transform: scaleX(1); }
 
-/* — Button icon nudge — */
+/* - Button icon nudge - */
 .btn-editorial svg.icon, .btn-ghost-hero svg.icon, .btn-footer-contact svg.icon {
   transition: transform .2s ease;
 }
@@ -1483,8 +1483,8 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
   transform: translateX(3px);
 }
 
-/* — Certificate cards: cursor tilt + glare (pointer devices only; JS drives
-     the tilt and glare custom properties, CSS only reads them) — */
+/* - Certificate cards: cursor tilt + glare (pointer devices only; JS drives
+     the tilt and glare custom properties, CSS only reads them) - */
 .cert-card {
   position: relative;
   transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
@@ -1502,7 +1502,7 @@ html[data-motion="reduce"] .dash-card::after { display: none; }
 }
 .cert-card:hover::after { opacity: 1; }
 
-/* — Dashboard cards: soft cursor-tracked sheen (no tilt; charts stay flat) — */
+/* - Dashboard cards: soft cursor-tracked sheen (no tilt; charts stay flat) - */
 .dash-card { position: relative; }
 .dash-card::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
@@ -1523,7 +1523,7 @@ svg.icon {
   flex: none;
 }
 
-/* — Touch devices / reduced motion: tilt, glare and ticker off — */
+/* - Touch devices / reduced motion: tilt, glare and ticker off - */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .cert-card, .cert-card:hover { transform: none; }
   .cert-card::after, .dash-card::after { display: none; }
@@ -1570,7 +1570,7 @@ svg.icon {
 }
 
 /* The filter row animates in with a transform, which makes it a stacking
-   context of its own — and a menu opened inside it would then paint under the
+   context of its own - and a menu opened inside it would then paint under the
    metrics that follow it in the document. Lift the row while it is on screen. */
 .dash-filters {
   position: relative;

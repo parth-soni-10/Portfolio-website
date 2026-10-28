@@ -1,4 +1,4 @@
-/* Accordion Gallery — a row of images where one opens and the rest step back.
+/* Accordion Gallery - a row of images where one opens and the rest step back.
  *
  * Colour and shape hooks, all optional:
  *   --ag-h (row height), --ag-gap, --ag-radius, --ag-open (grow factor),
@@ -11,12 +11,12 @@
  * its own and one hover cannot force a layout of the whole page.
  *
  * A panel opens on :hover and on :focus-within as well as on the kit's class,
- * which means the gallery still opens when the script has not run yet — the
+ * which means the gallery still opens when the script has not run yet - the
  * class is what keeps the last panel open after the pointer leaves the row.
  */
 
-/* The container carries the host's own class — `cert-grid`, in the site this
-   was built for — and that class is a grid. The attribute keeps this rule above
+/* The container carries the host's own class - `cert-grid`, in the site this
+   was built for - and that class is a grid. The attribute keeps this rule above
    it whatever order the two stylesheets are loaded in, so a host never has to
    know that adopting the gallery means dropping its grid. */
 .ag-gallery[data-accordion-gallery] {
@@ -123,7 +123,7 @@
   pointer-events: none;
   /* Opacity is declared here on purpose. A host that already draws a glare on
      this same pseudo-element leaves it at `opacity: 0` until hover, and a
-     property this rule does not set would be inherited from that rule — the
+     property this rule does not set would be inherited from that rule - the
      caption would float on the bare picture with no scrim behind it. */
   opacity: 1;
   background:
