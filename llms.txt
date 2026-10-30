@@ -69,26 +69,26 @@ about anyone other than Parth.
 Each link below is a full project page with the problem, approach, stack and result. The
 dashboard and several tools are live.
 
+- [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) - a fully local
+  RAG chatbot over 200+ UCD policy documents, with cited answers and abstention.
 - [Content Tracking Dashboard](https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/)
   - personal media analytics over a D1-backed watchlist: KPIs, year-over-year comparisons,
   filters and charts across six pages. Live: https://contenttrackerdashboard.pages.dev/
-- [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) - a fully local
-  RAG chatbot over 200+ UCD policy documents, with cited answers and abstention.
-- [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
-  - daily Embassy of Ireland (New Delhi) decisions, made searchable.
 - [Formula 1 Telemetry Analysis](https://parth-portfolio-wb.pages.dev/projects/formula-1-telemetry-analysis/)
   - FastF1, pandas and NumPy for race pace, strategy and performance.
-- [Excel & Python EDA](https://parth-portfolio-wb.pages.dev/projects/excel-python-eda/)
-- [Interactive Tableau Dashboards](https://parth-portfolio-wb.pages.dev/projects/interactive-tableau-dashboards/)
-- [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) - a CNN
-  classifier wrapped in a Flask app for real-time camera self-screening.
-- [cents. Personal Expense Tracker](https://parth-portfolio-wb.pages.dev/projects/cents-expense-tracker/)
-  - local-first expense tracking with optional cloud sync.
 - [RBI Weekly Dashboard](https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/)
   - a scheduled weekly refresh of Reserve Bank of India figures with week-over-week comparisons.
+- [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
+  - daily Embassy of Ireland (New Delhi) decisions, made searchable.
+- [Interactive Tableau Dashboards](https://parth-portfolio-wb.pages.dev/projects/interactive-tableau-dashboards/)
+- [Excel & Python EDA](https://parth-portfolio-wb.pages.dev/projects/excel-python-eda/)
 - [CSNL Module Picker](https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/)
   - an unofficial UCD module planner that checks timetable clashes.
 
+- [cents. Personal Expense Tracker](https://parth-portfolio-wb.pages.dev/projects/cents-expense-tracker/)
+  - local-first expense tracking with optional cloud sync.
+- [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) - a CNN
+  classifier wrapped in a Flask app for real-time camera self-screening.
 ## Writing
 
 Formula 1 qualifying and race reports at [Medium](https://medium.com/@soni.soni.parth), built
