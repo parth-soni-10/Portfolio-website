@@ -143,28 +143,62 @@
   const header   = document.getElementById('site-header');
   const edgeBlur = document.querySelector('.edge-blur');
 
+  /* Both states are edge-triggered: the shadow and the fade only belong on one
+     side of their threshold, so nothing is written on a scroll event that does
+     not cross it. The old version reassigned two inline styles on every event -
+     at trackpad rates that re-parsed a 1005px box-shadow a few hundred times a
+     second on the element that carries the blur stack, and repainted the stack
+     with it. The shadow is now a class (style.css), and the opacity write is
+     guarded by the last value. */
+  let shadowOn = null;
+  let edgeOn   = null;
+  let queued   = false;
+
   /* Runs for scroll, resize and focus changes - the three things that can
-     change whether the edge blur belongs on screen. */
+     change whether the edge blur belongs on screen. Every read happens before
+     the first write, so the scrollHeight lookup never forces a style or layout
+     pass over a document we just dirtied. */
   function syncScrollState() {
-    if (header) {
-      header.style.boxShadow = window.scrollY > 60
-        ? '0 1px 2px rgba(22,19,14,.05), 0 10px 28px -14px rgba(22,19,14,.18)'
-        : 'none';
-    }
+    const y = window.scrollY;
+
+    let wantShadow = false;
+    let wantEdge   = false;
+
+    if (header) wantShadow = y > 60;
+
     if (edgeBlur) {
       // Only while there is report left below the fold - the blur is a
       // "more to come" cue, not a permanent frame over the footer. It also
       // steps aside for a focused field, so typing at a form's bottom edge is
       // never hazy.
-      const active  = document.activeElement;
-      const typing  = active && active.matches && active.matches('input, textarea, select');
-      const remaining = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
-      edgeBlur.style.opacity = !typing && window.scrollY > 40 && remaining > 48 ? '1' : '0';
+      const active = document.activeElement;
+      const typing = active && active.matches && active.matches('input, textarea, select');
+      const remaining = document.documentElement.scrollHeight - (y + window.innerHeight);
+      wantEdge = !typing && y > 40 && remaining > 48;
+    }
+
+    if (header && wantShadow !== shadowOn) {
+      shadowOn = wantShadow;
+      header.classList.toggle('is-scrolled', wantShadow);
+    }
+    if (edgeBlur && wantEdge !== edgeOn) {
+      edgeOn = wantEdge;
+      edgeBlur.style.opacity = wantEdge ? '1' : '0';
     }
   }
 
-  window.addEventListener('scroll', syncScrollState, { passive: true });
-  window.addEventListener('resize', syncScrollState, { passive: true });
+  /* One pass per frame, however many scroll events arrive in it. */
+  function queueScrollState() {
+    if (queued) return;
+    queued = true;
+    window.requestAnimationFrame(() => {
+      queued = false;
+      syncScrollState();
+    });
+  }
+
+  window.addEventListener('scroll', queueScrollState, { passive: true });
+  window.addEventListener('resize', queueScrollState, { passive: true });
   document.addEventListener('focusin', syncScrollState);
   document.addEventListener('focusout', syncScrollState);
   syncScrollState();

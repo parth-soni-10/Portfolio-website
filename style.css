@@ -132,14 +132,21 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .skip-link:focus { top: 16px; }
 
 /* ===================== HEADER ===================== */
-/* Progressive blur. Instead of one uniform translucent bar, three stacked
-   backdrop layers each carry their own mask, so the veil is strongest at the
-   viewport edge and dissolves to nothing at the bar's lower edge - content
-   melts as it slides under rather than hitting a hard blurred brick. The
-   paper tint rides the same layers, so it fades in step with the blur. */
+/* One masked backdrop layer, not three. The veil is strongest at the viewport
+   edge and dissolves to nothing past the hairline, so content melts as it
+   slides under rather than hitting a hard blurred brick. Three stacked layers
+   (2px + 6px + 12px) bought a slightly tighter ramp and cost three full-width
+   backdrop passes on every scroll frame - the single biggest scroll cost on
+   the page. 10px behind the same mask reads almost identically. */
 #site-header {
   position: sticky; top: 0; z-index: 100;
   border-bottom: 1px solid var(--line);
+}
+/* Written by script.js on the threshold crossing, not on every scroll event.
+   A shadow is cheap; re-parsing it 120 times a second on the element that owns
+   the blur stack is not. */
+#site-header.is-scrolled {
+  box-shadow: 0 1px 2px rgba(22,19,14,.05), 0 10px 28px -14px rgba(22,19,14,.18);
 }
 .header-blur {
   position: absolute; inset: 0 0 -40px; /* bleed past the hairline into the page */
@@ -148,30 +155,23 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 }
 .header-blur span {
   position: absolute; inset: 0;
-  background: rgba(246,245,241,.54);
+  /* The old stack combined to ~.90 across the 64px bar; one layer carries it. */
+  background: rgba(246,245,241,.90);
 }
-/* The ramp is tuned so the bar itself is as opaque as the flat veil it
-   replaces: the three tints stack to ~.90 across the 64px bar, and every mask
-   holds full strength until past the hairline. Only the 40px bleed below the
-   hairline dissolves to nothing - that dissolve is the effect, so content
-   emerges from the bar instead of being cut off by it. */
+/* The only layer that paints. The mask holds full strength past the hairline
+   and dissolves through the 40px bleed below it - that dissolve is the effect,
+   so content emerges from the bar instead of being cut off by it. */
 .header-blur span:nth-child(1) {
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
 }
-.header-blur span:nth-child(2) {
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.92) 60%, transparent 88%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.92) 60%, transparent 88%);
-}
+/* Still in the markup so the fallback below can drop back to one flat bar,
+   but they never paint a filter again. */
+.header-blur span:nth-child(2),
 .header-blur span:nth-child(3) {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.8) 58%, transparent 78%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.8) 58%, transparent 78%);
+  display: none;
 }
 .header-inner { position: relative; z-index: 1; }
 /* No backdrop-filter (older Safari, locked-down build): fall back to a single
@@ -1187,29 +1187,25 @@ body.is-splashing { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { #splash { display: none; } }
 
 /* ===================== EDGE BLUR ===================== */
-/* Bottom-of-viewport progressive blur - the same layered, masked-blur trick as
-   the header, here hinting at the report below the fold. script.js owns the
-   opacity: it stays off until scroll is confirmed, turns off again at the end
-   of the page, and steps aside for a focused field, so it never sits over the
-   footer or a form being typed into. */
+/* Bottom-of-viewport fade - the same "more to come" cue, now a static gradient
+   rather than two masked backdrop blurs. Two more full-width blur passes is a
+   heavy price for a hint nobody reads while moving; fading the page into paper
+   costs nothing and sits in the same place. script.js owns the opacity: it
+   stays off until scroll is confirmed, turns off again at the end of the page,
+   and steps aside for a focused field, so it never sits over the footer or a
+   form being typed into. */
 .edge-blur {
   position: fixed; left: 0; right: 0; bottom: 0; height: 96px;
   z-index: 90; pointer-events: none;
   opacity: 0; transition: opacity .3s ease;
+  background: linear-gradient(to top,
+    rgba(246,245,241,.94) 0%,
+    rgba(246,245,241,.70) 38%,
+    rgba(246,245,241,0) 100%);
 }
-.edge-blur span { position: absolute; inset: 0; }
-.edge-blur span:nth-child(1) {
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  mask-image: linear-gradient(to top, #000 0%, transparent 62%);
-  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 62%);
-}
-.edge-blur span:nth-child(2) {
-  backdrop-filter: blur(11px) saturate(140%);
-  -webkit-backdrop-filter: blur(11px) saturate(140%);
-  mask-image: linear-gradient(to top, #000 0%, transparent 34%);
-  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 34%);
-}
+/* The old layered spans are still in the markup; there is nothing left to
+   paint inside them. */
+.edge-blur span { display: none; }
 
 /* ===================== REVEAL MOTION ===================== */
 .fade-up {
