@@ -50,9 +50,15 @@
   transform: none;
 }
 
+/* Exactly one panel is open. Once the kit has picked one - the root carries
+   [data-ag-open] - the class is the only thing that opens a panel. Ungated,
+   :hover and :focus-within can match two different cards at once: the pointer
+   on one, the keyboard focus still on a link that was just followed into a new
+   tab on another, and the row opens twice. They stay as the fallback for a
+   gallery the kit has not mounted yet. */
 .ag-gallery .ag-panel.is-open,
-.ag-gallery .ag-panel:hover,
-.ag-gallery .ag-panel:focus-within {
+.ag-gallery:not([data-ag-open]) .ag-panel:hover,
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within {
   flex-grow: var(--ag-open, 3.4);
 }
 
@@ -90,8 +96,8 @@
 }
 
 .ag-gallery .ag-panel.is-open [class*="img-wrap"] img,
-.ag-gallery .ag-panel:hover [class*="img-wrap"] img,
-.ag-gallery .ag-panel:focus-within [class*="img-wrap"] img {
+.ag-gallery:not([data-ag-open]) .ag-panel:hover [class*="img-wrap"] img,
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within [class*="img-wrap"] img {
   transform: scale(1);
 }
 
@@ -110,8 +116,8 @@
 }
 
 .ag-gallery .ag-panel.is-open::before,
-.ag-gallery .ag-panel:hover::before,
-.ag-gallery .ag-panel:focus-within::before {
+.ag-gallery:not([data-ag-open]) .ag-panel:hover::before,
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within::before {
   opacity: 0.16;
 }
 
@@ -149,10 +155,10 @@
 
 .ag-gallery .ag-panel.is-open [class*="cert-info"],
 .ag-gallery .ag-panel.is-open .ag-caption,
-.ag-gallery .ag-panel:hover [class*="cert-info"],
-.ag-gallery .ag-panel:hover .ag-caption,
-.ag-gallery .ag-panel:focus-within [class*="cert-info"],
-.ag-gallery .ag-panel:focus-within .ag-caption {
+.ag-gallery:not([data-ag-open]) .ag-panel:hover [class*="cert-info"],
+.ag-gallery:not([data-ag-open]) .ag-panel:hover .ag-caption,
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within [class*="cert-info"],
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within .ag-caption {
   opacity: 1;
   transform: none;
 }
@@ -205,8 +211,8 @@
 }
 
 .ag-gallery .ag-panel.is-open .ag-spine,
-.ag-gallery .ag-panel:hover .ag-spine,
-.ag-gallery .ag-panel:focus-within .ag-spine {
+.ag-gallery:not([data-ag-open]) .ag-panel:hover .ag-spine,
+.ag-gallery:not([data-ag-open]) .ag-panel:focus-within .ag-spine {
   opacity: 0;
 }
 
