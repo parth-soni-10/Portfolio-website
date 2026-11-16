@@ -556,7 +556,7 @@
      the SNAPSHOT:START/END block below. */
   /* SNAPSHOT:START */
   const FALLBACK = {
-    "taken": "2026-10-16",
+    "taken": "2026-11-16",
     "periods": {
       "2024": {
         "name": "2024",
@@ -570,22 +570,22 @@
       },
       "2025": {
         "name": "2025",
-        "months": [138,121,74,110,140,115,85,248,112,64,78,48],
-        "titles": 158,
-        "hours": 1331,
-        "shows": 122,
+        "months": [138,121,74,110,140,115,85,248,112,64,78,52],
+        "titles": 159,
+        "hours": 1336,
+        "shows": 123,
         "movies": 36,
         "sub": ["active in period","Jan-Dec 2025","77% of titles","23% of titles"],
         "monthsLabel": "Jan-Dec 2025"
       },
       "2026": {
         "name": "2026",
-        "months": [165,156,15,64,46,65,10,39,46,38],
-        "titles": 98,
-        "hours": 643,
-        "shows": 63,
-        "movies": 35,
-        "sub": ["active in period","Jan-Oct 2026","64% of titles","36% of titles"],
+        "months": [165,156,15,64,46,65,10,39,46,63],
+        "titles": 103,
+        "hours": 668,
+        "shows": 67,
+        "movies": 36,
+        "sub": ["active in period","Jan-Oct 2026","65% of titles","35% of titles"],
         "monthsLabel": "Jan-Oct 2026"
       },
       "all": {
@@ -614,7 +614,7 @@
           112,
           64,
           78,
-          48,
+          52,
           165,
           156,
           15,
@@ -624,13 +624,13 @@
           10,
           39,
           46,
-          38
+          63
         ],
-        "titles": 386,
-        "hours": 3048,
-        "shows": 291,
-        "movies": 95,
-        "sub": ["series + movies","since Jan 2024","75.4% of titles","24.6% of titles"],
+        "titles": 392,
+        "hours": 3077,
+        "shows": 296,
+        "movies": 96,
+        "sub": ["series + movies","since Jan 2024","75.5% of titles","24.5% of titles"],
         "monthsLabel": "Jan 2024-Oct 2026"
       }
     },
@@ -648,16 +648,17 @@
       "Mystery",
       "Animation",
       "Sci-Fi & Fantasy",
+      "Action & Adventure",
       "Action/Horror",
       "Tragic",
       "Science Fiction",
       "Horror"
     ],
     "genreYears": {
-      "2024": [428,88,179,144,55,90,47,35,0,0,0,7,0,0,0,0,0],
-      "2025": [349,234,251,204,111,49,38,34,31,23,0,3,0,2,0,0,2],
-      "2026": [129,179,54,120,85,3,22,19,6,0,14,0,9,0,2,2,0],
-      "all": [905,501,484,468,252,141,108,88,37,23,14,10,9,2,2,2,2]
+      "2024": [428,88,179,144,55,90,47,35,0,0,0,7,0,0,0,0,0,0],
+      "2025": [349,234,255,204,111,49,38,34,31,23,0,3,0,0,2,0,0,2],
+      "2026": [130,179,54,136,85,3,22,19,6,0,14,0,9,7,0,2,2,0],
+      "all": [907,501,488,484,252,141,108,88,37,23,14,10,9,7,2,2,2,2]
     },
     "startYear": 2024,
     "startC": 0,
