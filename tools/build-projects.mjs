@@ -21,6 +21,15 @@
  * numbered in display order but their ids are not sequential, and a slug is a
  * URL someone may have linked to. Adding a project means adding its panel and
  * one line to SLUGS.
+ *
+ * The one exception to "everything comes from the panel" is CASE_STUDIES below:
+ * the dashboard, PolicyBot and F1 pages carry a short case study (question,
+ * contribution, source, method, evidence, limitations) that exists nowhere on
+ * the home page. It is hand-written here - once, in the generator, so the page
+ * and the panel still cannot disagree about the facts they share - and only
+ * for those three slugs; every other project page stays exactly what its panel
+ * says. Every number in a case study is one the panel already publishes, and
+ * the precision figure is attributed to its own evaluation.
  */
 
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
@@ -45,6 +54,53 @@ const SLUGS = {
 };
 
 const collapse = (html) => html.replace(/\s+/g, ' ').trim();
+
+/**
+ * Case studies for the three project pages a search visitor should not have to
+ * bounce back from: original depth (question, contribution, source, method,
+ * evidence, limitations) instead of the home summary repeated. Keyed by slug;
+ * a project with no entry gets the plain generated page.
+ */
+const CASE_STUDIES = {
+  'content-tracking-dashboard': {
+    question: 'What did I watch \u2014 and how has my taste changed year over year?',
+    contribution:
+      'I built the whole thing end to end: the front end in vanilla HTML, CSS and JavaScript, and the backend as a Cloudflare Worker reading a D1 database \u2014 no framework, no build step.',
+    source:
+      'My own logged watch history: 375+ titles stored in D1, the same store the dashboard\u2019s watchlist endpoint serves.',
+    method:
+      'Calculated KPIs and derived metrics over the log, year-over-year comparisons, dynamic filtering and interactive visualisations across six analytics pages (Chart.js).',
+    evidence:
+      'The live dashboard: KPI cards and charts computed from the logged titles, with year-over-year comparisons and filters across six analytics pages.',
+    limitations:
+      'A single person\u2019s log, not a representative sample: the figures describe what was logged, not what was watched, and 375+ titles is a personal history, not a market.',
+  },
+  'ucd-policybot': {
+    question: 'Find the right UCD policy, with sources you can check.',
+    contribution:
+      'I built the ingestion pipeline (BeautifulSoup, markdownify, PyMuPDF) that converts 200+ policy documents into structured Markdown while preserving their hierarchy, plus automated dedup and validation; and the retrieval stack \u2014 BGE-M3 embeddings in Qdrant, answered by Qwen2.5-1.5B via Ollama, the lowest-latency pick from four local models I stress-tested.',
+    source:
+      '200+ UCD academic and administrative policy documents, converted to structured Markdown for vector indexing.',
+    method:
+      'Retrieve first, then answer only from retrieved context: every answer carries a mandatory citation (URL + page number) and the model abstains when the documents do not support an answer. My evaluation put retrieval precision above 80%, after dedup and validation cut malformed records by ~30%.',
+    evidence:
+      'The project repository: the local RAG stack and the ingestion pipeline that turns policy PDFs into cited answers.',
+    limitations:
+      'Runs 100% locally, so there is no cloud fallback and answers only cover the 200+ documents ingested; the 1.5B model trades depth for latency; the precision figure is from my own evaluation, not an independent benchmark.',
+  },
+  'formula-1-telemetry-analysis': {
+    question: 'How did each driver gain or lose time, lap by lap?',
+    contribution:
+      'I built the pipeline in Python with FastF1, pandas and NumPy \u2014 collecting, cleaning, transforming and analysing race telemetry across the 2026 season \u2014 and published weekly performance reports as 10+ articles on Medium.',
+    source: 'Race telemetry from FastF1 across the 2026 Formula 1 season.',
+    method:
+      'Clean and transform the raw timing and telemetry, then build 9+ visualisation types \u2014 lap-time evolution, tyre strategy, minisector dominance, cumulative lap delta and sector performance \u2014 as audience-friendly visual stories.',
+    evidence:
+      'Lap-time evolution across a race: tyre degradation and strategy windows read off the shape of the line.',
+    limitations:
+      'The analysis only covers sessions FastF1 publishes, and the 2026 season is still in progress; the reports describe pace and strategy, they do not predict results.',
+  },
+};
 
 /** Attribute value of the first tag matching `pattern`. */
 const attr = (html, pattern, name) => {
@@ -190,6 +246,41 @@ ${outward
 `
     : '';
 
+  const study = CASE_STUDIES[project.slug];
+  const caseHtml =
+    study && project.media
+      ? `      <section class="pp-case" aria-label="Case study">
+        <h2>Question</h2>
+        <p>${study.question}</p>
+      </section>
+      <section class="pp-case" aria-label="My contribution">
+        <h2>My contribution</h2>
+        <p>${study.contribution}</p>
+      </section>
+      <section class="pp-case" aria-label="Data source">
+        <h2>Data source</h2>
+        <p>${study.source}</p>
+      </section>
+      <section class="pp-case" aria-label="Method">
+        <h2>Method</h2>
+        <p>${study.method}</p>
+      </section>
+      <section class="pp-case" aria-label="Evidence">
+        <h2>Evidence</h2>
+        <figure>
+          <picture>
+${project.media.webp ? `            <source srcset="/${project.media.webp}" type="image/webp" />\n` : ''}            <img src="/${project.media.src}" alt="${escapeAttr(project.media.alt)}" width="${project.media.width}" height="${project.media.height}" loading="lazy" decoding="async" />
+          </picture>
+          <figcaption>${study.evidence}</figcaption>
+        </figure>
+      </section>
+      <section class="pp-case" aria-label="Limitations">
+        <h2>Limitations</h2>
+        <p>${study.limitations}</p>
+      </section>
+`
+      : '';
+
   const navLink = (item, direction) =>
     `        <a class="pp-nav-link${direction === 'next' ? ' pp-nav-next' : ''}" href="/projects/${item.slug}/" rel="${direction}">
           <span class="pp-nav-kicker">${direction === 'next' ? 'Next project &rarr;' : '&larr; Previous project'}</span>
@@ -254,7 +345,7 @@ ${media}      <p class="pp-desc">${project.description}</p>
       <div class="pp-tags">
 ${project.tags.map((tag) => `        <span class="ptag">${tag}</span>`).join('\n')}
       </div>
-${links}      <nav class="pp-nav" aria-label="More projects">
+${links}${caseHtml}      <nav class="pp-nav" aria-label="More projects">
 ${navLink(previous, 'prev')}
 ${navLink(next, 'next')}
       </nav>
@@ -342,6 +433,18 @@ const main = async () => {
   if (check) {
     for (const path of stale) problems.push(`${path} is out of date — run node tools/build-projects.mjs`);
     problems.push(...(await sitemapProblems(projects)));
+
+    // Both published totals must agree with the panels they count, or the page
+    // contradicts itself the moment a project is added or removed.
+    const home = await readIfExists('index.html');
+    const heading = home?.match(/<span class="proj-count-label">(\d+) works<\/span>/)?.[1];
+    const footer = home?.match(/<div class="footer-grey-num" data-project-count>(\d+)<\/div>/)?.[1];
+    if (heading !== String(projects.length)) {
+      problems.push(`index.html heading says "${heading ?? '(missing)'} works" for ${projects.length} project panels`);
+    }
+    if (footer !== String(projects.length).padStart(2, '0')) {
+      problems.push(`index.html footer says "${footer ?? '(missing)'} Projects" for ${projects.length} project panels`);
+    }
 
     // A generated page whose CSP meta differs from index.html would enforce an
     // intersection with _headers on that path only, so re-read every page

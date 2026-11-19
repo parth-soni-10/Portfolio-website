@@ -12,6 +12,13 @@
  * reads it, script.js reads it live, and squish-switch.js only paints the
  * control. A stored choice wins over the OS; with no stored choice the OS is
  * the default.
+ *
+ * Second job: flip the below-fold component stylesheets from print media to
+ * all once the document is parsed. They download in parallel without blocking
+ * first paint (the hero needs only style.css + gooey-nav.css), and an inline
+ * onload handler would break the strict CSP - so the flip lives here, in a
+ * same-origin file, on DOMContentLoaded. A scriptless visit never runs this
+ * file and keeps the noscript copies instead.
  * ------------------------------------------------------------------------ */
 (function () {
   var KEY = 'ps-motion';
@@ -30,4 +37,14 @@
   }
   var reduce = decided ? stored === 'reduce' : system;
   document.documentElement.dataset.motion = reduce ? 'reduce' : 'auto';
+
+  var flipAsyncCss = function () {
+    var sheets = document.querySelectorAll('link[data-async-css]');
+    for (var i = 0; i < sheets.length; i++) sheets[i].media = 'all';
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', flipAsyncCss);
+  } else {
+    flipAsyncCss();
+  }
 })();

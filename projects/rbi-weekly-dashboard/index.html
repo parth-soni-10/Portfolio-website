@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no comparison. A scheduled job fetches each Friday's figures…" />
+  <meta name="description" content="What moved in this week’s RBI data - and by how much? The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="RBI Weekly Dashboard - Parth Soni" />
-  <meta property="og:description" content="The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no comparison. A scheduled job fetches each Friday's figures…" />
+  <meta property="og:description" content="What moved in this week’s RBI data - and by how much? The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:alt" content="RBI Weekly Dashboard preview" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="RBI Weekly Dashboard - Parth Soni" />
-  <meta name="twitter:description" content="The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no comparison. A scheduled job fetches each Friday's figures…" />
+  <meta name="twitter:description" content="What moved in this week’s RBI data - and by how much? The Reserve Bank of India publishes a new report as a raw spreadsheet every week - no history, no…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
   <meta name="twitter:image:alt" content="RBI Weekly Dashboard preview" />
   <title>RBI Weekly Dashboard | Parth Soni</title>
@@ -76,7 +76,7 @@
         <h1 class="pp-title" id="project-title">RBI Weekly Dashboard</h1>
         <span class="proj-featured-badge">Live &bull; Personal Project</span>
       </div>
-      <p class="pp-desc">The Reserve Bank of India publishes a new report as a raw spreadsheet every week &mdash; no history, no comparison. A scheduled job fetches each Friday's figures once the report lands (reserves, gold, the rupee against the dollar and euro, the main market indexes, crude-import estimates and FII flows, plus the World Bank's quarterly external-debt rankings) and commits whatever changed, so the dashboard shows what moved and by how much rather than one week in isolation. Trend lines and a searchable 10/26/52-week history, a tab that compares any two Fridays metric by metric, RBI MPC and Fed decisions annotated onto the rupee chart, an RSS feed of new weeks, and an installable build that still renders the last week it fetched when the network is down.</p>
+      <p class="pp-desc">What moved in this week&rsquo;s RBI data &mdash; and by how much? The Reserve Bank of India publishes a new report as a raw spreadsheet every week &mdash; no history, no comparison. A scheduled job fetches each Friday's figures once the report lands (reserves, gold, the rupee against the dollar and euro, the main market indexes, crude-import estimates and FII flows, plus the World Bank's quarterly external-debt rankings) and commits whatever changed, so the dashboard shows what moved and by how much rather than one week in isolation. Trend lines and a searchable 10/26/52-week history, a tab that compares any two Fridays metric by metric, RBI MPC and Fed decisions annotated onto the rupee chart, an RSS feed of new weeks, and an installable build that still renders the last week it fetched when the network is down.</p>
       <div class="pp-tags">
         <span class="ptag">Node.js</span>
         <span class="ptag">GitHub Actions</span>

@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript over a Cloudflare Worker reading a D1 database, turning 375+…" />
+  <meta name="description" content="What did I watch - and how has my taste changed year over year? Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="Content Tracking Dashboard - Parth Soni" />
-  <meta property="og:description" content="Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript over a Cloudflare Worker reading a D1 database, turning 375+…" />
+  <meta property="og:description" content="What did I watch - and how has my taste changed year over year? Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/project-content-dashboard.jpeg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content="Content Tracking Dashboard live site" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Content Tracking Dashboard - Parth Soni" />
-  <meta name="twitter:description" content="Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript over a Cloudflare Worker reading a D1 database, turning 375+…" />
+  <meta name="twitter:description" content="What did I watch - and how has my taste changed year over year? Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/project-content-dashboard.jpeg" />
   <meta name="twitter:image:alt" content="Content Tracking Dashboard live site" />
   <title>Content Tracking Dashboard | Parth Soni</title>
@@ -82,7 +82,7 @@
           <img src="/project-content-dashboard.jpeg" alt="Content Tracking Dashboard live site" width="800" height="450" loading="eager" decoding="async" />
         </picture>
       </div>
-      <p class="pp-desc">Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript over a Cloudflare Worker reading a D1 database, turning 375+ logged titles into calculated KPIs, derived metrics, year-over-year comparisons, dynamic filtering and interactive visualisations across six analytics pages - no framework and no build step.</p>
+      <p class="pp-desc">What did I watch &mdash; and how has my taste changed year over year? Built an end-to-end personal media analytics dashboard in vanilla HTML, CSS and JavaScript over a Cloudflare Worker reading a D1 database, turning 375+ logged titles into calculated KPIs, derived metrics, year-over-year comparisons, dynamic filtering and interactive visualisations across six analytics pages - no framework and no build step.</p>
       <div class="pp-tags">
         <span class="ptag">JavaScript</span>
         <span class="ptag">Cloudflare Workers</span>
@@ -93,6 +93,36 @@
       <div class="pp-links">
         <a class="spot-link" href="https://contenttrackerdashboard.pages.dev/" target="_blank" rel="noopener">Live Dashboard &rarr;</a>
       </div>
+      <section class="pp-case" aria-label="Case study">
+        <h2>Question</h2>
+        <p>What did I watch — and how has my taste changed year over year?</p>
+      </section>
+      <section class="pp-case" aria-label="My contribution">
+        <h2>My contribution</h2>
+        <p>I built the whole thing end to end: the front end in vanilla HTML, CSS and JavaScript, and the backend as a Cloudflare Worker reading a D1 database — no framework, no build step.</p>
+      </section>
+      <section class="pp-case" aria-label="Data source">
+        <h2>Data source</h2>
+        <p>My own logged watch history: 375+ titles stored in D1, the same store the dashboard’s watchlist endpoint serves.</p>
+      </section>
+      <section class="pp-case" aria-label="Method">
+        <h2>Method</h2>
+        <p>Calculated KPIs and derived metrics over the log, year-over-year comparisons, dynamic filtering and interactive visualisations across six analytics pages (Chart.js).</p>
+      </section>
+      <section class="pp-case" aria-label="Evidence">
+        <h2>Evidence</h2>
+        <figure>
+          <picture>
+            <source srcset="/project-content-dashboard.webp" type="image/webp" />
+            <img src="/project-content-dashboard.jpeg" alt="Content Tracking Dashboard live site" width="800" height="450" loading="lazy" decoding="async" />
+          </picture>
+          <figcaption>The live dashboard: KPI cards and charts computed from the logged titles, with year-over-year comparisons and filters across six analytics pages.</figcaption>
+        </figure>
+      </section>
+      <section class="pp-case" aria-label="Limitations">
+        <h2>Limitations</h2>
+        <p>A single person’s log, not a representative sample: the figures describe what was logged, not what was watched, and 375+ titles is a personal history, not a market.</p>
+      </section>
       <nav class="pp-nav" aria-label="More projects">
         <a class="pp-nav-link" href="/projects/ucd-policybot/" rel="prev">
           <span class="pp-nav-kicker">&larr; Previous project</span>

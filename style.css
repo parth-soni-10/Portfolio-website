@@ -337,6 +337,17 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
 .btn-ghost-hero:hover { border-color: var(--ink); transform: translateY(-2px); }
 .btn-ghost-hero:active { transform: translateY(0) scale(.98); }
 
+/* Quieter third hero action: the dashboard is a destination the visitor
+   chooses, not a second button competing with email and resume. */
+.hero-text-link {
+  align-self: center;
+  font-weight: 600; font-size: 15px; color: var(--ink-soft);
+  text-decoration: none; padding-bottom: 3px;
+  border-bottom: 1px solid var(--line-strong);
+  transition: color .2s ease, border-color .2s ease;
+}
+.hero-text-link:hover { color: var(--accent-deep); border-color: rgba(232,93,4,.45); }
+
 /* Profile card (hero right) */
 .hero-right {
   background: var(--paper-raise);
@@ -389,6 +400,14 @@ section[id], div[id], footer[id] { scroll-margin-top: 80px; }
   background: var(--accent-soft);
   border-radius: 0 10px 10px 0;
 }
+/* The hero quote is the ANKO result linked to Experience, so the link
+   inherits the quote's colour and keeps only an underline to tell. */
+.pull-quote a {
+  color: inherit; text-decoration: underline;
+  text-decoration-color: rgba(232,93,4,.45); text-underline-offset: 4px;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+.pull-quote a:hover { color: var(--accent-deep); text-decoration-color: var(--accent-deep); }
 
 /* ===================== CONNECT CARD ===================== */
 .connect-section { border-top: 1px solid var(--line); }
@@ -1286,6 +1305,20 @@ body.is-splashing { overflow: hidden; }
   color: var(--ink-mute);
 }
 .pp-nav-title { font-size: 15.5px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+/* Case-study sections on the generated project pages: question first, then
+   contribution, source, method, evidence and limits - the shape a search
+   visitor (and a recruiter) reads in order. */
+.pp-case { margin: 0 0 34px; max-width: 68ch; }
+.pp-case + .pp-case { margin-top: -10px; }
+.pp-case h2 {
+  font-size: 13px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent-deep);
+  margin: 0 0 8px;
+}
+.pp-case p { font-size: 16px; line-height: 1.65; color: var(--ink-soft); margin: 0; }
+.pp-case figure { margin: 0; }
+.pp-case figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
+.pp-case figcaption { font-size: 13px; line-height: 1.55; color: var(--ink-mute); margin-top: 10px; }
 .pp-footer { border-top: 1px solid var(--line); }
 .pp-footer-inner {
   max-width: var(--maxw); margin: 0 auto; padding: 24px var(--pad) 32px;

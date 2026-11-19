@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a flat daily spreadsheet (no history, no search, no trends) into a…" />
+  <meta name="description" content="What has the Embassy of Ireland decided - and how do decisions trend over time? Tracks visa decisions published daily by the Embassy of Ireland, New Delhi…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="Irish Visa Decision Tracker - Parth Soni" />
-  <meta property="og:description" content="Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a flat daily spreadsheet (no history, no search, no trends) into a…" />
+  <meta property="og:description" content="What has the Embassy of Ireland decided - and how do decisions trend over time? Tracks visa decisions published daily by the Embassy of Ireland, New Delhi…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/project-visa-tracker.jpeg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content="Irish Visa Decision Tracker live site" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Irish Visa Decision Tracker - Parth Soni" />
-  <meta name="twitter:description" content="Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a flat daily spreadsheet (no history, no search, no trends) into a…" />
+  <meta name="twitter:description" content="What has the Embassy of Ireland decided - and how do decisions trend over time? Tracks visa decisions published daily by the Embassy of Ireland, New Delhi…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/project-visa-tracker.jpeg" />
   <meta name="twitter:image:alt" content="Irish Visa Decision Tracker live site" />
   <title>Irish Visa Decision Tracker | Parth Soni</title>
@@ -82,7 +82,7 @@
           <img src="/project-visa-tracker.jpeg" alt="Irish Visa Decision Tracker live site" width="800" height="450" loading="eager" decoding="async" />
         </picture>
       </div>
-      <p class="pp-desc">Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a flat daily spreadsheet (no history, no search, no trends) into a searchable, browsable dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s &lsquo;.ods&rsquo; file, handle weekends and public holidays gracefully, and upsert records into a Google Sheet (the database). The Apps Script Web App exposes a clean HTTP API read by a four-tab dashboard: live snapshot, daily summary, full history with date-picker, and a suggestions form.</p>
+      <p class="pp-desc">What has the Embassy of Ireland decided &mdash; and how do decisions trend over time? Tracks visa decisions published daily by the Embassy of Ireland, New Delhi, turning a flat daily spreadsheet (no history, no search, no trends) into a searchable, browsable dashboard. A GitHub Actions scraper runs 4&times; daily to fetch the embassy&rsquo;s &lsquo;.ods&rsquo; file, handle weekends and public holidays gracefully, and upsert records into a Google Sheet (the database). The Apps Script Web App exposes a clean HTTP API read by a four-tab dashboard: live snapshot, daily summary, full history with date-picker, and a suggestions form.</p>
       <div class="pp-tags">
         <span class="ptag">Python</span>
         <span class="ptag">GitHub Actions</span>

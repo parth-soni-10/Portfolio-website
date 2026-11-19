@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and nothing about it is hardcoded. Class timings, offerings…" />
+  <meta name="description" content="Which UCD modules fit together without a timetable clash? A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="CSNL Module Picker - Parth Soni" />
-  <meta property="og:description" content="A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and nothing about it is hardcoded. Class timings, offerings…" />
+  <meta property="og:description" content="Which UCD modules fit together without a timetable clash? A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:alt" content="CSNL Module Picker preview" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="CSNL Module Picker - Parth Soni" />
-  <meta name="twitter:description" content="A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and nothing about it is hardcoded. Class timings, offerings…" />
+  <meta name="twitter:description" content="Which UCD modules fit together without a timetable clash? A module picker for UCD Computer Science students that builds a clash-free weekly timetable - and…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/og-card.png" />
   <meta name="twitter:image:alt" content="CSNL Module Picker preview" />
   <title>CSNL Module Picker | Parth Soni</title>
@@ -76,7 +76,7 @@
         <h1 class="pp-title" id="project-title">CSNL Module Picker</h1>
         <span class="proj-featured-badge">Live &bull; UCD</span>
       </div>
-      <p class="pp-desc">A module picker for UCD Computer Science students that builds a clash-free weekly timetable &mdash; and nothing about it is hardcoded. Class timings, offerings, module titles and the academic year are fetched live from UCD's General Reference Timetable on every load, and the module list comes from UCD's own CSNL page, re-read on every request and daily by a scheduled function, so new modules appear and retired ones disappear without a code change. Only the target year's timetable is ever served: when UCD has published the year but not the schedule, a module says it has no timetable rather than showing last year's times, and any module code can be added by hand.</p>
+      <p class="pp-desc">Which UCD modules fit together without a timetable clash? A module picker for UCD Computer Science students that builds a clash-free weekly timetable &mdash; and nothing about it is hardcoded. Class timings, offerings, module titles and the academic year are fetched live from UCD's General Reference Timetable on every load, and the module list comes from UCD's own CSNL page, re-read on every request and daily by a scheduled function, so new modules appear and retired ones disappear without a code change. Only the target year's timetable is ever served: when UCD has published the year but not the schedule, a module says it has no timetable rather than showing last year's times, and any module code can be added by hand.</p>
       <div class="pp-tags">
         <span class="ptag">JavaScript</span>
         <span class="ptag">Cloudflare Workers</span>

@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector database feed a Qwen2.5-1.5B SLM served by Ollama - the…" />
+  <meta name="description" content="Find the right UCD policy, with sources you can check. RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="UCD PolicyBot - Parth Soni" />
-  <meta property="og:description" content="RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector database feed a Qwen2.5-1.5B SLM served by Ollama - the…" />
+  <meta property="og:description" content="Find the right UCD policy, with sources you can check. RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/project-policybot.jpeg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content="UCD PolicyBot repository on GitHub" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="UCD PolicyBot - Parth Soni" />
-  <meta name="twitter:description" content="RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector database feed a Qwen2.5-1.5B SLM served by Ollama - the…" />
+  <meta name="twitter:description" content="Find the right UCD policy, with sources you can check. RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/project-policybot.jpeg" />
   <meta name="twitter:image:alt" content="UCD PolicyBot repository on GitHub" />
   <title>UCD PolicyBot | Parth Soni</title>
@@ -82,7 +82,7 @@
           <img src="/project-policybot.jpeg" alt="UCD PolicyBot repository on GitHub" width="800" height="450" loading="eager" decoding="async" />
         </picture>
       </div>
-      <p class="pp-desc">RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector database feed a Qwen2.5-1.5B SLM served by Ollama &mdash; the lowest-latency pick from four stress-tested local models &mdash; to answer UCD academic and admin policy questions, with mandatory citation (URL + page number) and answers grounded in retrieved context (the model abstains when the docs do not support an answer). Built a scraping and parsing pipeline with BeautifulSoup, markdownify, and PyMuPDF (pymupdf4llm) to convert 200+ policy docs to structured Markdown, preserving hierarchical structure for downstream vector indexing. Automated dedup and validation checks cut malformed records by ~30% and pushed retrieval precision above 80%.</p>
+      <p class="pp-desc">Find the right UCD policy, with sources you can check. RAG chatbot running 100% locally: BGE-M3 embeddings (dense + lexical) stored in a Qdrant vector database feed a Qwen2.5-1.5B SLM served by Ollama &mdash; the lowest-latency pick from four stress-tested local models &mdash; to answer UCD academic and admin policy questions, with mandatory citation (URL + page number) and answers grounded in retrieved context (the model abstains when the docs do not support an answer). Built a scraping and parsing pipeline with BeautifulSoup, markdownify, and PyMuPDF (pymupdf4llm) to convert 200+ policy docs to structured Markdown, preserving hierarchical structure for downstream vector indexing. Automated dedup and validation checks cut malformed records by ~30% and pushed retrieval precision above 80%.</p>
       <div class="pp-tags">
         <span class="ptag">RAG</span>
         <span class="ptag">Python</span>
@@ -94,6 +94,36 @@
       <div class="pp-links">
         <a class="spot-link" href="https://github.com/shridharjoshi034-ai/LocalHost-Legends" target="_blank" rel="noopener">GitHub &rarr;</a>
       </div>
+      <section class="pp-case" aria-label="Case study">
+        <h2>Question</h2>
+        <p>Find the right UCD policy, with sources you can check.</p>
+      </section>
+      <section class="pp-case" aria-label="My contribution">
+        <h2>My contribution</h2>
+        <p>I built the ingestion pipeline (BeautifulSoup, markdownify, PyMuPDF) that converts 200+ policy documents into structured Markdown while preserving their hierarchy, plus automated dedup and validation; and the retrieval stack — BGE-M3 embeddings in Qdrant, answered by Qwen2.5-1.5B via Ollama, the lowest-latency pick from four local models I stress-tested.</p>
+      </section>
+      <section class="pp-case" aria-label="Data source">
+        <h2>Data source</h2>
+        <p>200+ UCD academic and administrative policy documents, converted to structured Markdown for vector indexing.</p>
+      </section>
+      <section class="pp-case" aria-label="Method">
+        <h2>Method</h2>
+        <p>Retrieve first, then answer only from retrieved context: every answer carries a mandatory citation (URL + page number) and the model abstains when the documents do not support an answer. My evaluation put retrieval precision above 80%, after dedup and validation cut malformed records by ~30%.</p>
+      </section>
+      <section class="pp-case" aria-label="Evidence">
+        <h2>Evidence</h2>
+        <figure>
+          <picture>
+            <source srcset="/project-policybot.webp" type="image/webp" />
+            <img src="/project-policybot.jpeg" alt="UCD PolicyBot repository on GitHub" width="800" height="450" loading="lazy" decoding="async" />
+          </picture>
+          <figcaption>The project repository: the local RAG stack and the ingestion pipeline that turns policy PDFs into cited answers.</figcaption>
+        </figure>
+      </section>
+      <section class="pp-case" aria-label="Limitations">
+        <h2>Limitations</h2>
+        <p>Runs 100% locally, so there is no cloud fallback and answers only cover the 200+ documents ingested; the 1.5B model trades depth for latency; the precision figure is from my own evaluation, not an independent benchmark.</p>
+      </section>
       <nav class="pp-nav" aria-label="More projects">
         <a class="pp-nav-link" href="/projects/pink-eye-cnn/" rel="prev">
           <span class="pp-nav-kicker">&larr; Previous project</span>

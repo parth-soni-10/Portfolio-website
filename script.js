@@ -1015,6 +1015,13 @@
   const panels  = Array.from(wrap.querySelectorAll('.spot-card'));
   if (!tablist || !tabs.length || !panels.length) return;
 
+  // Both published totals are generated from the panels themselves, so the
+  // heading and the footer can never disagree again.
+  const countLabel = document.querySelector('.proj-count-label');
+  if (countLabel) countLabel.textContent = panels.length + ' works';
+  const footerCount = document.querySelector('[data-project-count]');
+  if (footerCount) footerCount.textContent = String(panels.length).padStart(2, '0');
+
   let active = tabs.findIndex(t => t.classList.contains('active'));
   if (active < 0) active = 0;
 

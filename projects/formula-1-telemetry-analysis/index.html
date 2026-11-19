@@ -12,22 +12,22 @@
        The CSP below is copied from index.html; _headers carries the full policy
        for every path, so these pages need no second declaration there. -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com https://contenttrackerdashboard.pages.dev https://cloudflareinsights.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="description" content="Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect, clean, transform, and analyse race telemetry across the…" />
+  <meta name="description" content="How did each driver gain or lose time, lap by lap? Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect…" />
   <link rel="canonical" href="https://parth-portfolio-wb.pages.dev/projects/formula-1-telemetry-analysis/" />
   <meta name="theme-color" content="#f6f5f1" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Parth Soni | Data Analyst" />
   <meta property="og:title" content="Formula 1 Telemetry Analysis - Parth Soni" />
-  <meta property="og:description" content="Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect, clean, transform, and analyse race telemetry across the…" />
+  <meta property="og:description" content="How did each driver gain or lose time, lap by lap? Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect…" />
   <meta property="og:url" content="https://parth-portfolio-wb.pages.dev/projects/formula-1-telemetry-analysis/" />
   <meta property="og:image" content="https://parth-portfolio-wb.pages.dev/project-f1-telemetry.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:alt" content="Lap time evolution chart showing tyre degradation and strategy windows across a race" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Formula 1 Telemetry Analysis - Parth Soni" />
-  <meta name="twitter:description" content="Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect, clean, transform, and analyse race telemetry across the…" />
+  <meta name="twitter:description" content="How did each driver gain or lose time, lap by lap? Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect…" />
   <meta name="twitter:image" content="https://parth-portfolio-wb.pages.dev/project-f1-telemetry.png" />
   <meta name="twitter:image:alt" content="Lap time evolution chart showing tyre degradation and strategy windows across a race" />
   <title>Formula 1 Telemetry Analysis | Parth Soni</title>
@@ -81,7 +81,7 @@
           <img src="/project-f1-telemetry.png" alt="Lap time evolution chart showing tyre degradation and strategy windows across a race" width="800" height="450" loading="eager" decoding="async" />
         </picture>
       </div>
-      <p class="pp-desc">Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect, clean, transform, and analyse race telemetry across the 2026 Formula 1 season, publishing weekly data-driven performance reports. Developed 9+ visualisation types including lap-time evolution, tyre strategy analysis, minisector dominance, cumulative lap delta, and sector performance, translating complex datasets into audience-friendly visual stories through 10+ published articles on Medium.</p>
+      <p class="pp-desc">How did each driver gain or lose time, lap by lap? Built an end-to-end telemetry analytics pipeline using Python, FastF1, pandas, and NumPy to collect, clean, transform, and analyse race telemetry across the 2026 Formula 1 season, publishing weekly data-driven performance reports. Developed 9+ visualisation types including lap-time evolution, tyre strategy analysis, minisector dominance, cumulative lap delta, and sector performance, translating complex datasets into audience-friendly visual stories through 10+ published articles on Medium.</p>
       <div class="pp-tags">
         <span class="ptag">Python</span>
         <span class="ptag">FastF1</span>
@@ -94,6 +94,35 @@
         <a class="spot-link" href="https://f1-practice-session-analysis.pages.dev/" target="_blank" rel="noopener">Session Analyzer &rarr;</a>
         <a class="spot-link" href="https://medium.com/@soni.soni.parth" target="_blank" rel="noopener">Read on Medium &rarr;</a>
       </div>
+      <section class="pp-case" aria-label="Case study">
+        <h2>Question</h2>
+        <p>How did each driver gain or lose time, lap by lap?</p>
+      </section>
+      <section class="pp-case" aria-label="My contribution">
+        <h2>My contribution</h2>
+        <p>I built the pipeline in Python with FastF1, pandas and NumPy — collecting, cleaning, transforming and analysing race telemetry across the 2026 season — and published weekly performance reports as 10+ articles on Medium.</p>
+      </section>
+      <section class="pp-case" aria-label="Data source">
+        <h2>Data source</h2>
+        <p>Race telemetry from FastF1 across the 2026 Formula 1 season.</p>
+      </section>
+      <section class="pp-case" aria-label="Method">
+        <h2>Method</h2>
+        <p>Clean and transform the raw timing and telemetry, then build 9+ visualisation types — lap-time evolution, tyre strategy, minisector dominance, cumulative lap delta and sector performance — as audience-friendly visual stories.</p>
+      </section>
+      <section class="pp-case" aria-label="Evidence">
+        <h2>Evidence</h2>
+        <figure>
+          <picture>
+            <img src="/project-f1-telemetry.png" alt="Lap time evolution chart showing tyre degradation and strategy windows across a race" width="800" height="450" loading="lazy" decoding="async" />
+          </picture>
+          <figcaption>Lap-time evolution across a race: tyre degradation and strategy windows read off the shape of the line.</figcaption>
+        </figure>
+      </section>
+      <section class="pp-case" aria-label="Limitations">
+        <h2>Limitations</h2>
+        <p>The analysis only covers sessions FastF1 publishes, and the 2026 season is still in progress; the reports describe pace and strategy, they do not predict results.</p>
+      </section>
       <nav class="pp-nav" aria-label="More projects">
         <a class="pp-nav-link" href="/projects/content-tracking-dashboard/" rel="prev">
           <span class="pp-nav-kicker">&larr; Previous project</span>
