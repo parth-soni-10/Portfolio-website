@@ -556,7 +556,7 @@
      the SNAPSHOT:START/END block below. */
   /* SNAPSHOT:START */
   const FALLBACK = {
-    "taken": "2026-11-16",
+    "taken": "2026-11-20",
     "periods": {
       "2024": {
         "name": "2024",
@@ -580,13 +580,23 @@
       },
       "2026": {
         "name": "2026",
-        "months": [165,156,15,64,46,65,10,39,46,63],
-        "titles": 103,
-        "hours": 668,
-        "shows": 67,
+        "months": [165,156,15,64,46,65,10,39,46,68,3,0],
+        "titles": 104,
+        "hours": 675,
+        "shows": 68,
         "movies": 36,
-        "sub": ["active in period","Jan-Oct 2026","65% of titles","35% of titles"],
-        "monthsLabel": "Jan-Oct 2026"
+        "sub": ["active in period","Jan-Dec 2026","65% of titles","35% of titles"],
+        "monthsLabel": "Jan-Dec 2026"
+      },
+      "2027": {
+        "name": "2027",
+        "months": [0,0,0,0],
+        "titles": 1,
+        "hours": 0,
+        "shows": 1,
+        "movies": 0,
+        "sub": ["active in period","Jan-Apr 2027","100% of titles","0% of titles"],
+        "monthsLabel": "Jan-Apr 2027"
       },
       "all": {
         "name": "All Time",
@@ -624,14 +634,20 @@
           10,
           39,
           46,
-          63
+          68,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0
         ],
-        "titles": 392,
-        "hours": 3077,
-        "shows": 296,
+        "titles": 394,
+        "hours": 3084,
+        "shows": 298,
         "movies": 96,
-        "sub": ["series + movies","since Jan 2024","75.5% of titles","24.5% of titles"],
-        "monthsLabel": "Jan 2024-Oct 2026"
+        "sub": ["series + movies","since Jan 2024","75.6% of titles","24.4% of titles"],
+        "monthsLabel": "Jan 2024-Apr 2027"
       }
     },
     "genres": [
@@ -657,12 +673,13 @@
     "genreYears": {
       "2024": [428,88,179,144,55,90,47,35,0,0,0,7,0,0,0,0,0,0],
       "2025": [349,234,255,204,111,49,38,34,31,23,0,3,0,0,2,0,0,2],
-      "2026": [130,179,54,136,85,3,22,19,6,0,14,0,9,7,0,2,2,0],
-      "all": [907,501,488,484,252,141,108,88,37,23,14,10,9,7,2,2,2,2]
+      "2026": [133,179,58,136,85,3,22,19,6,0,14,0,9,7,0,2,2,0],
+      "2027": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      "all": [910,501,493,484,252,141,108,88,37,23,14,10,9,7,2,2,2,2]
     },
     "startYear": 2024,
     "startC": 0,
-    "yearOrder": ["2026","2025","2024"]
+    "yearOrder": ["2027","2026","2025","2024"]
   };
   /* SNAPSHOT:END */
 
