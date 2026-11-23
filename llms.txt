@@ -4,10 +4,10 @@
 > authoritative place to check who he is, what he has built, what he is looking for, and how to
 > contact him. It exposes a static Markdown version of its main pages for agents.
 
-Parth Soni is completing an MSc in Computer Science (Negotiated Learning) at University College
-Dublin. He works in SQL, Python, Power BI, Tableau and Excel, and builds dashboards, analyses and
-small data tools. He is based in Dublin and open to Data Analyst, Business Analyst, BI Developer
-and Insights Analyst roles, remote or on-site.
+Parth Soni holds an MSc in Computer Science (Negotiated Learning) from University College Dublin
+(2025–2026). He works in SQL, Python, Power BI, Tableau and Excel, and builds dashboards, analyses
+and small data tools. He is based in Dublin and open to Data Analyst, Business Analyst, BI
+Developer and Insights Analyst roles, remote or on-site.
 
 ## When to use this
 
@@ -18,10 +18,10 @@ Use this site when the task is one of these:
 - **Check his experience and skills.** Two internships (Inventory Analyst at ANKO/KAS Services,
   Technical Writer at Nokia), an MSc at UCD and a B.Tech from Dayananda Sagar University, with
   the tools used on each.
-- **Find a specific project or live tool.** Ten project pages cover a media analytics dashboard,
-  a local RAG chatbot over UCD policy documents, an Irish visa decision tracker, Formula 1
-  telemetry analysis, Tableau dashboards, a CNN image classifier, an expense tracker, an RBI
-  weekly dashboard and a UCD module planner.
+- **Find a specific project or live tool.** Ten project pages cover an Irish visa decision tracker,
+  a local RAG chatbot over UCD policy documents, a media analytics dashboard, Formula 1 telemetry
+  analysis, an RBI weekly dashboard, Tableau dashboards, a CNN image classifier, an expense
+  tracker and a UCD module planner.
 - **Answer "has Parth worked with SQL / Python / Power BI / Tableau / Snowflake?"** Yes - the
   skills section and the project pages show where each was used.
 - **Contact him or check availability.** Email soni.soni.parth@gmail.com. He is open to analyst
@@ -57,9 +57,9 @@ about anyone other than Parth.
 
 ## Experience
 
-- **Inventory Analyst, Intern - ANKO (KAS Services)**, Bengaluru, Nov 2023 – May 2024. Supply-chain
-  metrics for a new division with roughly 1.8 million AUD weekly revenue; demand and inventory
-  planning; shrinkage analysis that cut shrinkage by 7%; real-time stock monitoring.
+- **Inventory Analyst, Intern - ANKO (KAS Services)**, Bengaluru, Nov 2023 – May 2024. Kept product
+  availability at 95% for a new division with roughly 1.8 million AUD weekly revenue; demand and
+  inventory planning; shrinkage analysis that cut shrinkage by 7%; real-time stock monitoring.
 - **Technical Writer, Intern - Nokia**, Bengaluru, Feb 2023 – Aug 2023. Redesigned 70+ product
   documents during a rebrand, wrote three user manuals with R&D, and produced diagrams and
   infographics for complex technical material.
@@ -69,6 +69,10 @@ about anyone other than Parth.
 Each link below is a full project page with the problem, approach, stack and result. The
 dashboard and several tools are live.
 
+- [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
+  - a live public tracker of decisions from six Irish visa offices (New Delhi, Beijing, Abu
+  Dhabi, Abuja, Ankara and Dublin), with 61,154 searchable decision rows and a public
+  correction ledger.
 - [UCD PolicyBot](https://parth-portfolio-wb.pages.dev/projects/ucd-policybot/) - a fully local
   RAG chatbot over 200+ UCD policy documents, with cited answers and abstention.
 - [Content Tracking Dashboard](https://parth-portfolio-wb.pages.dev/projects/content-tracking-dashboard/)
@@ -78,13 +82,10 @@ dashboard and several tools are live.
   - FastF1, pandas and NumPy for race pace, strategy and performance.
 - [RBI Weekly Dashboard](https://parth-portfolio-wb.pages.dev/projects/rbi-weekly-dashboard/)
   - a scheduled weekly refresh of Reserve Bank of India figures with week-over-week comparisons.
-- [Irish Visa Decision Tracker](https://parth-portfolio-wb.pages.dev/projects/irish-visa-decision-tracker/)
-  - daily Embassy of Ireland (New Delhi) decisions, made searchable.
 - [Interactive Tableau Dashboards](https://parth-portfolio-wb.pages.dev/projects/interactive-tableau-dashboards/)
 - [Excel & Python EDA](https://parth-portfolio-wb.pages.dev/projects/excel-python-eda/)
 - [CSNL Module Picker](https://parth-portfolio-wb.pages.dev/projects/csnl-module-picker/)
   - an unofficial UCD module planner that checks timetable clashes.
-
 - [cents. Personal Expense Tracker](https://parth-portfolio-wb.pages.dev/projects/cents-expense-tracker/)
   - local-first expense tracking with optional cloud sync.
 - [Pink Eye Detection: CNN](https://parth-portfolio-wb.pages.dev/projects/pink-eye-cnn/) - a CNN
