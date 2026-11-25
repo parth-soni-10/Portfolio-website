@@ -29,7 +29,7 @@
  * and the panel still cannot disagree about the facts they share - and only
  * for those three slugs; every other project page stays exactly what its panel
  * says. Every number in a case study is one the panel already publishes, and
- * the precision figure is attributed to its own evaluation.
+ * the precision figure is attributed to its own evaluation; the dashboard evidence figures are computed from the live public watchlist and rounded.
  */
 
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
@@ -67,13 +67,13 @@ const CASE_STUDIES = {
     contribution:
       'I built the whole thing end to end: the front end in vanilla HTML, CSS and JavaScript, and the backend as a Cloudflare Worker reading a D1 database \u2014 no framework, no build step.',
     source:
-      'My own logged watch history: 375+ titles stored in D1, the same store the dashboard\u2019s watchlist endpoint serves.',
+      'My own logged watch history: 380+ titles stored in D1, the same store the dashboard\u2019s watchlist endpoint serves.',
     method:
-      'Calculated KPIs and derived metrics over the log, year-over-year comparisons, dynamic filtering and interactive visualisations across six analytics pages (Chart.js).',
+      'Calculated KPIs and derived metrics over the log, year-over-year comparisons, dynamic filtering and interactive visualisations across eight views - the six dashboard pages plus Random Pick and Submit (Chart.js).',
     evidence:
-      'The live dashboard: KPI cards and charts computed from the logged titles, with year-over-year comparisons and filters across six analytics pages.',
+      'Across about 380 logged titles: 3,090+ hours watched, 44% of that time on Netflix, and 29% in Drama, the largest genre. The dashboard computes these figures from the same D1 store.',
     limitations:
-      'A single person\u2019s log, not a representative sample: the figures describe what was logged, not what was watched, and 375+ titles is a personal history, not a market.',
+      'A single person\u2019s log, not a representative sample: the figures describe what was logged, not what was watched, and 380+ titles is a personal history, not a market.',
   },
   'ucd-policybot': {
     question: 'Find the right UCD policy, with sources you can check.',
